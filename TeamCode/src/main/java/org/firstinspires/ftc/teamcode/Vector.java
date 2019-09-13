@@ -9,6 +9,15 @@ public class Vector {
         setMagnitude(m);
     }
 
+    public Vector(float x, float y, boolean b){
+        this.setTheta((float)Math.atan(y/x));
+        this.setMagnitude((float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+    }
+
+    public Vector(){
+        this(0, 0);
+    }
+
     public void setTheta(float theta) {
         this.theta = theta;
     }
