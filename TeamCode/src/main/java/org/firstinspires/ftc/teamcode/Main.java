@@ -7,7 +7,11 @@ import org.firstinspires.ftc.teamcode.Robot;
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode {
 
-    Robot robot = new Robot();
+    Robot robot;
+
+    public void start(){
+        robot = new Robot();
+    }
 
     @Override
     public void init() {
