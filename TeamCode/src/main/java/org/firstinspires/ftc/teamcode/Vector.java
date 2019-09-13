@@ -28,19 +28,22 @@ public class Vector {
 
     public float getX(){
         double radians = Math.toRadians(theta);
-        return magnitude * (float)Math.sin(radians);
+        return magnitude * (float)Math.cos(radians);
     }
 
     public float getY(){
         double radians = Math.toRadians(theta);
-        return magnitude * (float)Math.cos(radians);
+        return magnitude * (float)Math.sin(radians);
     }
 
-    public void add(Vector v2){
-        float Vrx = v2.getX() + this.getX();
-        float Vry = v2.getY() + this.getY();
+    public static Vector add(Vector v1, Vector v2){
+        float Vrx = v2.getX() + v1.getX();
+        float Vry = v2.getY() + v1.getY();
 
-        this.setTheta((float)Math.atan(Vry/Vrx));
-        this.setMagnitude((float)Math.sqrt(Math.pow(Vrx, 2) + Math.pow(Vry, 2)));
+        Vector Vr = new Vector();
+        Vr.setTheta((float)Math.atan(Vry/Vrx));
+        Vr.setMagnitude((float)Math.sqrt(Math.pow(Vrx, 2) + Math.pow(Vry, 2)));
+
+        return Vr;
     }
 }
