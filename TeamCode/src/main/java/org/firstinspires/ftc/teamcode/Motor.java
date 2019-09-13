@@ -23,5 +23,5 @@ public class Motor extends Component{
         this.speed = speed;
         motor.setPower(speed);
     }
-    
+
 }

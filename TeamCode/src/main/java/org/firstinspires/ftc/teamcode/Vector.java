@@ -22,8 +22,16 @@ public class Vector {
         this.theta = theta;
     }
 
+    public float getTheta() {
+        return theta;
+    }
+
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
+    }
+
+    public float getMagnitude() {
+        return magnitude;
     }
 
     public float getX(){
