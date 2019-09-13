@@ -1,16 +1,27 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class Motor extends Component{
-    private boolean counterClockWise;
-    private int speed;
+    private boolean reverse;
+    private float speed;
     private DcMotor motor;
 
-    public Motor(String name){
-        super.port = -1;
-        super.name = name;
-        //motor = hardwareMap.dcMotor.get("arm");
+    public Motor(int port, String name, HardwareMap map, boolean reverse){
+        super(port, name);
+        this.reverse = reverse;
+        this.speed = 0;
+        motor = map.dcMotor.get(name);
+        if(reverse){
+            motor.setDirection(DcMotor.Direction.REVERSE);
+        }
     }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+        motor.setPower(speed);
+    }
+    
 }
