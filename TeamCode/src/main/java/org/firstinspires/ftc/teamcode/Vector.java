@@ -18,20 +18,25 @@ public class Vector {
         this(0, 0);
     }
 
+    public float getTheta() {
+        return theta;
+    }
+
     public void setTheta(float theta) {
         this.theta = theta;
     }
 
-    public void setTheta(float x, float y) {
-        this.theta = (float)Math.atan(y/x);
+    public float getMagnitude() {
+        return magnitude;
     }
 
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
     }
 
-    public void setMagnitude(float x, float y){this.setMagnitude((float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-
+    public void setVector(float x, float y){
+        this.setMagnitude((float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+        this.theta = (float)Math.atan(y/x);
     }
 
     public float getX(){
