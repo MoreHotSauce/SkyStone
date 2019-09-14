@@ -17,7 +17,6 @@ public class Robot {
     }
 
     public void drive(float xMove, float yMove, float rotate) {
-        drivetrain.moveLinear(xMove, yMove);
-        drivetrain.rotate(rotate);
+        drivetrain.move(xMove, yMove, rotate);
     }
 }
