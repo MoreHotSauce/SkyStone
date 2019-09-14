@@ -8,10 +8,10 @@ public class Mecanum {
     private Vector velocity = new Vector();
     private float rotation = 0.0f;
 
-    Motor backLeft;
-    Motor backRight;
-    Motor frontLeft;
-    Motor frontRight;
+    private Motor backLeft;
+    private Motor backRight;
+    private Motor frontLeft;
+    private Motor frontRight;
 
     public Mecanum(Component backLeft, Component backRight, Component frontLeft, Component frontRight){
         this.backLeft = (Motor) backLeft;
@@ -25,7 +25,5 @@ public class Mecanum {
         backRight.setSpeed(velocity.getX() - rotate);
         frontLeft.setSpeed(velocity.getX() + rotate);
         frontRight.setSpeed(velocity.getY() - rotate);
-
     }
-
 }
