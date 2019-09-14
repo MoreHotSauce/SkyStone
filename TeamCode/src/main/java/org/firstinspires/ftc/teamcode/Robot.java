@@ -6,8 +6,8 @@ public class Robot {
     private Component[] components;
     private Mecanum drivetrain;
 
-    public Robot(){
-        components = new Component[4];
+    public Robot(Component[] comps){
+        this.components = comps;
         drivetrain = new Mecanum(
                 components[0],
                 components[1],
