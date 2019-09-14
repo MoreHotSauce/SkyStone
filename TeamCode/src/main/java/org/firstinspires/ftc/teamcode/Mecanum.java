@@ -4,7 +4,6 @@ import org.firstinspires.ftc.teamcode.Motor;
 
 public class Mecanum {
 
-    private Motor[] motors = new Motor[4];
     private Vector velocity = new Vector();
     private float rotation = 0.0f;
 
@@ -21,6 +20,11 @@ public class Mecanum {
     }
 
     public void move(float xMove, float yMove, float rotate) {
+        this.rotation = rotate;
+
+        this.velocity.setMagnitude(xMove, yMove);
+        this.velocity.setTheta(xMove, yMove);
+
         backLeft.setSpeed(velocity.getY() + rotate);
         backRight.setSpeed(velocity.getX() - rotate);
         frontLeft.setSpeed(velocity.getX() + rotate);

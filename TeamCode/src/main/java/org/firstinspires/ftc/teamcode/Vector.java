@@ -22,16 +22,16 @@ public class Vector {
         this.theta = theta;
     }
 
-    public float getTheta() {
-        return theta;
+    public void setTheta(float x, float y) {
+        this.theta = (float)Math.atan(y/x);
     }
 
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
     }
 
-    public float getMagnitude() {
-        return magnitude;
+    public void setMagnitude(float x, float y){this.setMagnitude((float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+
     }
 
     public float getX(){
