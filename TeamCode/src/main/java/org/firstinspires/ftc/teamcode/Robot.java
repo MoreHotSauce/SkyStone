@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.Mecanum;
-
 public class Robot {
     private Component[] components;
     private Mecanum drivetrain;

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.Motor;
-
 public class Mecanum {
 
     private Vector velocity = new Vector();
