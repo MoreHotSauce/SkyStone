@@ -12,11 +12,20 @@ public class Mecanum {
     private Motor frontRight;
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
+    private float slowConstant = 1f;
 
     private boolean turbo;
 
     public void setTurbo(boolean turbo) {
         this.turbo = turbo;
+    }
+
+    public void setSlow(boolean slow){
+        if(slow){
+            slowConstant = 0.1f;
+        } else {
+            slowConstant = 1f;
+        }
     }
 
     public Mecanum(Component backLeft, Component backRight, Component frontLeft, Component frontRight){
@@ -91,10 +100,10 @@ public class Mecanum {
             backRightSpeed = yMove - xMove + rotate;
             frontLeftSpeed = yMove - xMove - rotate;
 
-            backLeftSpeed = backLeftSpeed / MOTORSPEEDCONST;
-            frontRightSpeed = frontRightSpeed / MOTORSPEEDCONST;
-            backRightSpeed = backRightSpeed / MOTORSPEEDCONST;
-            frontLeftSpeed = frontLeftSpeed / MOTORSPEEDCONST;
+            backLeftSpeed = (backLeftSpeed / MOTORSPEEDCONST) * slowConstant;
+            frontRightSpeed = (frontRightSpeed / MOTORSPEEDCONST) * slowConstant;
+            backRightSpeed = (backRightSpeed / MOTORSPEEDCONST) * slowConstant;
+            frontLeftSpeed = (frontLeftSpeed / MOTORSPEEDCONST) * slowConstant;
         }
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));

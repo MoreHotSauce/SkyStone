@@ -15,6 +15,9 @@ public class Main extends OpMode {
         left stick x = drive horizontal
         left stick y = drive vertical
         right stick x = rotation
+        left trigger = lift down
+        right trigger = lift up
+
         right bumper = TURBOSPEED
      */
 
