@@ -8,13 +8,21 @@ public class Main extends OpMode {
 
     Robot robot;
 
-    public void start(){
-        robot = new Robot();
-    }
-
     @Override
     public void init() {
-        
+        Component[] componentList = {
+                new Motor(-1, "backLeft", hardwareMap, false),
+                new Motor(-1, "backRight", hardwareMap, false),
+                new Motor(-1, "frontLeft", hardwareMap, false),
+                new Motor(-1, "frontRight", hardwareMap, false)
+        };
+
+        robot = new Robot(componentList);
+        telemetry.addData("Test", "Robot");
+    }
+
+    public void start(){
+
     }
 
     @Override

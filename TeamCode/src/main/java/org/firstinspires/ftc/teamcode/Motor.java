@@ -13,7 +13,12 @@ public class Motor extends Component{
         super(port, name);
         this.reverse = reverse;
         this.speed = 0;
-        motor = map.dcMotor.get(name);
+        try{
+            motor = map.dcMotor.get(name);
+        } catch (NullPointerException e) {
+            throw new ArrayIndexOutOfBoundsException("test");
+        }
+
         if(reverse){
             motor.setDirection(DcMotor.Direction.REVERSE);
         }
