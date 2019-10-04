@@ -8,6 +8,16 @@ public class Main extends OpMode {
 
     Robot robot;
 
+    /*
+    GAMEPAD CONTROLS:
+
+    GAMEPAD 1:
+        left stick x = drive horizontal
+        left stick y = drive vertical
+        right stick x = rotation
+        right bumper = TURBOSPEED
+     */
+
     @Override
     public void init() {
         Component[] componentList = {
@@ -27,6 +37,7 @@ public class Main extends OpMode {
 
     @Override
     public void loop() {
+        robot.turbo(gamepad1.right_bumper);
         robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
     }
 }

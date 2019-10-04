@@ -14,6 +14,10 @@ public class Robot {
         );
     }
 
+    public void turbo(boolean turbo){
+        drivetrain.setTurbo(turbo);
+    }
+
     public void drive(float xMove, float yMove, float rotate) {
         drivetrain.move(xMove, yMove, rotate);
     }
