@@ -17,8 +17,13 @@ public class Main extends OpMode {
         right stick x = rotation
         left trigger = lift down
         right trigger = lift up
-
-        right bumper = TURBOSPEED
+        left bumper = slow speed
+        right bumper = turbo speed
+        a = intake claw
+        b = foundation
+        x
+        y
+        dpad
      */
 
     @Override
