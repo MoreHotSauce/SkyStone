@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode;
 public class Vector {
     private float theta;
     private float magnitude;
+    private float x;
+    private float y;
+
 
     public Vector(float t, float m){
         setTheta(t);

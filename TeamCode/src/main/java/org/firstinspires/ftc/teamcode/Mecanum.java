@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.util.Range;
 
 public class Mecanum {
 
-    private Vector velocity = new Vector();
     private float rotation = 0.0f;
 
     private Motor backLeft;
@@ -13,6 +12,16 @@ public class Mecanum {
     private Motor frontRight;
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
+
+    private boolean turbo;
+
+    public boolean isTurbo() {
+        return turbo;
+    }
+
+    public void setTurbo(boolean turbo) {
+        this.turbo = turbo;
+    }
 
     public Mecanum(Component backLeft, Component backRight, Component frontLeft, Component frontRight){
         this.backLeft = (Motor) backLeft;
@@ -23,17 +32,78 @@ public class Mecanum {
 
     public void move(float xMove, float yMove, float rotate) {
         this.rotation = rotate;
+        float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
 
-        this.velocity.setVector(xMove, yMove);
+        if (turbo) {
+            float x = Math.abs(xMove);
+            float y = Math.abs(yMove);
+            int snap = -1; //[0,3] snap*90 = angle
 
-        float backLeftSpeed = velocity.getY() + velocity.getX() - rotate;
-        float frontRightSpeed = velocity.getY() + velocity.getX() + rotate;
-        float backRightSpeed = velocity.getY() - velocity.getX() + rotate;
-        float frontLeftSpeed = velocity.getY() - velocity.getX() - rotate;
+            if (x > y){
+                if (xMove >= 0){
+                    snap = 0;
+                } else {
+                    snap = 2;
+                }
+            } else {
+                if (yMove >= 0){
+                    snap = 1;
+                } else {
+                    snap = 3;
+                }
+            }
 
-        backLeft.setSpeed(Range.clip(backLeftSpeed / MOTORSPEEDCONST, -1, 1));
-        frontRight.setSpeed(Range.clip(frontRightSpeed / MOTORSPEEDCONST, -1, 1));
-        backRight.setSpeed(Range.clip(backRightSpeed / MOTORSPEEDCONST, -1, 1));
-        frontLeft.setSpeed(Range.clip(frontLeftSpeed / MOTORSPEEDCONST, -1, 1));
+            switch(snap){
+                 case(0):
+                     backLeftSpeed = 1;
+                     backRightSpeed = -1;
+                     frontLeftSpeed = -1;
+                     frontRightSpeed = 1;
+                     break;
+
+                 case(1):
+                     backLeftSpeed = 1;
+                     backRightSpeed = 1;
+                     frontLeftSpeed = 1;
+                     frontRightSpeed = 1;
+                     break;
+
+                 case(2):
+                     backLeftSpeed = -1;
+                     backRightSpeed = 1;
+                     frontLeftSpeed = 1;
+                     frontRightSpeed = -1;
+                     break;
+
+                 case(3):
+                    backLeftSpeed = -1;
+                    backRightSpeed = -1;
+                    frontLeftSpeed = -1;
+                    frontRightSpeed = -1;
+                    break;
+
+                 default:
+                     backLeftSpeed = 0;
+                     backRightSpeed = 0;
+                     frontLeftSpeed = 0;
+                     frontRightSpeed = 0;
+             }
+
+        } else {
+            backLeftSpeed = yMove + xMove - rotate;
+            frontRightSpeed = yMove + xMove + rotate;
+            backRightSpeed = yMove - xMove + rotate;
+            frontLeftSpeed = yMove - xMove - rotate;
+
+            backLeftSpeed = backLeftSpeed / MOTORSPEEDCONST;
+            frontRightSpeed = frontRightSpeed / MOTORSPEEDCONST;
+            backRightSpeed = backRightSpeed / MOTORSPEEDCONST;
+            frontLeftSpeed = frontLeftSpeed / MOTORSPEEDCONST;
+        }
+
+        backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
+        frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
+        backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
+        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
 }
