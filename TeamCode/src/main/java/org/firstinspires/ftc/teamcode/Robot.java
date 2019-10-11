@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
-    private Gyro gyro;
+    public Gyro gyro;
 
     public Robot(Component[] comps, HardwareMap map){
         this.components = comps;

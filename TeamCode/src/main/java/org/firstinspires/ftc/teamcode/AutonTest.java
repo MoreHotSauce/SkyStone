@@ -19,11 +19,11 @@ public class AutonTest extends LinearOpMode {
                 new Motor(-1, "frontRight", hardwareMap, true)
         };
 
-        robot = new Robot(componentList);
+        robot = new Robot(componentList, hardwareMap);
         telemetry.addData("Test", "Robot");
 
         robot.drivetrain.startRotation(true);
-        sleep(1000);
+
         robot.drivetrain.stop();
     }
 
