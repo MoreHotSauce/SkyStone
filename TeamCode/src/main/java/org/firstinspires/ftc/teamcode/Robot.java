@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
+    private Gyro gyro;
 
-    public Robot(Component[] comps){
+    public Robot(Component[] comps, HardwareMap map){
         this.components = comps;
         drivetrain = new Mecanum(
                 components[0],
@@ -12,6 +15,7 @@ public class Robot {
                 components[2],
                 components[3]
         );
+        this.gyro = new Gyro(map);
     }
 
     public void turbo(boolean turbo){

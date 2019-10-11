@@ -35,7 +35,7 @@ public class Main extends OpMode {
                 new Motor(-1, "frontRight", hardwareMap, true)
         };
 
-        robot = new Robot(componentList);
+        robot = new Robot(componentList, hardwareMap);
         telemetry.addData("Test", "Robot");
     }
 
