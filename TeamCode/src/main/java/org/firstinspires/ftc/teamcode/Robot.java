@@ -18,6 +18,12 @@ public class Robot {
         this.gyro = new Gyro(map);
     }
 
+    public void startRotation(boolean ccw){
+        drivetrain.startRotation(ccw);
+    }
+
+    public void stop() {drivetrain.stop();}
+
     public void turbo(boolean turbo){
         drivetrain.setTurbo(turbo);
     }
