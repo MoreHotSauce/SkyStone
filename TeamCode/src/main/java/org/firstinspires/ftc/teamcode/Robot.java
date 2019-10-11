@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class Robot {
     private Component[] components;
-    private Mecanum drivetrain;
+    public Mecanum drivetrain;
 
     public Robot(Component[] comps){
         this.components = comps;

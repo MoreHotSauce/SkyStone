@@ -30,9 +30,9 @@ public class Main extends OpMode {
     public void init() {
         Component[] componentList = {
                 new Motor(-1, "backLeft", hardwareMap, false),
-                new Motor(-1, "backRight", hardwareMap, false),
+                new Motor(-1, "backRight", hardwareMap, true),
                 new Motor(-1, "frontLeft", hardwareMap, false),
-                new Motor(-1, "frontRight", hardwareMap, false)
+                new Motor(-1, "frontRight", hardwareMap, true)
         };
 
         robot = new Robot(componentList);

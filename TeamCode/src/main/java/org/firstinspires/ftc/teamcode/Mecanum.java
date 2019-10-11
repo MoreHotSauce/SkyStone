@@ -12,7 +12,10 @@ public class Mecanum {
     private Motor frontRight;
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
-    private float slowConstant = 1f;
+    private final float SLOWMODECONST = 0.01f;
+    private final float AUTONROTATIONCONST = 0.5f;
+
+    private float slow = 1f;
 
     private boolean turbo;
 
@@ -20,11 +23,11 @@ public class Mecanum {
         this.turbo = turbo;
     }
 
-    public void setSlow(boolean slow){
-        if(slow){
-            slowConstant = 0.1f;
+    public void setSlow(boolean slowBoolean){
+        if(slowBoolean){
+            slow = SLOWMODECONST;
         } else {
-            slowConstant = 1f;
+            slow = 1f;
         }
     }
 
@@ -100,15 +103,44 @@ public class Mecanum {
             backRightSpeed = yMove - xMove + rotate;
             frontLeftSpeed = yMove - xMove - rotate;
 
-            backLeftSpeed = (backLeftSpeed / MOTORSPEEDCONST) * slowConstant;
-            frontRightSpeed = (frontRightSpeed / MOTORSPEEDCONST) * slowConstant;
-            backRightSpeed = (backRightSpeed / MOTORSPEEDCONST) * slowConstant;
-            frontLeftSpeed = (frontLeftSpeed / MOTORSPEEDCONST) * slowConstant;
+            backLeftSpeed = (backLeftSpeed / MOTORSPEEDCONST) * slow;
+            frontRightSpeed = (frontRightSpeed / MOTORSPEEDCONST) * slow;
+            backRightSpeed = (backRightSpeed / MOTORSPEEDCONST) * slow;
+            frontLeftSpeed = (frontLeftSpeed / MOTORSPEEDCONST) * slow;
         }
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+    }
+
+    public void startRotation(boolean ccw){
+        float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
+
+        int m;
+        if(ccw){
+            m = 1;
+        }else{
+            m = -1;
+        }
+
+        backLeftSpeed = AUTONROTATIONCONST * (float) m;
+        frontLeftSpeed = AUTONROTATIONCONST * (float) m;
+        backRightSpeed = AUTONROTATIONCONST * (float) -m;
+        frontLeftSpeed = AUTONROTATIONCONST * (float) -m;
+
+
+        backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
+        frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
+        backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
+        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+    }
+
+    public void stop(){
+        backLeft.setSpeed(Range.clip(0, -1, 1));
+        frontRight.setSpeed(Range.clip(0, -1, 1));
+        backRight.setSpeed(Range.clip(0, -1, 1));
+        frontLeft.setSpeed(Range.clip(0, -1, 1));
     }
 }
