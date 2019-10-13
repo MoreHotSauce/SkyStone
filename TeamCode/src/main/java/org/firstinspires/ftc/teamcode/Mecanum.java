@@ -13,7 +13,7 @@ public class Mecanum {
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
     private final float SLOWMODECONST = 0.01f;
-    private final float AUTONROTATIONCONST = 0.5f;
+    private final float AUTONROTATIONCONST = 0.1f;
 
     private float slow = 1f;
 
@@ -128,7 +128,7 @@ public class Mecanum {
         backLeftSpeed = AUTONROTATIONCONST * (float) m;
         frontLeftSpeed = AUTONROTATIONCONST * (float) m;
         backRightSpeed = AUTONROTATIONCONST * (float) -m;
-        frontLeftSpeed = AUTONROTATIONCONST * (float) -m;
+        frontRightSpeed = AUTONROTATIONCONST * (float) -m;
 
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
