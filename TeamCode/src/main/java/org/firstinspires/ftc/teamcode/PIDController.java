@@ -34,7 +34,7 @@ public class PIDController
         kd_ = kd;
     }
 
-    public double Update(double newInput){
+    public float update(double newInput){
 
         long time = System.currentTimeMillis();
         long period = time - lastTime_;
@@ -53,6 +53,6 @@ public class PIDController
 
         lastError_ = error;
         lastTime_ = time;
-        return output;
+        return (float) output;
     }
 }

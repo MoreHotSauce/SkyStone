@@ -14,7 +14,7 @@ public class AutonTest extends OpMode {
     private float targetHeading = 0.0f;
     private Gyro gyro;
 
-    //private PIDController pidRotation = new PIDController(90/360, 0.0055, 0.00001, 0.0);
+    private PIDController pidRotation = new PIDController(45, 0.0055, 0.00000, 0.0);
 
     @Override
     public void init() {
@@ -34,7 +34,8 @@ public class AutonTest extends OpMode {
     @Override
     public void loop() {
         heading = robot.gyro.getHeading();
-        rotate();
+        //rotate();
+        rotatePID();
         telemetry.addData("Rotation", heading);
         telemetry.addData("RotationTarget", targetHeading);
 
@@ -45,6 +46,17 @@ public class AutonTest extends OpMode {
             robot.startRotation(true);
         } else if (heading > targetHeading){
             robot.startRotation(false);
+        } else {
+            robot.stop();
+        }
+    }
+
+    public void rotatePID(){
+        float error = pidRotation.update(heading);
+        if (heading < targetHeading){
+            robot.rotatePID(true, error);
+        } else if (heading > targetHeading){
+            robot.rotatePID(false, error);
         } else {
             robot.stop();
         }
