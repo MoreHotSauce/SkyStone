@@ -51,7 +51,7 @@ public class AutonFoundationPark extends OpMode {
         heading = robot.gyro.getHeading();
         targetHeading = 45.0f;
 
-        pidRotation = new PIDController(targetHeading, 0.0055, 0.00000, 0.0);
+        pidRotation = new PIDController(targetHeading, 0.55, 0.00000, 0.0);
 
         currentState = State.START;
         nextState = State.START;

@@ -12,7 +12,7 @@ public class Mecanum {
     private Motor frontRight;
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
-    private final float SLOWMODECONST = 0.01f;
+    private final float SLOWMODECONST = 0.5f;
     private final float AUTONROTATIONCONST = 0.1f;
 
     private float slow = 1f;
@@ -117,22 +117,15 @@ public class Mecanum {
     public void rotatePID(boolean ccw, float error){
         float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
 
-        int m;
-        if(ccw){
-            m = 1;
-        }else{
-            m = -1;
-        }
+        backLeftSpeed = AUTONROTATIONCONST;
+        frontLeftSpeed = AUTONROTATIONCONST;
+        backRightSpeed = -AUTONROTATIONCONST;
+        frontRightSpeed = -AUTONROTATIONCONST;
 
-        backLeftSpeed = AUTONROTATIONCONST * (float) m;
-        frontLeftSpeed = AUTONROTATIONCONST * (float) m;
-        backRightSpeed = AUTONROTATIONCONST * (float) -m;
-        frontRightSpeed = AUTONROTATIONCONST * (float) -m;
-
-        backLeftSpeed -= error;
-        frontLeftSpeed -= error;
-        backRightSpeed += error;
-        frontRightSpeed += error;
+        backLeftSpeed += error;
+        frontLeftSpeed += error;
+        backRightSpeed += -error;
+        frontRightSpeed += -error;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
