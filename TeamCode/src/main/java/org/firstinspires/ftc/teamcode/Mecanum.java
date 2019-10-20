@@ -114,7 +114,7 @@ public class Mecanum {
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
-    public void rotatePID(boolean ccw, float error){
+    public void rotatePID(boolean ccw, float correction){
         float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
 
         backLeftSpeed = AUTONROTATIONCONST;
@@ -122,10 +122,10 @@ public class Mecanum {
         backRightSpeed = -AUTONROTATIONCONST;
         frontRightSpeed = -AUTONROTATIONCONST;
 
-        backLeftSpeed += error;
-        frontLeftSpeed += error;
-        backRightSpeed += -error;
-        frontRightSpeed += -error;
+        backLeftSpeed += correction;
+        frontLeftSpeed += correction;
+        backRightSpeed += -correction;
+        frontRightSpeed += -correction;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
