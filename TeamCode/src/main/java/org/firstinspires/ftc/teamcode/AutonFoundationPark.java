@@ -45,7 +45,7 @@ public class AutonFoundationPark extends OpMode {
                 new Motor(-1, "frontRight", hardwareMap, true)
         };
 
-        robot = new Robot(componentList, hardwareMap);
+        robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Init", "Robot initalized");
 
         heading = robot.gyro.getHeading();
@@ -105,16 +105,6 @@ public class AutonFoundationPark extends OpMode {
     private void movePID(float targetHeading, float distance) {
         //TODO: Implement move to a distance with PID
         //TODO: Update distanceFromWall
-    }
-
-    public void rotate(){
-        if (heading < targetHeading){
-            robot.startRotation(true);
-        } else if (heading > targetHeading){
-            robot.startRotation(false);
-        } else {
-            robot.stop();
-        }
     }
 
     public void rotatePID(float targetHeading){
