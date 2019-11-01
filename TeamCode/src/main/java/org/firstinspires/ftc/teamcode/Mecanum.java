@@ -11,9 +11,11 @@ public class Mecanum {
     private Motor frontLeft;
     private Motor frontRight;
 
+    public float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
+
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
     private final float SLOWMODECONST = 0.5f;
-    private final float AUTONROTATIONCONST = 0.1f;
+    private final float AUTONCONST = 0.1f;
 
     private float slow = 1f;
 
@@ -31,16 +33,22 @@ public class Mecanum {
         }
     }
 
-    public Mecanum(Component backLeft, Component backRight, Component frontLeft, Component frontRight){
+    public Mecanum(Component backLeft, Component backRight, Component frontLeft, Component frontRight, boolean auton){
         this.backLeft = (Motor) backLeft;
         this.backRight = (Motor) backRight;
         this.frontLeft = (Motor) frontLeft;
         this.frontRight = (Motor) frontRight;
+        if (auton) {
+            backLeftSpeed = AUTONCONST;
+            frontLeftSpeed = AUTONCONST;
+            backRightSpeed = -AUTONCONST;
+            frontRightSpeed = -AUTONCONST;
+        }
     }
 
     public void move(float xMove, float yMove, float rotate) {
         this.rotation = rotate;
-        float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
+
 
         if (turbo) {
             float x = Math.abs(xMove);
@@ -114,13 +122,15 @@ public class Mecanum {
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
-    public void rotatePID(boolean ccw, float correction){
-        float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
 
-        backLeftSpeed = AUTONROTATIONCONST;
-        frontLeftSpeed = AUTONROTATIONCONST;
-        backRightSpeed = -AUTONROTATIONCONST;
-        frontRightSpeed = -AUTONROTATIONCONST;
+    public void resetMotorSpeeds(){
+        backLeftSpeed = AUTONCONST;
+        frontLeftSpeed = AUTONCONST;
+        backRightSpeed = -AUTONCONST;
+        frontRightSpeed = -AUTONCONST;
+    }
+
+    public void rotatePID(float correction){
 
         backLeftSpeed += correction;
         frontLeftSpeed += correction;
@@ -133,27 +143,6 @@ public class Mecanum {
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
 
-    public void startRotation(boolean ccw){
-        float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
-
-        int m;
-        if(ccw){
-            m = 1;
-        }else{
-            m = -1;
-        }
-
-        backLeftSpeed = AUTONROTATIONCONST * (float) m;
-        frontLeftSpeed = AUTONROTATIONCONST * (float) m;
-        backRightSpeed = AUTONROTATIONCONST * (float) -m;
-        frontRightSpeed = AUTONROTATIONCONST * (float) -m;
-
-
-        backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
-        frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
-        backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
-        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
-    }
 
     public void stop(){
         backLeft.setSpeed(Range.clip(0, -1, 1));

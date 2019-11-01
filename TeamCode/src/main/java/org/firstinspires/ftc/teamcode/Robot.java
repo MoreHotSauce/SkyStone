@@ -1,36 +1,54 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
     //public Lift lift;
     public Gyro gyro;
+    public StepperServo foundationHook;
 
-    public Robot(Component[] comps, HardwareMap map){
+    public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
-        drivetrain = new Mecanum(
-                components[0],
-                components[1],
-                components[2],
-                components[3]
-        );
+        if (auton){
+            drivetrain = new Mecanum(
+                    components[0],
+                    components[1],
+                    components[2],
+                    components[3],
+                    true
+            );
+        } else {
+            drivetrain = new Mecanum(
+                    components[0],
+                    components[1],
+                    components[2],
+                    components[3],
+                    false
+            );
+        }
+
         /*
         lift = new Lift(
                 components[4]
         );
         */
         this.gyro = new Gyro(map);
+        this.foundationHook = (StepperServo) components[4];
+        foundationHook.setAngle(0.0f);
     }
 
-    public void rotatePID(boolean ccw, float error){
-        drivetrain.rotatePID(ccw, error);
+
+    public void resetMotorSpeeds(){
+        drivetrain.resetMotorSpeeds();
     }
 
-    public void startRotation(boolean ccw){
-        drivetrain.startRotation(ccw);
+    public void rotatePID(float error){
+        drivetrain.rotatePID(error);
     }
+
 
     public void stop() {
         drivetrain.stop();
@@ -50,4 +68,12 @@ public class Robot {
         lift.up(speedUp);
     }
      */
+    public void foundationHookControl(boolean up){
+
+        if (up){
+            foundationHook.setAngle(135);
+        } else {
+            foundationHook.setAngle(45);
+        }
+    }
 }

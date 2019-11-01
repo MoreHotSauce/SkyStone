@@ -14,7 +14,7 @@ public class AutonTest extends OpMode {
     private float targetHeading = 0.0f;
 
     private final float KPR = 0.015f;
-    private final float KIR = 0.00001f;
+    private final float KIR = 0.000001f;
     private final float KDR = 0.00001f;
 
     private PIDController pidRotation = new PIDController(180.0f, KPR, KIR, KDR);
@@ -25,32 +25,30 @@ public class AutonTest extends OpMode {
                 new Motor(-1, "backLeft", hardwareMap, false),
                 new Motor(-1, "backRight", hardwareMap, true),
                 new Motor(-1, "frontLeft", hardwareMap, false),
-                new Motor(-1, "frontRight", hardwareMap, true)
+                new Motor(-1, "frontRight", hardwareMap, true),
+                new StepperServo(-1, "foundationHook", hardwareMap)
         };
 
-        robot = new Robot(componentList, hardwareMap);
+        robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
         heading = robot.gyro.getHeading();
         changeTargetRotation(heading);
+        changeTargetRotation(90.0f);
     }
 
     @Override
     public void loop() {
         heading = robot.gyro.getHeading();
         //rotate();
+        robot.resetMotorSpeeds();
         rotatePID();
         telemetry.addData("Rotation", heading);
         telemetry.addData("RotationTarget", targetHeading);
-    }
+        telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
+        telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
+        telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
+        telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
 
-    public void rotate(){
-        if (heading < targetHeading){
-            robot.startRotation(true);
-        } else if (heading > targetHeading){
-            robot.startRotation(false);
-        } else {
-            robot.stop();
-        }
     }
 
     public void changeTargetRotation(float target){
@@ -60,7 +58,7 @@ public class AutonTest extends OpMode {
     public void rotatePID(){
         float correction = pidRotation.update(heading);
         telemetry.addData("Correction", correction);
-        robot.rotatePID(true, correction);
+        robot.rotatePID(correction);
     }
 
 }

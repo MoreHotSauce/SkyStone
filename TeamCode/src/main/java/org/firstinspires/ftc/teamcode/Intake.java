@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 public class Intake {
     private boolean open = true;
-    //private Servo intakeServo;
+    //private StepperServo intakeServo;
 
     public Intake(Component servo){
-        //this.intakeServo = (Servo) servo;
+        //this.intakeServo = (StepperServo) servo;
     }
 
     public void setServo(){
