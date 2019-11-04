@@ -13,9 +13,9 @@ public class AutonTest extends OpMode {
     private float heading = 0.0f;
     private float targetHeading = 0.0f;
 
-    private final float KPR = 0.015f;
-    private final float KIR = 0.000001f;
-    private final float KDR = 0.00001f;
+    private final float KPR = 0.01f;
+    private final float KIR = 0.00001f;
+    private final float KDR = 0.0001f;
 
     private PIDController pidRotation = new PIDController(180.0f, KPR, KIR, KDR);
 
