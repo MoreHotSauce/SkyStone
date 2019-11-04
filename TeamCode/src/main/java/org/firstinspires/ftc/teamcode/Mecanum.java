@@ -6,10 +6,10 @@ public class Mecanum {
 
     private float rotation = 0.0f;
 
-    private Motor backLeft;
-    private Motor backRight;
-    private Motor frontLeft;
-    private Motor frontRight;
+    public Motor backLeft;
+    public Motor backRight;
+    public Motor frontLeft;
+    public Motor frontRight;
 
     public float backLeftSpeed = 0, frontRightSpeed = 0, backRightSpeed = 0, frontLeftSpeed = 0;
 
@@ -141,8 +141,7 @@ public class Mecanum {
         float sumEncoderValues = 0.0f;
 
         for(int i = 0; i < 4; i++){
-            encoderValues[i] /= 134.4;
-            encoderValues[i] *= 121; //rotationstoinches
+            encoderValues[i] /= 537.6;
             encoderValues[i] /= 1.41421356237;
             sumEncoderValues += encoderValues[i];
         }

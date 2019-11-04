@@ -39,6 +39,11 @@ public class Main extends OpMode{
 
         robot = new Robot(componentList, hardwareMap, false);
         telemetry.addData("Test", "Robot");
+        telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
+        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
+        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
+        telemetry.addData("backLeft", robot.drivetrain.backLeft.getEncoderValue());
     }
 
     public void start(){
@@ -52,6 +57,11 @@ public class Main extends OpMode{
         //robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
         telemetry.addData("servo", robot.foundationHook.getAngle());
         robot.foundationHookControl(gamepad1.b);
+        telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
+        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
+        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
+        telemetry.addData("backLeft", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.update();
     }
 }

@@ -42,7 +42,11 @@ public class AutonTest extends OpMode {
         //rotate();
         robot.resetMotorSpeeds();
         rotatePID();
-        telemetry.addData("encoders", robot.drivetrain.getYDistance());
+        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
+        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
+        telemetry.addData("backRight", robot.drivetrain.backLeft.getEncoderValue());
+
         /*
         telemetry.addData("Rotation", heading);
         telemetry.addData("RotationTarget", targetHeading);
