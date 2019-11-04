@@ -15,7 +15,7 @@ public class Mecanum {
 
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
     private final float SLOWMODECONST = 0.5f;
-    private final float AUTONCONST = 0.1f;
+    private final float AUTONCONST = 0.0f;
 
     private float slow = 1f;
 
@@ -130,6 +130,27 @@ public class Mecanum {
         frontRightSpeed = -AUTONCONST;
     }
 
+    public float getYDistance(){
+        float[] encoderValues = {
+                backLeft.getEncoderValue(),
+                frontLeft.getEncoderValue(),
+                backRight.getEncoderValue(),
+                frontRight.getEncoderValue()
+        };
+
+        float sumEncoderValues = 0.0f;
+
+        for(int i = 0; i < 4; i++){
+            encoderValues[i] /= 134.4;
+            encoderValues[i] *= 121; //rotationstoinches
+            encoderValues[i] /= 1.41421356237;
+            sumEncoderValues += encoderValues[i];
+        }
+
+
+        return 0.0f;
+    }
+
     public void rotatePID(float correction){
 
         backLeftSpeed += correction;
@@ -142,7 +163,6 @@ public class Mecanum {
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
-
 
     public void stop(){
         backLeft.setSpeed(Range.clip(0, -1, 1));
