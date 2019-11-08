@@ -9,7 +9,7 @@ public class Robot {
     //public Lift lift;
     public Gyro gyro;
     public StepperServo foundationHook;
-
+    public StepperServo chomper;
     public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
         if (auton){
@@ -68,6 +68,15 @@ public class Robot {
         lift.up(speedUp);
     }
      */
+
+    public void chomperControl(boolean open){
+        if (open){
+            chomper.setAngle(45);
+        } else {
+            chomper.setAngle(135);
+        }
+    }
+
     public void foundationHookControl(boolean up){
 
         if (up){
