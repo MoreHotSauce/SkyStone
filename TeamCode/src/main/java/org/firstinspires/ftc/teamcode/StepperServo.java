@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class StepperServo extends Component{
 
     private float angle;
-    private Servo servo;
+    public Servo servo;
 
     public StepperServo(int port, String name, HardwareMap map){
         super(port, name);
@@ -19,7 +19,7 @@ public class StepperServo extends Component{
     }
 
     public float getAngle(){
-        return angle;
+        return (float) servo.getPosition();
     }
 
 }

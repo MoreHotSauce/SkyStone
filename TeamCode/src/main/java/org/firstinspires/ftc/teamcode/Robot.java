@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -35,6 +36,8 @@ public class Robot {
                 components[4]
         );
         */
+        this.chomper = (StepperServo) components[5];
+        chomper.servo.setPosition(0.45);
         this.gyro = new Gyro(map);
         this.foundationHook = (StepperServo) components[4];
         foundationHook.setAngle(0.0f);
@@ -70,10 +73,11 @@ public class Robot {
      */
 
     public void chomperControl(boolean open){
-        if (open){
-            chomper.setAngle(45);
-        } else {
-            chomper.setAngle(135);
+        if(open){
+            chomper.servo.setPosition(0);
+        }else{
+            chomper.servo.setPosition(0.9);
+
         }
     }
 

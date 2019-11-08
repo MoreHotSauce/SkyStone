@@ -59,7 +59,7 @@ public class Main extends OpMode{
         //robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
         robot.foundationHookControl(gamepad1.b);
 
-        telemetry.addData("servo", robot.foundationHook.getAngle());
+        telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
         telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
         telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
