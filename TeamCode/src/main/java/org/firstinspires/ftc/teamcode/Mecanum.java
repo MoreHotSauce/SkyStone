@@ -141,13 +141,17 @@ public class Mecanum {
         float sumEncoderValues = 0.0f;
 
         for(int i = 0; i < 4; i++){
+<<<<<<< Updated upstream
             encoderValues[i] /= 537.6;
             encoderValues[i] /= 1.41421356237;
+=======
+            encoderValues[i] /= 134.4;
+>>>>>>> Stashed changes
             sumEncoderValues += encoderValues[i];
         }
 
 
-        return 0.0f;
+        return sumEncoderValues / 4;
     }
 
     public void rotatePID(float correction){
