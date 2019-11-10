@@ -11,6 +11,8 @@ public class Robot {
     public Gyro gyro;
     public StepperServo foundationHook;
     public StepperServo chomper;
+    public Actuator actuator;
+
     public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
         if (auton){
@@ -37,10 +39,11 @@ public class Robot {
         );
         */
         this.chomper = (StepperServo) components[5];
-        chomper.servo.setPosition(0.45);
+        chomper.servo.setPosition(0);
         this.gyro = new Gyro(map);
         this.foundationHook = (StepperServo) components[4];
         foundationHook.setAngle(0.0f);
+        actuator = new Actuator((EMotor) components[6]);
     }
 
 
@@ -72,11 +75,12 @@ public class Robot {
     }
      */
 
+
     public void chomperControl(boolean open){
         if(open){
-            chomper.servo.setPosition(0);
+            chomper.servo.setPosition(0.5);
         }else{
-            chomper.servo.setPosition(0.9);
+            chomper.servo.setPosition(0);
 
         }
     }

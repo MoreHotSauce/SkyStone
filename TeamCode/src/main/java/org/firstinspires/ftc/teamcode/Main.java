@@ -35,7 +35,8 @@ public class Main extends OpMode{
                 new Motor(-1, "frontRight", hardwareMap, true),
                 //new Motor(-1, "liftMotor", hardwareMap, false),
                 new StepperServo(-1, "foundationHook", hardwareMap),
-                new StepperServo(-1, "chomper", hardwareMap)
+                new StepperServo(-1, "chomper", hardwareMap),
+                new EMotor(-1, "actuator", hardwareMap, 1)
         };
 
         robot = new Robot(componentList, hardwareMap, false);
@@ -58,6 +59,11 @@ public class Main extends OpMode{
         robot.chomperControl(gamepad1.x);
         //robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
         robot.foundationHookControl(gamepad1.b);
+        if(gamepad1.dpad_down){
+
+        }else if(gamepad1.dpad_up){
+
+        }
 
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
