@@ -106,10 +106,10 @@ public class Mecanum {
              }
 
         } else {
-            backLeftSpeed = yMove + xMove - rotate;
-            frontRightSpeed = yMove + xMove + rotate;
-            backRightSpeed = yMove - xMove + rotate;
-            frontLeftSpeed = yMove - xMove - rotate;
+            backLeftSpeed = yMove + xMove + rotate;
+            frontRightSpeed = yMove + xMove - rotate;
+            backRightSpeed = yMove - xMove - rotate;
+            frontLeftSpeed = yMove - xMove + rotate;
 
             backLeftSpeed = (backLeftSpeed / MOTORSPEEDCONST) * slow;
             frontRightSpeed = (frontRightSpeed / MOTORSPEEDCONST) * slow;
@@ -150,10 +150,10 @@ public class Mecanum {
     }
 
     public void moveYDistance(float correctionY){
-        backLeftSpeed += correctionY;
-        frontLeftSpeed += correctionY;
-        backRightSpeed += correctionY;
-        frontRightSpeed += correctionY;
+        backLeftSpeed -= correctionY;
+        frontLeftSpeed -= correctionY;
+        backRightSpeed -= correctionY;
+        frontRightSpeed -= correctionY;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
@@ -170,10 +170,10 @@ public class Mecanum {
 
     public void rotatePID(float correction){
 
-        backLeftSpeed += correction;
-        frontLeftSpeed += correction;
-        backRightSpeed += -correction;
-        frontRightSpeed += -correction;
+        backLeftSpeed += -correction;
+        frontLeftSpeed += -correction;
+        backRightSpeed += correction;
+        frontRightSpeed += correction;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));

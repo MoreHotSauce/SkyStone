@@ -14,18 +14,18 @@ public class Robot {
     public Actuator actuator;
 
     public float heading = 0.0f;
-    public float targetHeading = 180.0f;
+    public float targetHeading = 0.0f;
 
     public float currentY = 0.0f;
     public float targetY = 0.0f;
 
-    private final float rKPR = 0.01f;
-    private final float rKIR = 0.00001f;
-    private final float rKDR = 0.0001f;
+    private final float rKPR = 0.007f;
+    private final float rKIR = 0.0f;
+    private final float rKDR = 0.0f;
 
-    private final float yKPR = 0.01f;
-    private final float yKIR = 0.00001f;
-    private final float yKDR = 0.0001f;
+    private final float yKPR = 0.2f;
+    private final float yKIR = 0.001f;
+    private final float yKDR = 0.01f;
 
 
 
@@ -65,12 +65,16 @@ public class Robot {
         actuator = new Actuator((EMotor) components[6]);
 
         heading = gyro.getHeading();
+        targetHeading = heading;
         changeTargetRotation(targetHeading);
 
         currentY = drivetrain.getYDistance();
         changeTargetY(targetY);
     }
 
+    public void updateLoop(){
+        heading = gyro.getHeading();
+    }
 
     public void resetMotorSpeeds(){
         drivetrain.resetMotorSpeeds();
@@ -115,6 +119,7 @@ public class Robot {
     }
 
     public void changeTargetY(float target){
+        targetY = target;
         pidYDistance = new PIDController(target, yKPR, yKIR, yKDR);
     }
 

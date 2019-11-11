@@ -26,23 +26,21 @@ public class AutonTest extends OpMode {
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
+
+        robot.changeTargetRotation(270.0f);
     }
 
     @Override
     public void loop() {
+        robot.updateLoop();
         robot.resetMotorSpeeds();
         float correctionR = robot.rotatePID();
-        //robot.moveTargetY();
+        float correctionY = robot.moveTargetY();
 
-        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
-        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
-        telemetry.addData("backRight", robot.drivetrain.backLeft.getEncoderValue());
-
-
-        telemetry.addData("Rotation", robot.heading);
-        telemetry.addData("RotationTarget", robot.targetHeading);
+        telemetry.addData("Position", robot.drivetrain.getYDistance());
+        telemetry.addData("PositionTarget", robot.targetY);
         telemetry.addData("CorrectionR", correctionR);
+        telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
         telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
         telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
