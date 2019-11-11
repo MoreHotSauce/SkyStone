@@ -29,10 +29,10 @@ public class Main extends OpMode{
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, false),
-                new Motor(-1, "backRight", hardwareMap, true),
-                new Motor(-1, "frontLeft", hardwareMap, false),
-                new Motor(-1, "frontRight", hardwareMap, true),
+                new Motor(-1, "backLeft", hardwareMap, true),
+                new Motor(-1, "backRight", hardwareMap, false),
+                new Motor(-1, "frontLeft", hardwareMap, true),
+                new Motor(-1, "frontRight", hardwareMap, false),
                 //new Motor(-1, "liftMotor", hardwareMap, false),
                 new StepperServo(-1, "foundationHook", hardwareMap),
                 new StepperServo(-1, "chomper", hardwareMap),
@@ -41,24 +41,21 @@ public class Main extends OpMode{
 
         robot = new Robot(componentList, hardwareMap, false);
         telemetry.addData("Test", "Robot");
-        telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
-        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
-        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
-        telemetry.addData("backLeft", robot.drivetrain.backLeft.getEncoderValue());
+        telemetry.addData("avgRotation", robot.drivetrain.getYDistance());
     }
 
     public void start(){
-
+        robot.drivetrain.resetAllEncoders();
     }
 
     @Override
     public void loop() {
-        robot.turbo(gamepad1.right_bumper);
-        robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        robot.chomperControl(gamepad1.x);
+        //robot.turbo(gamepad1.right_bumper);
+        //robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        robot.drive(0, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        //robot.chomperControl(gamepad1.x);
         //robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
-        robot.foundationHookControl(gamepad1.b);
+        //robot.foundationHookControl(gamepad1.b);
         if(gamepad1.dpad_down){
 
         }else if(gamepad1.dpad_up){
@@ -67,11 +64,10 @@ public class Main extends OpMode{
 
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
-        telemetry.addData("frontRight", robot.drivetrain.frontRight.getEncoderValue());
-        telemetry.addData("frontLeft", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("backRight", robot.drivetrain.backRight.getEncoderValue());
-        telemetry.addData("backLeft", robot.drivetrain.backLeft.getEncoderValue());
+
 
         telemetry.update();
     }
+
+
 }

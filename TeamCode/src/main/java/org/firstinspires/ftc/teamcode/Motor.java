@@ -27,10 +27,12 @@ public class Motor extends Component{
 
     public float getEncoderValue(){
         return motor.getCurrentPosition();
+
     }
 
     public void resetEncoder(){
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }
