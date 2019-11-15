@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
-    //public Lift lift;
+    public Lift lift;
     public Gyro gyro;
     public StepperServo foundationHook;
     public StepperServo chomper;
@@ -52,16 +52,19 @@ public class Robot {
             );
         }
 
-        /*
+
         lift = new Lift(
-                components[4]
+                components[7]
         );
-        */
+
         this.chomper = (StepperServo) components[5];
         chomper.servo.setPosition(0);
+
         this.gyro = new Gyro(map);
+
         this.foundationHook = (StepperServo) components[4];
         foundationHook.setAngle(0.0f);
+
         actuator = new Actuator((EMotor) components[6]);
 
         heading = gyro.getHeading();
@@ -92,12 +95,12 @@ public class Robot {
         drivetrain.move(xMove, yMove, rotate);
     }
 
-    /*
+
     public void moveLift(float speedDown, float speedUp){
         lift.down(speedDown);
         lift.up(speedUp);
     }
-     */
+
 
 
     public void chomperControl(boolean open){
@@ -106,6 +109,15 @@ public class Robot {
         }else{
             chomper.servo.setPosition(0);
 
+        }
+    }
+
+    //TODO: Make this not terribly designed
+    public void actuatorControl(boolean extend, boolean retract){
+        if (extend && !retract){
+            actuator.actuatorMotor.motor.setPower(1.0);
+        } else if (!extend && retract) {
+            actuator.actuatorMotor.motor.setPower(-1.0);
         }
     }
 

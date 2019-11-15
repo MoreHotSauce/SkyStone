@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class EMotor extends Component {
-    private DcMotor motor;
+    public DcMotor motor;
     private float speed = 0;
     private float targetPos = 0;
 

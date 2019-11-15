@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Actuator {
-    private EMotor actuatorMotor;
+    public EMotor actuatorMotor;
     private final float FOURINCHENCODER = 100;
     private final float MAXPOSITION = 400;
     public Actuator(EMotor motor){
@@ -17,7 +17,7 @@ public class Actuator {
         }
     }
 
-    public boolean decrease(){
+    public boolean decreaseFour(){
         if (actuatorMotor.getEncoderValue() - FOURINCHENCODER >= 0){
             actuatorMotor.setTargetPos(actuatorMotor.getEncoderValue() - FOURINCHENCODER);
             return true;
