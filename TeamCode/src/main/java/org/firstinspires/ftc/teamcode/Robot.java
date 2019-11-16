@@ -30,6 +30,9 @@ public class Robot {
     private boolean chomperButtonControl = false;
     private boolean chomperOpen = true;
 
+    private boolean foundationButtonControl = false;
+    private boolean foundationOpen = true;
+
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR);
     private PIDController pidRotation = new PIDController(180.0f, rKPR, rKIR, rKDR);
 
@@ -116,16 +119,13 @@ public class Robot {
             chomperButtonControl = true;
             if(chomperOpen){
                 chomper.servo.setPosition(0);
+                chomperOpen = false;
             } else {
                 chomper.servo.setPosition(0.5);
+                chomperOpen = true;
             }
         } else if (chomperButtonControl && !pressed){ //Just now unpressed
             chomperButtonControl = false;
-            if(chomperOpen){
-                chomper.servo.setPosition(0);
-            } else {
-                chomper.servo.setPosition(0.5);
-            }
         }
     }
 
@@ -135,15 +135,27 @@ public class Robot {
             actuator.actuatorMotor.motor.setPower(1.0);
         } else if (!extend && retract) {
             actuator.actuatorMotor.motor.setPower(-1.0);
+        } else {
+            actuator.actuatorMotor.motor.setPower(0);
         }
     }
 
-    public void foundationHookControl(boolean up){
+    public void foundationHookControl(boolean pressed){
+        if (foundationButtonControl == pressed){ //Still pressed
+            return;
+        }
 
-        if (up){
-            foundationHook.setAngle(135);
-        } else {
-            foundationHook.setAngle(45);
+        if (!foundationButtonControl && pressed){ //Just now pressed
+            foundationButtonControl = true;
+            if(foundationOpen){
+                foundationHook.setAngle(45);
+                foundationOpen = false;
+            } else {
+                foundationHook.setAngle(135);
+                foundationOpen = true;
+            }
+        } else if (foundationButtonControl && !pressed){ //Just now unpressed
+            foundationButtonControl = false;
         }
     }
 
