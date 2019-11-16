@@ -77,6 +77,7 @@ public class Robot {
 
     public void updateLoop(){
         heading = gyro.getHeading();
+        currentY = drivetrain.getYDistance();
     }
 
     public void resetMotorSpeeds(){
@@ -146,7 +147,7 @@ public class Robot {
     }
 
     public float moveTargetY(){
-        float correctionY = pidYDistance.update(drivetrain.getYDistance());
+        float correctionY = pidYDistance.update(currentY);
         drivetrain.moveYDistance(correctionY);
         return correctionY;
     }
