@@ -132,9 +132,9 @@ public class Robot {
     //TODO: Make this not terribly designed
     public void actuatorControl(boolean extend, boolean retract){
         if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(1.0);
+            actuator.actuatorMotor.motor.setPower(0.3);
         } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-1.0);
+            actuator.actuatorMotor.motor.setPower(-0.3);
         } else {
             actuator.actuatorMotor.motor.setPower(0);
         }
