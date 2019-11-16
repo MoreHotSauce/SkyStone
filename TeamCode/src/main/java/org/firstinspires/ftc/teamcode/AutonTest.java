@@ -14,20 +14,19 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, true),
-                new Motor(-1, "backRight", hardwareMap, false),
-                new Motor(-1, "frontLeft", hardwareMap, true),
-                new Motor(-1, "frontRight", hardwareMap, false),
-                //new Motor(-1, "liftMotor", hardwareMap, false),
-                new StepperServo(-1, "foundationHook", hardwareMap),
-                new StepperServo(-1, "chomper", hardwareMap),
-                new EMotor(-1, "actuator", hardwareMap, 1)
+                new Motor(-1, "backLeft", hardwareMap, false),     //0
+                new Motor(-1, "backRight", hardwareMap, true),   //1
+                new Motor(-1, "frontLeft", hardwareMap, false),    //2
+                new Motor(-1, "frontRight", hardwareMap, true),  //3
+                new StepperServo(-1, "foundationHook", hardwareMap),      //4
+                new StepperServo(-1, "chomper", hardwareMap),             //5
+                new EMotor(-1, "actuator", hardwareMap, 1),        //6
+                new Motor(-1, "liftMotor", hardwareMap, false)    //7
         };
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
-
-        robot.changeTargetRotation(270.0f);
+        robot.changeTargetRotation(270);
     }
 
     @Override
@@ -37,8 +36,10 @@ public class AutonTest extends OpMode {
         float correctionR = robot.rotatePID();
         float correctionY = robot.moveTargetY();
 
-        telemetry.addData("Position", robot.drivetrain.getYDistance());
+        telemetry.addData("Position", robot.currentY);
         telemetry.addData("PositionTarget", robot.targetY);
+        telemetry.addData("Rotation", robot.heading);
+        telemetry.addData("RotationTarget", robot.targetHeading);
         telemetry.addData("CorrectionR", correctionR);
         telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);

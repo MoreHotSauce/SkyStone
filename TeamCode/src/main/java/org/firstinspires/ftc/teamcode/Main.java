@@ -64,6 +64,10 @@ public class Main extends OpMode{
 
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
+        telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
+        telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());
+        telemetry.addData("fl", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("fr", robot.drivetrain.frontRight.getEncoderValue());
 
 
         telemetry.update();

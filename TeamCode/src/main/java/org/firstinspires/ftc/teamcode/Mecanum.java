@@ -132,9 +132,9 @@ public class Mecanum {
 
     public float getYDistance(){
         float[] encoderValues = {
-                backLeft.getEncoderValue(),
+                backLeft.getEncoderValue() * -1,
                 frontLeft.getEncoderValue() * -1,
-                backRight.getEncoderValue(),
+                backRight.getEncoderValue() * -1,
                 frontRight.getEncoderValue() * -1
         };
 
@@ -170,10 +170,10 @@ public class Mecanum {
 
     public void rotatePID(float correction){
 
-        backLeftSpeed += -correction;
-        frontLeftSpeed += -correction;
-        backRightSpeed += correction;
-        frontRightSpeed += correction;
+        backLeftSpeed += correction;
+        frontLeftSpeed += correction;
+        backRightSpeed += -correction;
+        frontRightSpeed += -correction;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));

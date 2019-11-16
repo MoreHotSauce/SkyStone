@@ -29,10 +29,10 @@ public class MainTempNov15 extends OpMode{
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, true),     //0
-                new Motor(-1, "backRight", hardwareMap, false),   //1
-                new Motor(-1, "frontLeft", hardwareMap, true),    //2
-                new Motor(-1, "frontRight", hardwareMap, false),  //3
+                new Motor(-1, "backLeft", hardwareMap, false),     //0
+                new Motor(-1, "backRight", hardwareMap, true),   //1
+                new Motor(-1, "frontLeft", hardwareMap, false),    //2
+                new Motor(-1, "frontRight", hardwareMap, true),  //3
                 new StepperServo(-1, "foundationHook", hardwareMap),      //4
                 new StepperServo(-1, "chomper", hardwareMap),             //5
                 new EMotor(-1, "actuator", hardwareMap, 1),        //6
@@ -70,8 +70,10 @@ public class MainTempNov15 extends OpMode{
 
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
-
-
+        telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
+        telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());
+        telemetry.addData("fl", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("fr", robot.drivetrain.frontRight.getEncoderValue());
         telemetry.update();
     }
 

@@ -19,13 +19,13 @@ public class Robot {
     public float currentY = 0.0f;
     public float targetY = 0.0f;
 
-    private final float rKPR = 0.007f;
-    private final float rKIR = 0.0f;
+    private final float rKPR = 0.0007f;
+    private final float rKIR = 0.00001f;
     private final float rKDR = 0.0f;
 
-    private final float yKPR = 0.2f;
-    private final float yKIR = 0.001f;
-    private final float yKDR = 0.01f;
+    private final float yKPR = 0.015f;
+    private final float yKIR = 0.00003f;
+    private final float yKDR = 0.005f;
 
 
 
@@ -66,6 +66,8 @@ public class Robot {
         foundationHook.setAngle(0.0f);
 
         actuator = new Actuator((EMotor) components[6]);
+
+        drivetrain.resetAllEncoders();
 
         heading = gyro.getHeading();
         targetHeading = heading;
