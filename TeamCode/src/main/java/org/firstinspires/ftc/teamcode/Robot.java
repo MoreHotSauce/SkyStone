@@ -27,7 +27,8 @@ public class Robot {
     private final float yKIR = 0.00003f;
     private final float yKDR = 0.005f;
 
-
+    private boolean chomperButtonControl = false;
+    private boolean chomperOpen = true;
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR);
     private PIDController pidRotation = new PIDController(180.0f, rKPR, rKIR, rKDR);
@@ -106,12 +107,25 @@ public class Robot {
 
 
 
-    public void chomperControl(boolean open){
-        if(open){
-            chomper.servo.setPosition(0.5);
-        }else{
-            chomper.servo.setPosition(0);
+    public void chomperControl(boolean pressed){
+        if (chomperButtonControl == pressed){ //Still pressed
+            return;
+        }
 
+        if (!chomperButtonControl && pressed){ //Just now pressed
+            chomperButtonControl = true;
+            if(chomperOpen){
+                chomper.servo.setPosition(0);
+            } else {
+                chomper.servo.setPosition(0.5);
+            }
+        } else if (chomperButtonControl && !pressed){ //Just now unpressed
+            chomperButtonControl = false;
+            if(chomperOpen){
+                chomper.servo.setPosition(0);
+            } else {
+                chomper.servo.setPosition(0.5);
+            }
         }
     }
 

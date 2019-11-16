@@ -62,12 +62,6 @@ public class MainTempNov15 extends OpMode{
 
         robot.foundationHookControl(gamepad1.a);
 
-        if(gamepad1.dpad_down){
-
-        }else if(gamepad1.dpad_up){
-
-        }
-
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
         telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
