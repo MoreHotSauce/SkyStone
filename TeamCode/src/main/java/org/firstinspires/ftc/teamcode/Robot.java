@@ -27,10 +27,10 @@ public class Robot {
     private final float yKIR = 0.00003f;
     private final float yKDR = 0.005f;
 
-    private boolean chomperButtonControl = false;
+    private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
 
-    private boolean foundationButtonControl = false;
+    private boolean previousFoundationButton = false;
     private boolean foundationOpen = true;
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR);
@@ -111,12 +111,7 @@ public class Robot {
 
 
     public void chomperControl(boolean pressed){
-        if (chomperButtonControl == pressed){ //Still pressed
-            return;
-        }
-
-        if (!chomperButtonControl && pressed){ //Just now pressed
-            chomperButtonControl = true;
+        if(pressed && !previousChomperButton){
             if(chomperOpen){
                 chomper.servo.setPosition(0);
                 chomperOpen = false;
@@ -124,9 +119,9 @@ public class Robot {
                 chomper.servo.setPosition(0.5);
                 chomperOpen = true;
             }
-        } else if (chomperButtonControl && !pressed){ //Just now unpressed
-            chomperButtonControl = false;
         }
+
+        previousChomperButton = pressed;
     }
 
     //TODO: Make this not terribly designed
@@ -141,12 +136,7 @@ public class Robot {
     }
 
     public void foundationHookControl(boolean pressed){
-        if (foundationButtonControl == pressed){ //Still pressed
-            return;
-        }
-
-        if (!foundationButtonControl && pressed){ //Just now pressed
-            foundationButtonControl = true;
+        if(pressed && !previousFoundationButton){
             if(foundationOpen){
                 foundationHook.setAngle(45);
                 foundationOpen = false;
@@ -154,18 +144,28 @@ public class Robot {
                 foundationHook.setAngle(135);
                 foundationOpen = true;
             }
-        } else if (foundationButtonControl && !pressed){ //Just now unpressed
-            foundationButtonControl = false;
         }
+
+        previousFoundationButton = pressed;
     }
 
     public void changeTargetY(float target){
-        targetY = target;
-        pidYDistance = new PIDController(target, yKPR, yKIR, yKDR);
+        if(target == this.targetY){
+            return;
+        } else {
+            targetY = target;
+            drivetrain.resetAllEncoders();
+            pidYDistance = new PIDController(target, yKPR, yKIR, yKDR);
+        }
     }
 
     public void changeTargetRotation(float target){
-        pidRotation = new PIDController(target, rKPR, rKIR, rKDR);
+        if(target == this.targetHeading){
+            return;
+        } else {
+            targetHeading = target;
+            pidRotation = new PIDController(target, rKPR, rKIR, rKDR);
+        }
     }
 
     public float rotatePID(){

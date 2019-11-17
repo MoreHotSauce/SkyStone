@@ -10,6 +10,7 @@ enum State{ //Maybe add wait states
     ROTATE180,
     MOVETOFOUNDATION,
     HOOKFOUNDATION,
+    WAIT1,
     MOVETOWALL,
     RELEASEHOOK,
     STRAFETOGATE,
@@ -23,78 +24,92 @@ enum State{ //Maybe add wait states
 public class AutonFoundationPark extends OpMode {
 
     Robot robot;
-    private float heading = 0.0f, targetHeading = 0.0f;
-    private Gyro gyro;
 
-    private PIDController pidRotation;
+    private State currentState;
+    private final float YTOL = 1.0f;
+    private final float RTOL = 0.5f;
 
-    private State currentState, nextState;
-
-    private float distanceFromWall = 0f;
-    private float distanceFromRotate = 0f;
-
-    private final float FOUNDATIONDISTANCE = 4f; //TODO: Change to actual distance
-    private final float DISTANCETOROTATE = 1f; //TODO: Change to actual distance
 
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, false),
-                new Motor(-1, "backRight", hardwareMap, true),
-                new Motor(-1, "frontLeft", hardwareMap, false),
-                new Motor(-1, "frontRight", hardwareMap, true)
+                new Motor(-1, "backLeft", hardwareMap, false),     //0
+                new Motor(-1, "backRight", hardwareMap, true),   //1
+                new Motor(-1, "frontLeft", hardwareMap, false),    //2
+                new Motor(-1, "frontRight", hardwareMap, true),  //3
+                new StepperServo(-1, "foundationHook", hardwareMap),      //4
+                new StepperServo(-1, "chomper", hardwareMap),             //5
+                new EMotor(-1, "actuator", hardwareMap, 1),        //6
+                new Motor(-1, "liftMotor", hardwareMap, false)    //7
         };
 
         robot = new Robot(componentList, hardwareMap, true);
-        telemetry.addData("Init", "Robot initalized");
-
-        heading = robot.gyro.getHeading();
-        targetHeading = 45.0f;
-
-        pidRotation = new PIDController(targetHeading, 0.55, 0.00000, 0.0);
+        telemetry.addData("Test", "Robot");
 
         currentState = State.START;
-        nextState = State.START;
     }
 
     @Override
     public void loop() {
-        currentState = nextState;
+        robot.updateLoop();
+        robot.resetMotorSpeeds();
+        robot.chomperControl(false);
+        robot.foundationHookControl(false);
 
         switch(currentState){
             case START:
-                nextState = State.CHECKHEADING;
+                currentState = State.CHECKHEADING;
                 break;
 
             case CHECKHEADING:
-                if (heading == 180.0f){
-                    nextState = State.MOVEFROMWALL;
-                } else {
-                    rotatePID(180.0f);
+                robot.changeTargetRotation(180.0f);
+                if (tol(robot.heading , robot.targetHeading, RTOL)){
+                    currentState = State.MOVEFROMWALL;
                 }
                 break;
 
             case MOVEFROMWALL:
-                if (distanceFromWall == DISTANCETOROTATE){
-                    nextState = State.ROTATE180;
-                } else {
-                    movePID(180, DISTANCETOROTATE);
+                robot.changeTargetY(12.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL){
+                    robot.changeTargetY(0.0f);
+                    currentState = State.ROTATE180;
                 }
                 break;
 
             case ROTATE180:
-                if (heading == 0.0f) {
-                    nextState = State.MOVETOFOUNDATION;
-                } else {
-                    rotatePID(0.0f);
+                robot.changeTargetRotation(0.0f);
+                if(tol(robot.heading, robot.targetHeading, RTOL)){
+                    currentState = State.MOVETOFOUNDATION;
                 }
                 break;
 
             case MOVETOFOUNDATION:
-                if (distanceFromRotate == FOUNDATIONDISTANCE - DISTANCETOROTATE){
-                    nextState = State.HOOKFOUNDATION;
-                } else {
-                    movePID(0.0f, FOUNDATIONDISTANCE - DISTANCETOROTATE);
+                robot.changeTargetY(-12.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL){
+                    robot.changeTargetY(0.0f);
+                    currentState = State.HOOKFOUNDATION;
+                }
+                break;
+
+            case HOOKFOUNDATION:
+                robot.foundationHookControl(true);
+                currentState = State.WAIT1;
+                break;
+
+            case WAIT1:
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                currentState = State.MOVETOWALL;
+                break;
+
+            case MOVETOWALL:
+                robot.changeTargetY(24.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL){
+                    robot.changeTargetY(0.0f);
+                    currentState = State.HOOKFOUNDATION;
                 }
                 break;
 
@@ -102,13 +117,8 @@ public class AutonFoundationPark extends OpMode {
         }
     }
 
-    private void movePID(float targetHeading, float distance) {
-        //TODO: Implement move to a distance with PID
-        //TODO: Update distanceFromWall
-    }
-
-    public void rotatePID(float targetHeading){
-        //TODO: Implement rotation with PID
+    public static boolean tol(float current, float target, float tolerance){
+        return Math.abs(current - target) <= tolerance;
     }
 
 }
