@@ -13,6 +13,7 @@ enum State{ //Maybe add wait states
     WAIT1,
     MOVETOWALL,
     RELEASEHOOK,
+    WAIT2,
     STRAFETOGATE,
     REVERSETOGATELINEUP,
     STRAFETOPARK,
@@ -70,7 +71,7 @@ public class AutonFoundationPark extends OpMode {
 
             case MOVEFROMWALL:
                 robot.changeTargetY(12.0f);
-                if(tol(robot.currentY, robot.targetY, YTOL){
+                if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = State.ROTATE180;
                 }
@@ -85,7 +86,7 @@ public class AutonFoundationPark extends OpMode {
 
             case MOVETOFOUNDATION:
                 robot.changeTargetY(-12.0f);
-                if(tol(robot.currentY, robot.targetY, YTOL){
+                if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = State.HOOKFOUNDATION;
                 }
@@ -107,10 +108,40 @@ public class AutonFoundationPark extends OpMode {
 
             case MOVETOWALL:
                 robot.changeTargetY(24.0f);
-                if(tol(robot.currentY, robot.targetY, YTOL){
+                if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = State.HOOKFOUNDATION;
+                    currentState = State.RELEASEHOOK;
                 }
+                break;
+
+            case RELEASEHOOK:
+                robot.foundationHookControl(true);
+                currentState = State.WAIT2;
+
+            case WAIT2:
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                currentState = State.STRAFETOGATE;
+                break;
+
+            case STRAFETOGATE:
+                //TODO: Move right by like 20 inches
+                currentState = State.REVERSETOGATELINEUP;
+
+            case REVERSETOGATELINEUP:
+                robot.changeTargetY(-24.0f); //TODO: Get real number this is a compete guess
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0.0f);
+                    currentState = State.STRAFETOPARK;
+                }
+                break;
+
+            case STRAFETOPARK:
+                //TODO: Move right by like 12 inches
+                currentState = State.REVERSETOGATELINEUP;
                 break;
 
             //TODO: Continue Implementation of cases
