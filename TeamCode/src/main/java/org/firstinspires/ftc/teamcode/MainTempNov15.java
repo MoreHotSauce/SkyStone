@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+//DEPRICATED
 @TeleOp(name="Main TeleOp Nov 15", group="Juice TeleOp")
 public class MainTempNov15 extends OpMode{
 
@@ -61,6 +62,16 @@ public class MainTempNov15 extends OpMode{
         robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
 
         robot.foundationHookControl(gamepad1.a);
+
+        if(gamepad1.dpad_down){
+            robot.drive(0, -0.1f, 0f);
+        }else if(gamepad1.dpad_up){
+            robot.drive(0, -0.1f, 0f);
+        } else if (gamepad1.dpad_right) {
+            robot.drive(0.1f, 0f, 0f);
+        } else if (gamepad1.dpad_left) {
+            robot.drive(-0.1f, 0f, 0f);
+        }
 
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
