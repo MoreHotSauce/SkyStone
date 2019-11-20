@@ -19,6 +19,9 @@ public class Robot {
     public float currentY = 0.0f;
     public float targetY = 0.0f;
 
+    public float currentX = 0.0f;
+    public float targetX = 0.0f;
+
     private final float rKPR = 0.0007f;
     private final float rKIR = 0.00001f;
     private final float rKDR = 0.0f;
@@ -27,14 +30,19 @@ public class Robot {
     private final float yKIR = 0.00003f;
     private final float yKDR = 0.005f;
 
+    private final float xKPR = 0.015f;
+    private final float xKIR = 0.00003f;
+    private final float xKDR = 0.005f;
+
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
 
     private boolean previousFoundationButton = false;
     private boolean foundationOpen = true;
 
-    private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR);
-    private PIDController pidRotation = new PIDController(180.0f, rKPR, rKIR, rKDR);
+    private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
+    private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
+    private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
     public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
@@ -67,7 +75,7 @@ public class Robot {
         this.gyro = new Gyro(map);
 
         this.foundationHook = (StepperServo) components[4];
-        foundationHook.setAngle(0.0f);
+        foundationHook.setAngle(153.0f);
 
         actuator = new Actuator((EMotor) components[6]);
 
@@ -84,6 +92,7 @@ public class Robot {
     public void updateLoop(){
         heading = gyro.getHeading();
         currentY = drivetrain.getYDistance();
+        currentX = drivetrain.getXDistance();
     }
 
     public void resetMotorSpeeds(){
@@ -138,10 +147,10 @@ public class Robot {
     public void foundationHookControl(boolean pressed){
         if(pressed && !previousFoundationButton){
             if(foundationOpen){
-                foundationHook.setAngle(45);
+                foundationHook.setAngle(135);
                 foundationOpen = false;
             } else {
-                foundationHook.setAngle(135);
+                foundationHook.setAngle(100);
                 foundationOpen = true;
             }
         }
@@ -155,7 +164,17 @@ public class Robot {
         } else {
             targetY = target;
             drivetrain.resetAllEncoders();
-            pidYDistance = new PIDController(target, yKPR, yKIR, yKDR);
+            pidYDistance = new PIDController(target, yKPR, yKIR, yKDR, false);
+        }
+    }
+
+    public void changeTargetX(float target){
+        if(target == this.targetX){
+            return;
+        } else {
+            targetX = target;
+            drivetrain.resetAllEncoders();
+            pidXDistance = new PIDController(target, xKPR, xKIR, xKDR, false);
         }
     }
 
@@ -164,7 +183,7 @@ public class Robot {
             return;
         } else {
             targetHeading = target;
-            pidRotation = new PIDController(target, rKPR, rKIR, rKDR);
+            pidRotation = new PIDController(target, rKPR, rKIR, rKDR, true);
         }
     }
 
@@ -178,5 +197,11 @@ public class Robot {
         float correctionY = pidYDistance.update(currentY);
         drivetrain.moveYDistance(correctionY);
         return correctionY;
+    }
+
+    public float moveTargetX(){
+        float correctionX = pidYDistance.update(currentX);
+        drivetrain.moveXDistance(correctionX);
+        return correctionX;
     }
 }

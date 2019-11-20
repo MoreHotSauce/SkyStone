@@ -18,16 +18,18 @@ public class PIDController
     private double ki_;
     private double kd_;
     private long lastTime_;
+    private boolean rot;
 
     /* Public OpMode members. */
     private PIDController() {}
 
     /* Constructor */
-    public PIDController(double setPoint, double kp, double ki, double kd){
+    public PIDController(double setPoint, double kp, double ki, double kd, boolean rot){
         setPoint_ = setPoint;
         lastError_ = 0;
         lastTime_ = System.currentTimeMillis();
         errorSum_ = 0;
+        this.rot = rot;
 
         kp_ = kp;
         ki_ = ki;
@@ -38,10 +40,16 @@ public class PIDController
 
         long time = System.currentTimeMillis();
         long period = time - lastTime_;
-        double error  = setPoint_ - newInput;
+        double error;
+
+        if(rot){
+            error  = norm(setPoint_ - newInput);
+        }else{
+            error  = setPoint_ - newInput;
+        }
 
         if ((int)Math.signum(lastError_) != (int) Math.signum(error)) {
-            errorSum_ = 0 ;
+            errorSum_ = 0;
         }
 
         errorSum_ +=  (error * period);
@@ -54,5 +62,18 @@ public class PIDController
         lastError_ = error;
         lastTime_ = time;
         return (float) output;
+    }
+
+    public static double norm(double angle) {
+        // return angle %TAU - Math.PI;
+        angle = angle % 360.0f;
+
+        angle = (angle + 360.0f) % 360.0f;
+
+        if (angle > 180.0f) {
+            angle -= 360.0f;
+        }
+        return angle;
+
     }
 }

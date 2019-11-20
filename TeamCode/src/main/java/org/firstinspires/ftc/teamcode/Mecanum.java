@@ -161,6 +161,37 @@ public class Mecanum {
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
 
+    public float getXDistance(){
+        float[] encoderValues = {
+                backLeft.getEncoderValue() * -1,
+                frontLeft.getEncoderValue(),
+                backRight.getEncoderValue(),
+                frontRight.getEncoderValue() * -1
+        };
+
+        float sumEncoderValues = 0.0f;
+
+        for(int i = 0; i < 4; i++){
+            encoderValues[i] /= 537.6;
+            sumEncoderValues += encoderValues[i];
+        }
+
+
+        return (sumEncoderValues / 4) * 11.3402f;
+    }
+
+    public void moveXDistance(float correctionX){
+        backLeftSpeed -= correctionX;
+        frontLeftSpeed += correctionX;
+        backRightSpeed += correctionX;
+        frontRightSpeed -= correctionX;
+
+        backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
+        frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
+        backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
+        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+    }
+
     public void resetAllEncoders(){
         backLeft.resetEncoder();
         backRight.resetEncoder();

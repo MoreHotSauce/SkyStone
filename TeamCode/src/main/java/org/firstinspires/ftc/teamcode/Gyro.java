@@ -38,7 +38,7 @@ public class Gyro {
     public float getHeading(){
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         float heading = Float.parseFloat(formatAngle(angles.angleUnit, angles.firstAngle));
-        return heading + 180;
+        return heading;
     }
 
     private String formatAngle(AngleUnit angleUnit, float angle) {

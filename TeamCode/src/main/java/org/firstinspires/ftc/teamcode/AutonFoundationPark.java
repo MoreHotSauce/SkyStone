@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 
 enum State{ //Maybe add wait states
     START,
@@ -20,8 +22,7 @@ enum State{ //Maybe add wait states
     PARK
 }
 
-
-@Autonomous(name="Autonomous Foundation and Park", group="Auton Opmode")
+@TeleOp(name="Autonomous Foundation and Park", group="Auton Opmode")
 public class AutonFoundationPark extends OpMode {
 
     Robot robot;
@@ -52,18 +53,27 @@ public class AutonFoundationPark extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("State", currentState);
+        telemetry.addData("y-target", robot.targetY);
+        telemetry.addData("r-target", robot.targetHeading);
+
+
+
         robot.updateLoop();
         robot.resetMotorSpeeds();
+        robot.rotatePID();
+        robot.moveTargetY();
         robot.chomperControl(false);
         robot.foundationHookControl(false);
 
         switch(currentState){
             case START:
+                robot.foundationHookControl(true);
                 currentState = State.CHECKHEADING;
                 break;
 
             case CHECKHEADING:
-                robot.changeTargetRotation(180.0f);
+                robot.changeTargetRotation(0.0f);
                 if (tol(robot.heading , robot.targetHeading, RTOL)){
                     currentState = State.MOVEFROMWALL;
                 }
@@ -78,7 +88,7 @@ public class AutonFoundationPark extends OpMode {
                 break;
 
             case ROTATE180:
-                robot.changeTargetRotation(0.0f);
+                robot.changeTargetRotation(180.0f);
                 if(tol(robot.heading, robot.targetHeading, RTOL)){
                     currentState = State.MOVETOFOUNDATION;
                 }
