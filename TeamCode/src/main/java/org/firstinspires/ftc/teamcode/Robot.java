@@ -22,15 +22,15 @@ public class Robot {
     public float currentX = 0.0f;
     public float targetX = 0.0f;
 
-    private final float rKPR = 0.0007f;
-    private final float rKIR = 0.00001f;
-    private final float rKDR = 0.0f;
+    private final float rKPR = 0.003f;
+    private final float rKIR = 0.0000075f;
+    private final float rKDR = 0.000003f;
 
-    private final float yKPR = 0.015f;
+    private final float yKPR = 0.01f;
     private final float yKIR = 0.00003f;
     private final float yKDR = 0.005f;
 
-    private final float xKPR = 0.015f;
+    private final float xKPR = 0.01f;
     private final float xKIR = 0.00003f;
     private final float xKDR = 0.005f;
 
@@ -87,6 +87,9 @@ public class Robot {
 
         currentY = drivetrain.getYDistance();
         changeTargetY(targetY);
+
+        currentX = drivetrain.getXDistance();
+        changeTargetX(targetX);
     }
 
     public void updateLoop(){
@@ -200,7 +203,7 @@ public class Robot {
     }
 
     public float moveTargetX(){
-        float correctionX = pidYDistance.update(currentX);
+        float correctionX = pidXDistance.update(currentX);
         drivetrain.moveXDistance(correctionX);
         return correctionX;
     }

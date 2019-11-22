@@ -69,7 +69,7 @@ public class Main extends OpMode{
         } else if (gamepad1.dpad_left) {
             robot.drive(-0.4f, 0f, 0f);
         } else {
-            robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y * 0, -1*gamepad1.right_stick_x);
+            robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
 
         telemetry.addData("servo", robot.chomper.getAngle());

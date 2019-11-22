@@ -30,6 +30,7 @@ public class AutonFoundationPark extends OpMode {
     private State currentState;
     private final float YTOL = 1.0f;
     private final float RTOL = 0.5f;
+    private final float XTOL = 1.0f;
 
 
     @Override
@@ -57,19 +58,33 @@ public class AutonFoundationPark extends OpMode {
         telemetry.addData("y-target", robot.targetY);
         telemetry.addData("r-target", robot.targetHeading);
 
+        float correctionR = robot.rotatePID();
+        float correctionY = robot.moveTargetY();
+        float correctionX = robot.moveTargetX();
 
+
+        telemetry.addData("PositionY", robot.currentY);
+        telemetry.addData("PositionX", robot.currentX);
+        telemetry.addData("PositionTargetY", robot.targetY);
+        telemetry.addData("PositionTargetX", robot.targetX);
+        telemetry.addData("Rotation", robot.heading);
+        telemetry.addData("RotationTarget", robot.targetHeading);
+        telemetry.addData("CorrectionR", correctionR);
+        telemetry.addData("CorrectionY", correctionY);
+        telemetry.addData("CorrectionX", correctionX);
 
         robot.updateLoop();
         robot.resetMotorSpeeds();
         robot.rotatePID();
         robot.moveTargetY();
+        robot.moveTargetX();
         robot.chomperControl(false);
         robot.foundationHookControl(false);
 
         switch(currentState){
             case START:
                 robot.foundationHookControl(true);
-                currentState = State.CHECKHEADING;
+                currentState = State.STRAFETOPARK;
                 break;
 
             case CHECKHEADING:
@@ -138,8 +153,11 @@ public class AutonFoundationPark extends OpMode {
                 break;
 
             case STRAFETOGATE:
-                //TODO: Move right by like 20 inches
-                currentState = State.REVERSETOGATELINEUP;
+                robot.changeTargetX(20.0f);
+                if(tol(robot.currentX, robot.targetX, XTOL)){
+                    robot.changeTargetX(0.0f);
+                    currentState = State.REVERSETOGATELINEUP;
+                }
 
             case REVERSETOGATELINEUP:
                 robot.changeTargetY(-24.0f); //TODO: Get real number this is a compete guess
@@ -150,11 +168,15 @@ public class AutonFoundationPark extends OpMode {
                 break;
 
             case STRAFETOPARK:
-                //TODO: Move right by like 12 inches
-                currentState = State.REVERSETOGATELINEUP;
+                robot.changeTargetX(12.0f);
+                if(tol(robot.currentX, robot.targetX, XTOL)){
+                    robot.changeTargetX(0.0f);
+                    currentState = State.PARK;
+                }
                 break;
 
-            //TODO: Continue Implementation of cases
+            case PARK:
+                break;
         }
     }
 
