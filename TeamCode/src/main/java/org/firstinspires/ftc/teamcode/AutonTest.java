@@ -26,7 +26,7 @@ public class AutonTest extends OpMode {
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
-        robot.changeTargetRotation(90.0f);
+        robot.changeTargetX(-20.0f);
     }
 
     @Override
