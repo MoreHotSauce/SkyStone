@@ -84,7 +84,7 @@ public class AutonFoundationPark extends OpMode {
         switch(currentState){
             case START:
                 robot.foundationHookControl(true);
-                currentState = State.STRAFETOPARK;
+                currentState = State.CHECKHEADING;
                 break;
 
             case CHECKHEADING:
