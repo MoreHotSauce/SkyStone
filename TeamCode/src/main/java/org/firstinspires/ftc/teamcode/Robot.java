@@ -30,9 +30,9 @@ public class Robot {
     private final float yKIR = 0.00003f;
     private final float yKDR = 0.005f;
 
-    private final float xKPR = 0.01f;
-    private final float xKIR = 0.00003f;
-    private final float xKDR = 0.005f;
+    private final float xKPR = 0.06f;
+    private final float xKIR = 0.0005f;
+    private final float xKDR = 0.0000f;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -70,7 +70,7 @@ public class Robot {
         );
 
         this.chomper = (StepperServo) components[5];
-        chomper.servo.setPosition(0);
+        chomper.servo.setPosition(0.9);
 
         this.gyro = new Gyro(map);
 
@@ -116,8 +116,12 @@ public class Robot {
 
 
     public void moveLift(float speedDown, float speedUp){
-        lift.down(speedDown);
-        lift.up(speedUp);
+        if(speedDown == 0 && speedUp == 0){
+            lift.brake();
+        }else {
+            lift.down(speedDown);
+            lift.up(speedUp);
+        }
     }
 
 
@@ -125,7 +129,7 @@ public class Robot {
     public void chomperControl(boolean pressed){
         if(pressed && !previousChomperButton){
             if(chomperOpen){
-                chomper.servo.setPosition(0);
+                chomper.servo.setPosition(0.25);
                 chomperOpen = false;
             } else {
                 chomper.servo.setPosition(0.5);
@@ -136,12 +140,11 @@ public class Robot {
         previousChomperButton = pressed;
     }
 
-    //TODO: Make this not terribly designed
     public void actuatorControl(boolean extend, boolean retract){
         if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(0.3);
+            actuator.actuatorMotor.motor.setPower(0.6);
         } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-0.3);
+            actuator.actuatorMotor.motor.setPower(-0.6);
         } else {
             actuator.actuatorMotor.motor.setPower(0);
         }
@@ -150,7 +153,7 @@ public class Robot {
     public void foundationHookControl(boolean pressed){
         if(pressed && !previousFoundationButton){
             if(foundationOpen){
-                foundationHook.setAngle(135);
+                foundationHook.setAngle(153);
                 foundationOpen = false;
             } else {
                 foundationHook.setAngle(100);
