@@ -18,6 +18,7 @@ enum StateRed{ //Maybe add wait states
     WAIT2,
     STRAFETOGATE,
     REVERSETOGATELINEUP,
+    STRAFEPUSH,
     STRAFETOPARK,
     PARK
 }
@@ -111,7 +112,7 @@ public class AutonFoundationParkRed extends OpMode {
                 break;
 
             case LINEUPFOUNDATION:
-                robot.changeTargetX(-10.0f);
+                robot.changeTargetX(10.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateRed.MOVETOFOUNDATION;
@@ -162,23 +163,36 @@ public class AutonFoundationParkRed extends OpMode {
                 break;
 
             case STRAFETOGATE:
-                robot.changeTargetX(28.0f);
+                robot.changeTargetX(-28.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateRed.REVERSETOGATELINEUP;
                 }
                 break;
 
+
             case REVERSETOGATELINEUP:
                 robot.changeTargetY(-20.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
+                    currentState = StateRed.STRAFEPUSH;
+                }
+                break;
+
+            case STRAFEPUSH:
+                robot.changeTargetX(10.0f);
+                if(tol(robot.currentX, robot.targetX, XTOL)){
+                    robot.changeTargetX(0.0f);
+                    robot.chomperControl(false);
+                    robot.chomperControl(true);
+                    robot.chomperControl(false);
+                    robot.chomperControl(true);
                     currentState = StateRed.STRAFETOPARK;
                 }
                 break;
 
             case STRAFETOPARK:
-                robot.changeTargetX(24.0f);
+                robot.changeTargetX(-26.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateRed.PARK;
