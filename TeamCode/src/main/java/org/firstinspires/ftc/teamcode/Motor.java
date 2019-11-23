@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Motor extends Component{
     private boolean reverse;
     private float speed;
-    private DcMotor motor;
+    public DcMotor motor;
 
     public Motor(int port, String name, HardwareMap map, boolean reverse){
         super(port, name);

@@ -52,13 +52,13 @@ public class Main extends OpMode{
     public void loop() {
         robot.turbo(gamepad1.right_bumper);
 
-        robot.chomperControl(gamepad1.b);
+        robot.chomperControl(gamepad1.a);
 
-        robot.actuatorControl(gamepad1.x, gamepad1.y);
+        robot.actuatorControl(gamepad1.x, gamepad1.b);
 
         robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
 
-        robot.foundationHookControl(gamepad1.a);
+        robot.foundationHookControl(gamepad1.y);
 
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);

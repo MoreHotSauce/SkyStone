@@ -26,7 +26,7 @@ public class AutonTest extends OpMode {
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
-        robot.changeTargetX(-20.0f);
+        robot.changeTargetX(-22.5f);
     }
 
     @Override
@@ -38,8 +38,10 @@ public class AutonTest extends OpMode {
         float correctionX = robot.moveTargetX();
 
 
-        telemetry.addData("Position", robot.currentY);
-        telemetry.addData("PositionTarget", robot.targetY);
+        telemetry.addData("PositionY", robot.currentY);
+        telemetry.addData("PositionTargetY", robot.targetY);
+        telemetry.addData("PositionX", robot.currentX);
+        telemetry.addData("PositionTargetX", robot.targetX);
         telemetry.addData("Rotation", robot.heading);
         telemetry.addData("RotationTarget", robot.targetHeading);
         telemetry.addData("CorrectionR", correctionR);
