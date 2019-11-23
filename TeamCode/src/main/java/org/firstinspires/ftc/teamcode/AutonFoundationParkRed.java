@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-enum StateBlue{ //Maybe add wait states
+enum StateRed{ //Maybe add wait states
     START,
     CHECKHEADING,
     MOVEFROMWALL,
@@ -22,12 +22,12 @@ enum StateBlue{ //Maybe add wait states
     PARK
 }
 
-@TeleOp(name="Autonomous Foundation and Park Blue", group="Auton Opmode")
-public class AutonFoundationParkBlue extends OpMode {
+@TeleOp(name="Autonomous Foundation and Park Red", group="Auton Opmode")
+public class AutonFoundationParkRed extends OpMode {
 
     Robot robot;
 
-    private StateBlue currentState;
+    private StateRed currentState;
     private final float YTOL = 1.0f;
     private final float RTOL = 1.0f;
     private final float XTOL = 1.0f;
@@ -49,7 +49,7 @@ public class AutonFoundationParkBlue extends OpMode {
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
 
-        currentState = StateBlue.START;
+        currentState = StateRed.START;
         robot.chomperControl(false);
         robot.chomperControl(true);
         robot.chomperControl(false);
@@ -85,13 +85,13 @@ public class AutonFoundationParkBlue extends OpMode {
         switch(currentState){
             case START:
                 robot.foundationHookControl(true);
-                currentState = StateBlue.CHECKHEADING; //TEMP
+                currentState = StateRed.CHECKHEADING;
                 break;
 
             case CHECKHEADING:
                 robot.changeTargetRotation(0.0f);
                 if (tol(robot.heading , robot.targetHeading, RTOL)){
-                    currentState = StateBlue.MOVEFROMWALL;
+                    currentState = StateRed.MOVEFROMWALL;
                 }
                 break;
 
@@ -99,14 +99,14 @@ public class AutonFoundationParkBlue extends OpMode {
                 robot.changeTargetY(10.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.ROTATE180;
+                    currentState = StateRed.ROTATE180;
                 }
                 break;
 
             case ROTATE180:
                 robot.changeTargetRotation(180.0f);
                 if(tol(robot.heading, robot.targetHeading, RTOL)){
-                    currentState = StateBlue.LINEUPFOUNDATION;
+                    currentState = StateRed.LINEUPFOUNDATION;
                 }
                 break;
 
@@ -114,7 +114,7 @@ public class AutonFoundationParkBlue extends OpMode {
                 robot.changeTargetX(-10.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateBlue.MOVETOFOUNDATION; //TEMP
+                    currentState = StateRed.MOVETOFOUNDATION;
                 }
                 break;
 
@@ -122,13 +122,13 @@ public class AutonFoundationParkBlue extends OpMode {
                 robot.changeTargetY(-12.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.HOOKFOUNDATION;
+                    currentState = StateRed.HOOKFOUNDATION;
                 }
                 break;
 
             case HOOKFOUNDATION:
                 robot.foundationHookControl(true);
-                currentState = StateBlue.WAIT1;
+                currentState = StateRed.WAIT1;
                 break;
 
             case WAIT1:
@@ -137,20 +137,20 @@ public class AutonFoundationParkBlue extends OpMode {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                currentState = StateBlue.MOVETOWALL;
+                currentState = StateRed.MOVETOWALL;
                 break;
 
             case MOVETOWALL:
                 robot.changeTargetY(24.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.RELEASEHOOK;
+                    currentState = StateRed.RELEASEHOOK;
                 }
                 break;
 
             case RELEASEHOOK:
                 robot.foundationHookControl(true);
-                currentState = StateBlue.WAIT2;
+                currentState = StateRed.WAIT2;
 
             case WAIT2:
                 try {
@@ -158,22 +158,22 @@ public class AutonFoundationParkBlue extends OpMode {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                currentState = StateBlue.STRAFETOGATE;
+                currentState = StateRed.STRAFETOGATE;
                 break;
 
             case STRAFETOGATE:
                 robot.changeTargetX(28.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateBlue.REVERSETOGATELINEUP; //TEMP
+                    currentState = StateRed.REVERSETOGATELINEUP;
                 }
                 break;
 
             case REVERSETOGATELINEUP:
-                robot.changeTargetY(-20.0f); //TODO: Get real number this is a compete guess
+                robot.changeTargetY(-20.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.STRAFETOPARK;
+                    currentState = StateRed.STRAFETOPARK;
                 }
                 break;
 
@@ -181,7 +181,7 @@ public class AutonFoundationParkBlue extends OpMode {
                 robot.changeTargetX(24.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateBlue.PARK;
+                    currentState = StateRed.PARK;
                 }
                 break;
 
