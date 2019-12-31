@@ -12,6 +12,8 @@ public class Robot {
     public StepperServo foundationHook;
     public StepperServo chomper;
     public Actuator actuator;
+    public Color colorSensor;
+    public StepperServo hugger;
 
     public float heading = 0.0f;
     public float targetHeading = 0.0f;
@@ -33,6 +35,8 @@ public class Robot {
     private final float xKPR = 0.04f;
     private final float xKIR = 0.00002f;
     private final float xKDR = 0.000005f;
+
+    private final int COLORTHRESHOLD = 200;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -79,6 +83,11 @@ public class Robot {
 
         actuator = new Actuator((EMotor) components[6]);
 
+        this.colorSensor = (Color) components[8];
+
+        this.hugger = (StepperServo) components[9];
+        hugger.setAngle(0);
+
         drivetrain.resetAllEncoders();
 
         heading = gyro.getHeading();
@@ -114,6 +123,12 @@ public class Robot {
         drivetrain.move(xMove, yMove, rotate);
     }
 
+    public boolean isSkystone(){
+        if (colorSensor.getValue()[0] > COLORTHRESHOLD){
+            return true;
+        }
+        return false;
+    }
 
     public void moveLift(float speedDown, float speedUp){
         if(speedDown == 0 && speedUp == 0){
@@ -210,4 +225,6 @@ public class Robot {
         drivetrain.moveXDistance(correctionX);
         return correctionX;
     }
+
+
 }

@@ -21,12 +21,15 @@ public class AutonTest extends OpMode {
                 new StepperServo(-1, "foundationHook", hardwareMap),      //4
                 new StepperServo(-1, "chomper", hardwareMap),             //5
                 new EMotor(-1, "actuator", hardwareMap, 1),        //6
-                new Motor(-1, "liftMotor", hardwareMap, false)    //7
+                new Motor(-1, "liftMotor", hardwareMap, false),   //7
+                new Color(-1, "colorSensor", hardwareMap),                 //8
+                new StepperServo(-1, "hugger", hardwareMap)                //9
+
         };
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
-        robot.changeTargetY(22.5f);
+        robot.colorSensor.led(true);
     }
 
     @Override
@@ -36,8 +39,7 @@ public class AutonTest extends OpMode {
         float correctionR = robot.rotatePID();
         float correctionY = robot.moveTargetY();
         float correctionX = robot.moveTargetX();
-
-
+        robot.hugger.setAngle(130f);
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionX", robot.currentX);
@@ -51,6 +53,7 @@ public class AutonTest extends OpMode {
         telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
         telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
         telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
+        telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
 
 
     }
