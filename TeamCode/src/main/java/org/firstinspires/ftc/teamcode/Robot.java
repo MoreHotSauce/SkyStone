@@ -22,17 +22,17 @@ public class Robot {
     public float currentX = 0.0f;
     public float targetX = 0.0f;
 
-    private final float rKPR = 0.003f;
-    private final float rKIR = 0.0000075f;
+    private final float rKPR = 0.002f;
+    private final float rKIR = 0.000007f;
     private final float rKDR = 0.000003f;
 
-    private final float yKPR = 0.01f;
-    private final float yKIR = 0.00003f;
-    private final float yKDR = 0.005f;
+    private final float yKPR = 0.0034f;
+    private final float yKIR = 0.000025f;
+    private final float yKDR = 0.01f;
 
-    private final float xKPR = 0.06f;
-    private final float xKIR = 0.0005f;
-    private final float xKDR = 0.0000f;
+    private final float xKPR = 0.04f;
+    private final float xKIR = 0.00002f;
+    private final float xKDR = 0.000005f;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -70,7 +70,7 @@ public class Robot {
         );
 
         this.chomper = (StepperServo) components[5];
-        chomper.servo.setPosition(0.9);
+        chomper.servo.setPosition(0);
 
         this.gyro = new Gyro(map);
 

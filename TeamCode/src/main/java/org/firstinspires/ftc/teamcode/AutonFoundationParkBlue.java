@@ -17,8 +17,9 @@ enum StateBlue{ //Maybe add wait states
     RELEASEHOOK,
     WAIT2,
     STRAFETOGATE,
-    REVERSETOGATELINEUP,
-    STRAFEPUSH,
+    REVERSEFORPUSH,
+    STRAFEFORPUSH,
+    PUSH,
     STRAFETOPARK,
     PARK
 }
@@ -30,7 +31,7 @@ public class AutonFoundationParkBlue extends OpMode {
 
     private StateBlue currentState;
     private final float YTOL = 1.0f;
-    private final float RTOL = 2.0f;
+    private final float RTOL = 3.0f;
     private final float XTOL = 1.0f;
 
 
@@ -83,6 +84,9 @@ public class AutonFoundationParkBlue extends OpMode {
         switch(currentState){
             case START:
                 currentState = StateBlue.CHECKHEADING; //TEMP
+                robot.chomperControl(true);
+                robot.chomperControl(false);
+                robot.chomperControl(true);
                 break;
 
             case CHECKHEADING:
@@ -93,16 +97,9 @@ public class AutonFoundationParkBlue extends OpMode {
                 break;
 
             case MOVEFROMWALL:
-                robot.changeTargetY(8.0f);
+                robot.changeTargetY(-12.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.ROTATE180;
-                }
-                break;
-
-            case ROTATE180:
-                robot.changeTargetRotation(180.0f);
-                if(tol(robot.heading, robot.targetHeading, RTOL)){
                     currentState = StateBlue.LINEUPFOUNDATION;
                 }
                 break;
@@ -116,10 +113,12 @@ public class AutonFoundationParkBlue extends OpMode {
                 break;
 
             case MOVETOFOUNDATION:
-                robot.foundationHookControl(true);
-                robot.changeTargetY(-12.0f);
+                robot.changeTargetY(-16.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
+                    robot.foundationHookControl(true);
+                    robot.foundationHookControl(false);
+
                     currentState = StateBlue.HOOKFOUNDATION;
                 }
                 break;
@@ -139,7 +138,7 @@ public class AutonFoundationParkBlue extends OpMode {
                 break;
 
             case MOVETOWALL:
-                robot.changeTargetY(24.0f);
+                robot.changeTargetY(28.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StateBlue.RELEASEHOOK;
@@ -160,35 +159,40 @@ public class AutonFoundationParkBlue extends OpMode {
                 break;
 
             case STRAFETOGATE:
-                robot.changeTargetX(28.0f);
+                robot.changeTargetX(30.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateBlue.REVERSETOGATELINEUP;
+                    currentState = StateBlue.REVERSEFORPUSH;
                 }
                 break;
 
-            case REVERSETOGATELINEUP:
-                robot.changeTargetY(-20.0f);
+            case REVERSEFORPUSH:
+                robot.changeTargetY(-40.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlue.STRAFEPUSH;
+                    currentState = StateBlue.STRAFEFORPUSH;
                 }
                 break;
 
-            case STRAFEPUSH:
-                robot.changeTargetX(-10.0f);
+
+            case STRAFEFORPUSH:
+                robot.changeTargetX(-28.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    robot.chomperControl(false);
-                    robot.chomperControl(true);
-                    robot.chomperControl(false);
-                    robot.chomperControl(true);
+                    currentState = StateBlue.PUSH;
+                }
+                break;
+
+            case PUSH:
+                robot.changeTargetY(30.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0.0f);
                     currentState = StateBlue.STRAFETOPARK;
                 }
                 break;
 
             case STRAFETOPARK:
-                robot.changeTargetX(26.0f);
+                robot.changeTargetX(45.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateBlue.PARK;

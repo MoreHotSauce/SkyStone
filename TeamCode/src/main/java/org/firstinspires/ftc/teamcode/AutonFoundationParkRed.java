@@ -17,8 +17,9 @@ enum StateRed{ //Maybe add wait states
     RELEASEHOOK,
     WAIT2,
     STRAFETOGATE,
-    REVERSETOGATELINEUP,
-    STRAFEPUSH,
+    REVERSEFORPUSH,
+    STRAFEFORPUSH,
+    PUSH,
     STRAFETOPARK,
     PARK
 }
@@ -30,7 +31,7 @@ public class AutonFoundationParkRed extends OpMode {
 
     private StateRed currentState;
     private final float YTOL = 1.0f;
-    private final float RTOL = 1.0f;
+    private final float RTOL = 3.0f;
     private final float XTOL = 1.0f;
 
 
@@ -51,11 +52,7 @@ public class AutonFoundationParkRed extends OpMode {
         telemetry.addData("Test", "Robot");
 
         currentState = StateRed.START;
-        robot.chomperControl(false);
-        robot.chomperControl(true);
-        robot.chomperControl(false);
-        robot.chomperControl(true);
-
+        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
     }
 
     @Override
@@ -79,14 +76,17 @@ public class AutonFoundationParkRed extends OpMode {
         telemetry.addData("CorrectionR", correctionR);
         telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("CorrectionX", correctionX);
+        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
 
-        robot.chomperControl(false);
+
         robot.foundationHookControl(false);
 
         switch(currentState){
             case START:
-                robot.foundationHookControl(true);
-                currentState = StateRed.CHECKHEADING;
+                currentState = StateRed.CHECKHEADING; //TEMP
+                robot.chomperControl(true);
+                robot.chomperControl(false);
+                robot.chomperControl(true);
                 break;
 
             case CHECKHEADING:
@@ -97,16 +97,9 @@ public class AutonFoundationParkRed extends OpMode {
                 break;
 
             case MOVEFROMWALL:
-                robot.changeTargetY(10.0f);
+                robot.changeTargetY(-12.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateRed.ROTATE180;
-                }
-                break;
-
-            case ROTATE180:
-                robot.changeTargetRotation(180.0f);
-                if(tol(robot.heading, robot.targetHeading, RTOL)){
                     currentState = StateRed.LINEUPFOUNDATION;
                 }
                 break;
@@ -115,14 +108,17 @@ public class AutonFoundationParkRed extends OpMode {
                 robot.changeTargetX(10.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateRed.MOVETOFOUNDATION;
+                    currentState = StateRed.MOVETOFOUNDATION; //TEMP
                 }
                 break;
 
             case MOVETOFOUNDATION:
-                robot.changeTargetY(-12.0f);
+                robot.changeTargetY(-16.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
+                    robot.foundationHookControl(true);
+                    robot.foundationHookControl(false);
+
                     currentState = StateRed.HOOKFOUNDATION;
                 }
                 break;
@@ -134,7 +130,7 @@ public class AutonFoundationParkRed extends OpMode {
 
             case WAIT1:
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -155,7 +151,7 @@ public class AutonFoundationParkRed extends OpMode {
 
             case WAIT2:
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -163,36 +159,39 @@ public class AutonFoundationParkRed extends OpMode {
                 break;
 
             case STRAFETOGATE:
-                robot.changeTargetX(-28.0f);
+                robot.changeTargetX(-24.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    currentState = StateRed.REVERSETOGATELINEUP;
+                    currentState = StateRed.REVERSEFORPUSH;
                 }
                 break;
 
-
-            case REVERSETOGATELINEUP:
-                robot.changeTargetY(-20.0f);
+            case REVERSEFORPUSH:
+                robot.changeTargetY(-35.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateRed.STRAFEPUSH;
+                    currentState = StateRed.STRAFEFORPUSH;
                 }
                 break;
 
-            case STRAFEPUSH:
-                robot.changeTargetX(10.0f);
+            case STRAFEFORPUSH:
+                robot.changeTargetX(28.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
-                    robot.chomperControl(false);
-                    robot.chomperControl(true);
-                    robot.chomperControl(false);
-                    robot.chomperControl(true);
+                    currentState = StateRed.PUSH;
+                }
+                break;
+
+            case PUSH:
+                robot.changeTargetY(20.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0.0f);
                     currentState = StateRed.STRAFETOPARK;
                 }
                 break;
 
             case STRAFETOPARK:
-                robot.changeTargetX(-26.0f);
+                robot.changeTargetX(-45.0f);
                 if(tol(robot.currentX, robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateRed.PARK;

@@ -86,17 +86,9 @@ public class AutonParkRed extends OpMode {
                 break;
 
             case MOVEFROMWALL:
-                robot.changeTargetY(6.0f);
+                robot.changeTargetY(30.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
-                    currentState = StateParkRed.STRAFETOPARK;
-                }
-                break;
-
-            case STRAFETOPARK:
-                robot.changeTargetX(-28.0f);
-                if(tol(robot.currentX, robot.targetX, XTOL)){
-                    robot.changeTargetX(0.0f);
                     currentState = StateParkRed.PARK;
                 }
                 break;
