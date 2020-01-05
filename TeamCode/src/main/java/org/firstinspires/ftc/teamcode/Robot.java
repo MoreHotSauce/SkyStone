@@ -36,7 +36,7 @@ public class Robot {
     private final float xKIR = 0.00002f;
     private final float xKDR = 0.000005f;
 
-    private final int COLORTHRESHOLD = 200;
+    private final long SKYSTONE_THRESHOLD = 500000;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -124,10 +124,7 @@ public class Robot {
     }
 
     public boolean isSkystone(){
-        if (colorSensor.getValue()[0] > COLORTHRESHOLD){
-            return true;
-        }
-        return false;
+        return (colorSensor.getValue()[0] * colorSensor.getValue()[1] * colorSensor.getValue()[2] < SKYSTONE_THRESHOLD);
     }
 
     public void moveLift(float speedDown, float speedUp){
@@ -138,8 +135,6 @@ public class Robot {
             lift.up(speedUp);
         }
     }
-
-
 
     public void chomperControl(boolean pressed){
         if(pressed && !previousChomperButton){

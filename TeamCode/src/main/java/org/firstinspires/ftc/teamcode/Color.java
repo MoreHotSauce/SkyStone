@@ -12,8 +12,8 @@ public class Color extends Component {
         sensor = map.colorSensor.get(name);
     }
 
-    public int[] getValue(){
-        return new int[]{sensor.alpha(), sensor.red(), sensor.green(), sensor.blue()};
+    public long[] getValue(){
+        return new long[]{sensor.alpha(), sensor.red(), sensor.green(), sensor.blue()};
     }
 
     public void led(boolean enabled){

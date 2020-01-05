@@ -39,7 +39,9 @@ public class AutonTest extends OpMode {
         float correctionR = robot.rotatePID();
         float correctionY = robot.moveTargetY();
         float correctionX = robot.moveTargetX();
+
         robot.hugger.setAngle(130f);
+
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionX", robot.currentX);
@@ -53,7 +55,12 @@ public class AutonTest extends OpMode {
         telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
         telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
         telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
+        telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
         telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
+        telemetry.addData("red", robot.colorSensor.getValue()[1]);
+        telemetry.addData("green", robot.colorSensor.getValue()[2]);
+        telemetry.addData("blue", robot.colorSensor.getValue()[3]);
+        telemetry.addData("skystone?", robot.isSkystone());
 
 
     }
