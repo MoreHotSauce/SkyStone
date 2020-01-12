@@ -36,7 +36,9 @@ public class Main extends OpMode{
                 new StepperServo(-1, "foundationHook", hardwareMap),      //4
                 new StepperServo(-1, "chomper", hardwareMap),             //5
                 new EMotor(-1, "actuator", hardwareMap, 1),        //6
-                new Motor(-1, "liftMotor", hardwareMap, false)    //7
+                new Motor(-1, "liftMotor", hardwareMap, false),   //7
+                new Color(-1, "colorSensor", hardwareMap),                 //8
+                new StepperServo(-1, "hugger", hardwareMap)                //9
         };
 
         robot = new Robot(componentList, hardwareMap, false);
@@ -52,11 +54,11 @@ public class Main extends OpMode{
     public void loop() {
         robot.turbo(gamepad1.right_bumper);
 
-        robot.chomperControl(gamepad1.a);
+        robot.chomperControl(gamepad2.a);
 
-        robot.actuatorControl(gamepad1.x, gamepad1.b);
+        robot.actuatorControl(gamepad2.x, gamepad2.b);
 
-        robot.moveLift(gamepad1.left_trigger, gamepad1.right_trigger);
+        robot.moveLift(gamepad2.left_trigger, gamepad2.right_trigger);
 
         robot.foundationHookControl(gamepad1.y);
 
@@ -75,10 +77,12 @@ public class Main extends OpMode{
         telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
         telemetry.addData("encStrafe", robot.drivetrain.getXDistance());
-        telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
+        /*telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());
         telemetry.addData("fl", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("fr", robot.drivetrain.frontRight.getEncoderValue());
+        telemetry.addData("fr", robot.drivetrain.frontRight.getEncoderValue());*/
+        telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
+        telemetry.addData("skystone?", robot.isSkystone());
         telemetry.update();
     }
 

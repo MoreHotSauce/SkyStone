@@ -34,7 +34,7 @@ public class AutonTest extends OpMode {
 
     @Override
     public void loop() {
-        robot.updateLoop();
+        //robot.updateLoop();
         robot.resetMotorSpeeds();
         float correctionR = robot.rotatePID();
         float correctionY = robot.moveTargetY();
@@ -55,7 +55,7 @@ public class AutonTest extends OpMode {
         telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
         telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
         telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
-        telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
+        telemetry.addData("totalMult", robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
         telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
         telemetry.addData("red", robot.colorSensor.getValue()[1]);
         telemetry.addData("green", robot.colorSensor.getValue()[2]);

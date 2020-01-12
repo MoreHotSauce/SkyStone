@@ -5,8 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 enum SkystoneBlue{ //Maybe add wait states
     START,
     CHECKHEADING,
-    MOVEFROMWALL,
-    
+    STRAFETOSTONE,
+    DETECTSTONE,
+    ALIGNSTONE,
+    HUG,
+    PULLBACK,
+    ROTATE90,
+    PASTGATE
+
 }
 
 public class AutonDetectSkystone extends OpMode {

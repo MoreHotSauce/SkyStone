@@ -11,6 +11,8 @@ public class Robot {
     public Gyro gyro;
     public StepperServo foundationHook;
     public StepperServo chomper;
+    public StepperServo chomperLeft;
+    public StepperServo chomperRight;
     public Actuator actuator;
     public Color colorSensor;
     public StepperServo hugger;
@@ -36,7 +38,7 @@ public class Robot {
     private final float xKIR = 0.00002f;
     private final float xKDR = 0.000005f;
 
-    private final long SKYSTONE_THRESHOLD = 500000;
+    private final long SKYSTONE_THRESHOLD = 4000;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -149,6 +151,22 @@ public class Robot {
 
         previousChomperButton = pressed;
     }
+
+    /*public void chomperControl(boolean pressed){
+        if(pressed && !previousChomperButton){
+            if(chomperOpen){
+                chomperLeft.servo.setPosition(0.25);
+                chomperRight.servo.setPosition(0.25);
+                chomperOpen = false;
+            } else {
+                chomperLeft.servo.setPosition(0.5);
+                chomperRight.servo.setPosition(0.5);
+                chomperOpen = true;
+            }
+        }
+        //223 435\\
+        previousChomperButton = pressed;
+    }*/
 
     public void actuatorControl(boolean extend, boolean retract){
         if (extend && !retract){
