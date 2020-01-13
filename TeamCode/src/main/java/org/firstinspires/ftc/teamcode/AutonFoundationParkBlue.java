@@ -52,7 +52,7 @@ public class AutonFoundationParkBlue extends OpMode {
         telemetry.addData("Test", "Robot");
 
         currentState = StateBlue.START;
-        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
+        //telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AutonFoundationParkBlue extends OpMode {
         telemetry.addData("CorrectionR", correctionR);
         telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("CorrectionX", correctionX);
-        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
+        //telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
 
 
         robot.foundationHookControl(false);
@@ -84,9 +84,9 @@ public class AutonFoundationParkBlue extends OpMode {
         switch(currentState){
             case START:
                 currentState = StateBlue.CHECKHEADING; //TEMP
-                robot.chomperControl(true);
-                robot.chomperControl(false);
-                robot.chomperControl(true);
+                //robot.chomperControl(true);
+                //robot.chomperControl(false);
+                //robot.chomperControl(true);
                 break;
 
             case CHECKHEADING:

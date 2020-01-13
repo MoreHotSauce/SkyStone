@@ -55,7 +55,7 @@ public class MainTempNov15 extends OpMode{
 
         robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-        robot.chomperControl(gamepad1.b);
+        //robot.chomperControl(gamepad1.b);
 
         robot.actuatorControl(gamepad1.x, gamepad1.y);
 
@@ -73,7 +73,7 @@ public class MainTempNov15 extends OpMode{
             robot.drive(-0.1f, 0f, 0f);
         }
 
-        telemetry.addData("servo", robot.chomper.getAngle());
+        //telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
         telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());

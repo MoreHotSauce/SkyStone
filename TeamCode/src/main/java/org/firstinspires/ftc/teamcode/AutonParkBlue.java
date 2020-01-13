@@ -24,10 +24,10 @@ public class AutonParkBlue extends LinearOpMode {
 
         robot = new Robot(componentList, hardwareMap, true);
 
-        robot.chomperControl(false);
-        robot.chomperControl(true);
-        robot.chomperControl(false);
-        robot.chomperControl(true);
+        //robot.chomperControl(false);
+        //robot.chomperControl(true);
+        //robot.chomperControl(false);
+        //robot.chomperControl(true);
 
         waitForStart();
         sleep(17000);

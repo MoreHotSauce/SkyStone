@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Blinker;
 
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode{
@@ -34,11 +35,16 @@ public class Main extends OpMode{
                 new Motor(-1, "frontLeft", hardwareMap, false),    //2
                 new Motor(-1, "frontRight", hardwareMap, true),  //3
                 new StepperServo(-1, "foundationHook", hardwareMap),      //4
-                new StepperServo(-1, "chomper", hardwareMap),             //5
+                new StepperServo(-1, "intakeClawLeft", hardwareMap),      //5
                 new EMotor(-1, "actuator", hardwareMap, 1),        //6
                 new Motor(-1, "liftMotor", hardwareMap, false),   //7
                 new Color(-1, "colorSensor", hardwareMap),                 //8
-                new StepperServo(-1, "hugger", hardwareMap)                //9
+                new StepperServo(-1, "hugger", hardwareMap),               //9
+                new Motor(-1, "liftMotor2", hardwareMap, true),     //10
+                new StepperServo(-1, "intakeClawRight", hardwareMap),      //11
+                new StepperServo(-1, "odoServo", hardwareMap)              //12
+
+
         };
 
         robot = new Robot(componentList, hardwareMap, false);
@@ -54,9 +60,10 @@ public class Main extends OpMode{
     public void loop() {
         robot.turbo(gamepad1.right_bumper);
 
-        robot.chomperControl(gamepad2.a);
+        robot.intakeControl(gamepad2.a);
 
         robot.actuatorControl(gamepad2.x, gamepad2.b);
+        //robot.incrementActuator(gamepad2.right_bumper, gamepad2.left_bumper);
 
         robot.moveLift(gamepad2.left_trigger, gamepad2.right_trigger);
 
@@ -74,9 +81,9 @@ public class Main extends OpMode{
             robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
 
-        telemetry.addData("servo", robot.chomper.getAngle());
         telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
         telemetry.addData("encStrafe", robot.drivetrain.getXDistance());
+        telemetry.addData("encAct", robot.actuator.actuatorMotor.getEncoderValue());
         /*telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());
         telemetry.addData("fl", robot.drivetrain.frontLeft.getEncoderValue());

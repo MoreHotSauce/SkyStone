@@ -12,6 +12,7 @@ public class EMotor extends Component {
         super(port, name);
         motor = map.dcMotor.get(name);
         speed = this.speed;
+        //this.motor.setTargetPosition(0);
     }
 
     public float getEncoderValue(){

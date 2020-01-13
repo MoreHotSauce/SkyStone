@@ -10,9 +10,9 @@ public class Robot {
     public Lift lift;
     public Gyro gyro;
     public StepperServo foundationHook;
-    public StepperServo chomper;
-    public StepperServo chomperLeft;
-    public StepperServo chomperRight;
+    public StepperServo intakeClawLeft;
+    public StepperServo intakeClawRight;
+    public StepperServo odoServo;
     public Actuator actuator;
     public Color colorSensor;
     public StepperServo hugger;
@@ -39,6 +39,9 @@ public class Robot {
     private final float xKDR = 0.000005f;
 
     private final long SKYSTONE_THRESHOLD = 4000;
+
+    private boolean increaseAct = false;
+    private boolean previousIncreaseAct = false;
 
     private boolean previousChomperButton = false;
     private boolean chomperOpen = true;
@@ -72,11 +75,15 @@ public class Robot {
 
 
         lift = new Lift(
-                components[7]
+                components[7],
+                components[10]
         );
 
-        this.chomper = (StepperServo) components[5];
-        chomper.servo.setPosition(0);
+        this.intakeClawLeft = (StepperServo) components[5];
+        intakeClawLeft.servo.setPosition(0);
+
+        this.intakeClawRight = (StepperServo) components[11];
+        intakeClawRight.servo.setPosition(0);
 
         this.gyro = new Gyro(map);
 
@@ -89,6 +96,8 @@ public class Robot {
 
         this.hugger = (StepperServo) components[9];
         hugger.setAngle(0);
+
+        this.odoServo = (StepperServo) components[12];
 
         drivetrain.resetAllEncoders();
 
@@ -133,18 +142,23 @@ public class Robot {
         if(speedDown == 0 && speedUp == 0){
             lift.brake();
         }else {
-            lift.down(speedDown);
-            lift.up(speedUp);
+            if (speedDown != 0.0){
+                lift.down(speedDown);
+            } else if (speedUp != 0.0){
+                lift.up(speedUp);
+            }
         }
     }
 
-    public void chomperControl(boolean pressed){
+    public void intakeControl(boolean pressed){
         if(pressed && !previousChomperButton){
             if(chomperOpen){
-                chomper.servo.setPosition(0.25);
+                intakeClawRight.servo.setPosition(0.25);
+                intakeClawLeft.servo.setPosition(0.85);
                 chomperOpen = false;
             } else {
-                chomper.servo.setPosition(0.5);
+                intakeClawRight.servo.setPosition(0.25);
+                intakeClawLeft.servo.setPosition(0.85);
                 chomperOpen = true;
             }
         }
@@ -170,13 +184,32 @@ public class Robot {
 
     public void actuatorControl(boolean extend, boolean retract){
         if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(0.6);
+            actuator.actuatorMotor.motor.setPower(0.3);
         } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-0.6);
+            actuator.actuatorMotor.motor.setPower(-0.3);
         } else {
             actuator.actuatorMotor.motor.setPower(0);
         }
     }
+
+    /*public void incrementActuator(boolean increase, boolean decrease){
+        if (increase){
+            actuator.increaseFour();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else if (decrease){
+            actuator.decreaseFour();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }*/
 
     public void foundationHookControl(boolean pressed){
         if(pressed && !previousFoundationButton){

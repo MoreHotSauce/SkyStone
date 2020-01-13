@@ -40,10 +40,10 @@ public class AutonParkRed extends OpMode {
         telemetry.addData("Test", "Robot");
 
         currentState = StateParkRed.START;
-        robot.chomperControl(false);
-        robot.chomperControl(true);
-        robot.chomperControl(false);
-        robot.chomperControl(true);
+        //robot.chomperControl(false);
+        //robot.chomperControl(true);
+        //robot.chomperControl(false);
+        //robot.chomperControl(true);
 
     }
 
@@ -69,7 +69,7 @@ public class AutonParkRed extends OpMode {
         telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("CorrectionX", correctionX);
 
-        robot.chomperControl(false);
+        //robot.chomperControl(false);
         robot.foundationHookControl(false);
 
         switch(currentState){
