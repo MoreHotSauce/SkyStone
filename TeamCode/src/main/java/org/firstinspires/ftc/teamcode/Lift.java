@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Lift {
-    private Motor liftMotor;
-    private Motor liftMotor2;
+    public Motor liftMotor;
+    public Motor liftMotor2;
 
     public Lift(Component liftMotor, Component liftMotor2){
         this.liftMotor = (Motor) liftMotor;

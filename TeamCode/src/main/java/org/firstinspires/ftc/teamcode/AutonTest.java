@@ -19,12 +19,15 @@ public class AutonTest extends OpMode {
                 new Motor(-1, "frontLeft", hardwareMap, false),    //2
                 new Motor(-1, "frontRight", hardwareMap, true),  //3
                 new StepperServo(-1, "foundationHook", hardwareMap),      //4
-                new StepperServo(-1, "chomper", hardwareMap),             //5
+                new StepperServo(-1, "intakeClawLeft", hardwareMap),      //5
                 new EMotor(-1, "actuator", hardwareMap, 1),        //6
                 new Motor(-1, "liftMotor", hardwareMap, false),   //7
                 new Color(-1, "colorSensor", hardwareMap),                 //8
-                new StepperServo(-1, "hugger", hardwareMap)                //9
-
+                new StepperServo(-1, "hugger", hardwareMap),               //9
+                new Motor(-1, "liftMotor2", hardwareMap, true),     //10 ENCODER IS Y ODO
+                new StepperServo(-1, "intakeClawRight", hardwareMap),      //11
+                new StepperServo(-1, "odoServo", hardwareMap),             //12
+                new Motor(-1, "fakeMotor", hardwareMap, true)                     // ENCODER IS X ODO
         };
 
         robot = new Robot(componentList, hardwareMap, true);
@@ -42,6 +45,7 @@ public class AutonTest extends OpMode {
 
         robot.hugger.setAngle(130f);
 
+        telemetry.addData("", robot);
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionX", robot.currentX);

@@ -16,7 +16,7 @@ public class Robot {
     public Actuator actuator;
     public Color colorSensor;
     public StepperServo hugger;
-
+    public Motor fakeMotor;
     public float heading = 0.0f;
     public float targetHeading = 0.0f;
 
@@ -99,6 +99,8 @@ public class Robot {
 
         this.odoServo = (StepperServo) components[12];
 
+        this.fakeMotor = (Motor) components[13];
+
         drivetrain.resetAllEncoders();
 
         heading = gyro.getHeading();
@@ -110,6 +112,9 @@ public class Robot {
 
         currentX = drivetrain.getXDistance();
         changeTargetX(targetX);
+
+        fakeMotor.resetEncoder();
+        lift.liftMotor2.resetEncoder();
     }
 
     public void updateLoop(){
@@ -183,14 +188,10 @@ public class Robot {
     }*/
 
     public void actuatorControl(boolean extend, boolean retract){
-        if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(0.3);
-        } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-0.3);
-        } else {
-            actuator.actuatorMotor.motor.setPower(0);
-        }
+
     }
+
+
 
     /*public void incrementActuator(boolean increase, boolean decrease){
         if (increase){
@@ -223,6 +224,14 @@ public class Robot {
         }
 
         previousFoundationButton = pressed;
+    }
+
+    public float getOdoX(){
+        return fakeMotor.getEncoderValue() / (975.6f * 6.1842375f);
+    }
+
+    public float getOdoY(){
+        return lift.liftMotor2.getEncoderValue() / (975.6f * 6.1842375f);
     }
 
     public void changeTargetY(float target){
