@@ -29,14 +29,20 @@ public class Main extends OpMode{
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, false),     //0
-                new Motor(-1, "backRight", hardwareMap, true),   //1
-                new Motor(-1, "frontLeft", hardwareMap, false),    //2
-                new Motor(-1, "frontRight", hardwareMap, true),  //3
-                new StepperServo(-1, "foundationHook", hardwareMap),      //4
-                new StepperServo(-1, "chomper", hardwareMap),             //5
-                new EMotor(-1, "actuator", hardwareMap, 1),        //6
-                new Motor(-1, "liftMotor", hardwareMap, false)    //7
+                new Motor(-1, "backLeft", hardwareMap, false),              //0
+                new Motor(-1, "backRight", hardwareMap, true),              //1
+                new Motor(-1, "frontLeft", hardwareMap, false),             //2
+                new Motor(-1, "frontRight", hardwareMap, true),             //3
+                new StepperServo(-1, "foundationHook", hardwareMap),                //4
+                new StepperServo(-1, "hugger", hardwareMap),                        //5
+                new EMotor(-1, "actuator", hardwareMap, 1),                  //6
+                new Motor(-1, "liftMotor", hardwareMap, false),             //7
+                new Motor(-1, "liftMotor2", hardwareMap, false),            //8
+                new StepperServo(-1, "intakeClawLeft", hardwareMap),                //9
+                new StepperServo(-1, "intakeClawRight", hardwareMap),               //10
+                new StepperServo(-1, "odoServo", hardwareMap),                      //11
+                new Motor(-1, "fakeMotor", hardwareMap, true),              //12
+                new Color(-1, "colorSensor", hardwareMap)                           //13
         };
 
         robot = new Robot(componentList, hardwareMap, false);
@@ -45,7 +51,8 @@ public class Main extends OpMode{
     }
 
     public void start(){
-        robot.drivetrain.resetAllEncoders();
+        robot.lift.liftMotor2.resetEncoder();
+        robot.fakeMotor.resetEncoder();
     }
 
     @Override
@@ -72,15 +79,9 @@ public class Main extends OpMode{
             robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
 
-        telemetry.addData("servo", robot.chomper.getAngle());
-        telemetry.addData("inchesForward", robot.drivetrain.getYDistance());
-        telemetry.addData("encStrafe", robot.drivetrain.getXDistance());
-        telemetry.addData("bl", robot.drivetrain.backLeft.getEncoderValue());
-        telemetry.addData("br", robot.drivetrain.backRight.getEncoderValue());
-        telemetry.addData("fl", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("fr", robot.drivetrain.frontRight.getEncoderValue());
-        telemetry.update();
+
+        telemetry.addData("rot", robot.heading);
+        telemetry.addData("x", robot.getOdoX());
+        telemetry.addData("y", robot.getOdoY());
     }
-
-
 }

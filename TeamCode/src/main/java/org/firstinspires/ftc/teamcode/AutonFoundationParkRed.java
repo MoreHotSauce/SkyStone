@@ -52,7 +52,6 @@ public class AutonFoundationParkRed extends OpMode {
         telemetry.addData("Test", "Robot");
 
         currentState = StateRed.START;
-        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
     }
 
     @Override
@@ -76,7 +75,6 @@ public class AutonFoundationParkRed extends OpMode {
         telemetry.addData("CorrectionR", correctionR);
         telemetry.addData("CorrectionY", correctionY);
         telemetry.addData("CorrectionX", correctionX);
-        telemetry.addData("ChomperPos", robot.chomper.servo.getPosition());
 
 
         robot.foundationHookControl(false);

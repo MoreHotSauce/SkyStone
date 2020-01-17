@@ -10,10 +10,10 @@ public class Robot {
     public Lift lift;
     public Gyro gyro;
     public StepperServo foundationHook;
-    public StepperServo chomper;
     public Actuator actuator;
     public Color colorSensor;
     public StepperServo hugger;
+    public Motor fakeMotor;
 
     public float heading = 0.0f;
     public float targetHeading = 0.0f;
@@ -70,11 +70,9 @@ public class Robot {
 
 
         lift = new Lift(
-                components[7]
+                components[7],
+                components[8]
         );
-
-        this.chomper = (StepperServo) components[5];
-        chomper.servo.setPosition(0);
 
         this.gyro = new Gyro(map);
 
@@ -83,12 +81,14 @@ public class Robot {
 
         actuator = new Actuator((EMotor) components[6]);
 
-        this.colorSensor = (Color) components[8];
+        this.colorSensor = (Color) components[13];
 
-        this.hugger = (StepperServo) components[9];
+        this.hugger = (StepperServo) components[5];
         hugger.setAngle(0);
 
         drivetrain.resetAllEncoders();
+
+        this.fakeMotor = (Motor) components[12];
 
         heading = gyro.getHeading();
         targetHeading = heading;
@@ -137,17 +137,15 @@ public class Robot {
     }
 
     public void chomperControl(boolean pressed){
-        if(pressed && !previousChomperButton){
-            if(chomperOpen){
-                chomper.servo.setPosition(0.25);
-                chomperOpen = false;
-            } else {
-                chomper.servo.setPosition(0.5);
-                chomperOpen = true;
-            }
-        }
 
-        previousChomperButton = pressed;
+    }
+
+    public float getOdoX(){
+        return (fakeMotor.getEncoderValue() / (8192f)) * 6.1842375f;
+    }
+
+    public float getOdoY(){
+        return (lift.liftMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
     }
 
     public void actuatorControl(boolean extend, boolean retract){
