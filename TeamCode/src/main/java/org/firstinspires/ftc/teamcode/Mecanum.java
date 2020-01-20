@@ -16,6 +16,8 @@ public class Mecanum {
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
     private final float SLOWMODECONST = 0.5f;
     private final float AUTONCONST = 0.0f;
+    private final float YCONST = -0.3f;
+    private final float XCONST = -0.3f;
 
     private float slow = 1f;
 
@@ -130,30 +132,16 @@ public class Mecanum {
         frontRightSpeed = -AUTONCONST;
     }
 
-    public float getYDistance(){
-        float[] encoderValues = {
-                backLeft.getEncoderValue() * -1,
-                frontLeft.getEncoderValue() * -1,
-                backRight.getEncoderValue() * -1,
-                frontRight.getEncoderValue() * -1
-        };
-
-        float sumEncoderValues = 0.0f;
-
-        for(int i = 0; i < 4; i++){
-            encoderValues[i] /= 537.6;
-            sumEncoderValues += encoderValues[i];
-        }
-
-
-        return (sumEncoderValues / 4) * 12.2004f;
-    }
-
     public void moveYDistance(float correctionY){
-        backLeftSpeed -= correctionY;
-        frontLeftSpeed -= correctionY;
-        backRightSpeed -= correctionY;
-        frontRightSpeed -= correctionY;
+        backLeftSpeed = YCONST;
+        frontLeftSpeed = YCONST;
+        backRightSpeed = YCONST;
+        frontRightSpeed = YCONST;
+
+        backLeftSpeed *= correctionY;
+        frontLeftSpeed *= correctionY;
+        backRightSpeed *= correctionY;
+        frontRightSpeed *= correctionY;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
@@ -161,30 +149,17 @@ public class Mecanum {
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
     }
 
-    public float getXDistance(){
-        float[] encoderValues = {
-                backLeft.getEncoderValue() * -1,
-                frontLeft.getEncoderValue(),
-                backRight.getEncoderValue(),
-                frontRight.getEncoderValue() * -1
-        };
-
-        float sumEncoderValues = 0.0f;
-
-        for(int i = 0; i < 4; i++){
-            encoderValues[i] /= 537.6;
-            sumEncoderValues += encoderValues[i];
-        }
-
-
-        return (sumEncoderValues / 4) * 11.3402f;
-    }
-
     public void moveXDistance(float correctionX){
-        backLeftSpeed -= correctionX;
-        frontLeftSpeed += correctionX;
-        backRightSpeed += correctionX;
-        frontRightSpeed -= correctionX;
+
+        backLeftSpeed = -XCONST;
+        frontLeftSpeed = XCONST;
+        backRightSpeed = XCONST;
+        frontRightSpeed = -XCONST;
+
+        backLeftSpeed *= correctionX;
+        frontLeftSpeed *= correctionX;
+        backRightSpeed *= correctionX;
+        frontRightSpeed *= correctionX;
 
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));

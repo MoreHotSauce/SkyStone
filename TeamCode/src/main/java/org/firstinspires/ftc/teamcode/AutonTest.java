@@ -14,17 +14,20 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         Component[] componentList = {
-                new Motor(-1, "backLeft", hardwareMap, false),     //0
-                new Motor(-1, "backRight", hardwareMap, true),   //1
-                new Motor(-1, "frontLeft", hardwareMap, false),    //2
-                new Motor(-1, "frontRight", hardwareMap, true),  //3
-                new StepperServo(-1, "foundationHook", hardwareMap),      //4
-                new StepperServo(-1, "chomper", hardwareMap),             //5
-                new EMotor(-1, "actuator", hardwareMap, 1),        //6
-                new Motor(-1, "liftMotor", hardwareMap, false),   //7
-                new Color(-1, "colorSensor", hardwareMap),                 //8
-                new StepperServo(-1, "hugger", hardwareMap)                //9
-
+                new Motor(-1, "backLeft", hardwareMap, false),              //0
+                new Motor(-1, "backRight", hardwareMap, true),              //1
+                new Motor(-1, "frontLeft", hardwareMap, false),             //2
+                new Motor(-1, "frontRight", hardwareMap, true),             //3
+                new StepperServo(-1, "foundationHook", hardwareMap),                //4
+                new StepperServo(-1, "hugger", hardwareMap),                        //5
+                new EMotor(-1, "actuator", hardwareMap, 1),                  //6
+                new Motor(-1, "liftMotor", hardwareMap, false),             //7
+                new Motor(-1, "liftMotor2", hardwareMap, true),            //8
+                new StepperServo(-1, "intakeClawLeft", hardwareMap),                //9
+                new StepperServo(-1, "intakeClawRight", hardwareMap),               //10
+                new StepperServo(-1, "odoServo", hardwareMap),                      //11
+                new Motor(-1, "fakeMotor", hardwareMap, true),              //12
+                new Color(-1, "colorSensor", hardwareMap)                           //13
         };
 
         robot = new Robot(componentList, hardwareMap, true);
@@ -36,30 +39,33 @@ public class AutonTest extends OpMode {
     public void loop() {
         robot.updateLoop();
         robot.resetMotorSpeeds();
-        float correctionR = robot.rotatePID();
-        float correctionY = robot.moveTargetY();
-        float correctionX = robot.moveTargetX();
 
-        robot.hugger.setAngle(130f);
+        //robot.hugger.setAngle(130f);
+
+        robot.changeTargetX(28);
 
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionTargetY", robot.targetY);
+        telemetry.addData("CorrectionY", robot.correctionY);
+        telemetry.addData("highestY", robot.highestY);
         telemetry.addData("PositionX", robot.currentX);
         telemetry.addData("PositionTargetX", robot.targetX);
+        telemetry.addData("CorrectionX", robot.correctionX);
+        telemetry.addData("highestX", robot.highestX);
+        //telemetry.addData("PositionX", robot.currentX);
+        //telemetry.addData("PositionTargetX", robot.targetX);
         telemetry.addData("Rotation", robot.heading);
         telemetry.addData("RotationTarget", robot.targetHeading);
-        telemetry.addData("CorrectionR", correctionR);
-        telemetry.addData("CorrectionY", correctionY);
-        telemetry.addData("CorrectionX", correctionX);
-        telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
-        telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
-        telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
-        telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
+        telemetry.addData("CorrectionR", robot.correctionR);
+       // telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
+        //telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
+        //telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
+        //telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
         telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
-        telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
-        telemetry.addData("red", robot.colorSensor.getValue()[1]);
-        telemetry.addData("green", robot.colorSensor.getValue()[2]);
-        telemetry.addData("blue", robot.colorSensor.getValue()[3]);
+        //telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
+        //telemetry.addData("red", robot.colorSensor.getValue()[1]);
+        //telemetry.addData("green", robot.colorSensor.getValue()[2]);
+        //telemetry.addData("blue", robot.colorSensor.getValue()[3]);
         telemetry.addData("skystone?", robot.isSkystone());
 
 

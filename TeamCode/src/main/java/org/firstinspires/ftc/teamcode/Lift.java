@@ -23,8 +23,8 @@ public class Lift {
     }
 
     public void brake(){
-        liftMotor.setSpeed(0.1f);
-        liftMotor2.setSpeed(0.1f);
+        liftMotor.setSpeed(0.05f);
+        liftMotor2.setSpeed(0.05f);
     }
 
 }
