@@ -18,6 +18,9 @@ public class Motor extends Component{
         if(reverse){
             motor.setDirection(DcMotor.Direction.REVERSE);
         }
+
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     public void setSpeed(float speed) {
