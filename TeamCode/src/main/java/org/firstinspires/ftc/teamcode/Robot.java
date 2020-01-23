@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Blinker;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -16,6 +17,7 @@ public class Robot {
     public Motor fakeMotor;
     public StepperServo intakeClawLeft;
     public StepperServo intakeClawRight;
+    public LimitSensor limit;
 
     public float heading = 0.0f;
     public float targetHeading = 0.0f;
@@ -104,6 +106,8 @@ public class Robot {
 
         this.fakeMotor = (Motor) components[12];
 
+        this.limit = (LimitSensor) components[14];
+
         heading = gyro.getHeading();
         targetHeading = heading;
         //changeTargetRotation(targetHeading);
@@ -115,7 +119,6 @@ public class Robot {
 
         lift.liftMotor2.resetEncoder();
         fakeMotor.resetEncoder();
-
 
         currentY = getOdoY();
         //changeTargetY(targetY);

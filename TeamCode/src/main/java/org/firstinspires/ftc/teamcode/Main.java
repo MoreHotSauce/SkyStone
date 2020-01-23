@@ -42,7 +42,8 @@ public class Main extends OpMode{
                 new StepperServo(-1, "intakeClawRight", hardwareMap),               //10
                 new StepperServo(-1, "odoServo", hardwareMap),                      //11
                 new Motor(-1, "fakeMotor", hardwareMap, true),              //12
-                new Color(-1, "colorSensor", hardwareMap)                           //13
+                new Color(-1, "colorSensor", hardwareMap),                           //13
+                new LimitSensor(-1, "limit", hardwareMap)                           //13
         };
 
         robot = new Robot(componentList, hardwareMap, false);
