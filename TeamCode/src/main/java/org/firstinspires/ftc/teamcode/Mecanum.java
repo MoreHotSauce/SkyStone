@@ -16,8 +16,8 @@ public class Mecanum {
     private final float MOTORSPEEDCONST = (float) Math.sqrt(2);
     private final float SLOWMODECONST = 0.5f;
     private final float AUTONCONST = 0.0f;
-    private final float YCONST = -0.3f;
-    private final float XCONST = -0.3f;
+    private final float YCONST = -0.4f;
+    private final float XCONST = -0.25f;
 
     private float slow = 1f;
 

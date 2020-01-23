@@ -63,6 +63,8 @@ public class Main extends OpMode{
 
         robot.intakeControl(gamepad2.a);
 
+        robot.huggerControl(gamepad2.dpad_down);
+
         robot.actuatorControl(gamepad2.x, gamepad2.b);
 
         robot.moveLift(gamepad2.left_trigger, gamepad2.right_trigger);

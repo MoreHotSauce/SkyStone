@@ -40,11 +40,11 @@ public class Robot {
     private final float rKIR = 0.00001f;
     private final float rKDR = 0.0001f;
 
-    private final float yKPR = 0.1f;
-    private final float yKIR = 0.00005f;
-    private final float yKDR = 100f;
+    private final float yKPR = 0.06f;
+    private final float yKIR = 0.000000001f;
+    private final float yKDR = 0.00005f;
 
-    private final float xKPR = 0.04f;
+    private final float xKPR = 0.0325f;
     private final float xKIR = 0.00002f;
     private final float xKDR = 0.000005f;
 
@@ -54,7 +54,9 @@ public class Robot {
     private boolean intakeOpen = true;
 
     private boolean previousFoundationButton = false;
+    private boolean previousHuggerButton = false;
     private boolean foundationOpen = true;
+    private boolean huggerOpen = true;
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
@@ -165,7 +167,7 @@ public class Robot {
     }
 
     public void intakeControl(boolean pressed){
-        if(pressed && !previousFoundationButton){
+        if(pressed && !previousIntakeButton){
             if(intakeOpen){
                 intakeClawLeft.setAngle(50);
                 intakeClawRight.setAngle(100);
@@ -216,6 +218,20 @@ public class Robot {
         previousFoundationButton = pressed;
     }
 
+    public void huggerControl(boolean pressed){
+        if(pressed && !previousHuggerButton){
+            if(huggerOpen){
+                hugger.setAngle(133);
+                huggerOpen = false;
+            } else {
+                hugger.setAngle(0);
+                huggerOpen = true;
+            }
+        }
+
+        previousHuggerButton = pressed;
+    }
+
     public void changeTargetY(float target){
         if(target == this.targetY){
             return;
@@ -223,7 +239,8 @@ public class Robot {
             pidY = true;
             pidX = false;
             targetY = target;
-            drivetrain.resetAllEncoders();
+            lift.liftMotor2.resetEncoder();
+            fakeMotor.resetEncoder();
             pidYDistance = new PIDController(target, yKPR, yKIR, yKDR, false);
         }
     }
@@ -235,7 +252,8 @@ public class Robot {
             pidY = false;
             pidX = true;
             targetX = target;
-            drivetrain.resetAllEncoders();
+            lift.liftMotor2.resetEncoder();
+            fakeMotor.resetEncoder();
             pidXDistance = new PIDController(target, xKPR, xKIR, xKDR, false);
         }
     }
