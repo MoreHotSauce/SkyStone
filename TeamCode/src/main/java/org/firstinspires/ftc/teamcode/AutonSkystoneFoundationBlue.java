@@ -8,7 +8,8 @@ enum StateBlueSkystone{ //Maybe add wait states
     CHECKHEADING,
     STRAFETOSKYSTONE,
     SKYSTONECHECKING1,
-    SKYSTONECHECKING2,
+    SKYSTONECHECKING21,
+    SKYSTONECHECKING22,
     SKYSTONECHECKING3,
     MOVEINTO,
     YOINK,
@@ -122,26 +123,36 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                     currentState = StateBlueSkystone.MOVEINTO;
                     moveMore = 16.0f;
                 } else {
-                    currentState = StateBlueSkystone.SKYSTONECHECKING2;
+                    currentState = StateBlueSkystone.SKYSTONECHECKING21;
                 }
                 break;
 
-            case SKYSTONECHECKING2:
+            case SKYSTONECHECKING21:
                 robot.changeTargetY(8.0f);
-                if (tol(robot.currentY , robot.targetY, YTOL)){
-                    robot.changeTargetY(0.0f);
-                    if (robot.isSkystone()) {
-                        currentState = StateBlueSkystone.MOVEINTO;
-                        moveMore = 8.0f;
-                    } else {
-                        currentState = StateBlueSkystone.SKYSTONECHECKING3;
+                if (tol(robot.currentX , robot.targetX, XTOL)){
+                    robot.changeTargetX(0.0f);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    currentState = StateBlueSkystone.SKYSTONECHECKING22;
+                }
+                break;
+
+            case SKYSTONECHECKING22:
+                if (robot.isSkystone()) {
+                    currentState = StateBlueSkystone.MOVEINTO;
+                    moveMore = 8.0f;
+                } else {
+                    currentState = StateBlueSkystone.SKYSTONECHECKING3;
                 }
                 break;
 
             case SKYSTONECHECKING3:
                 robot.changeTargetY(8.0f);
                 if (tol(robot.currentY , robot.targetY, YTOL)){
+                    moveMore = 8.0f;
                     robot.changeTargetY(0.0f);
                     currentState = StateBlueSkystone.MOVEINTO;
                 }
@@ -156,6 +167,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
 
             case YOINK:
                 robot.huggerControl(true);
+                robot.huggerControl(false);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
