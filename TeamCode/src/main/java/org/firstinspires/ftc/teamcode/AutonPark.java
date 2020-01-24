@@ -50,10 +50,12 @@ public class AutonPark extends OpMode {
 
     @Override
     public void loop() {
+
+        robot.updateLoop();
+
         telemetry.addData("State", currentState);
         telemetry.addData("y-target", robot.targetY);
         telemetry.addData("r-target", robot.targetHeading);
-
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionX", robot.currentX);
         telemetry.addData("PositionTargetY", robot.targetY);
@@ -74,7 +76,7 @@ public class AutonPark extends OpMode {
                 break;
 
             case MOVETOPARK:
-                robot.changeTargetY(30.0f);
+                robot.changeTargetY(32.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StatePark.PARK;
