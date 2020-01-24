@@ -17,7 +17,7 @@ public class Robot {
     public Motor fakeMotor;
     public StepperServo intakeClawLeft;
     public StepperServo intakeClawRight;
-    public LimitSensor limit;
+    //public LimitSensor limit;
 
     public float heading = 0.0f;
     public float targetHeading = 0.0f;
@@ -34,9 +34,13 @@ public class Robot {
     public float correctionY = 0.0f;
     public float correctionR = 0.0f;
 
+    private final float xSpeed = 0.45f;
+    private final float ySpeed = -0.25f;
 
-    private boolean pidX = false;
-    private boolean pidY = false;
+    public boolean epicMode = false;
+
+    public boolean pidX = false;
+    public boolean pidY = false;
 
     private final float rKPR = 0.006f;
     private final float rKIR = 0.00001f;
@@ -106,16 +110,16 @@ public class Robot {
 
         this.fakeMotor = (Motor) components[12];
 
-        this.limit = (LimitSensor) components[14];
+        //this.limit = (LimitSensor) components[14];
 
         heading = gyro.getHeading();
         targetHeading = heading;
         //changeTargetRotation(targetHeading);
 
         this.intakeClawLeft = (StepperServo) components[9];
-        intakeClawLeft.setAngle(80);
+        intakeClawLeft.setAngle(0);
         this.intakeClawRight = (StepperServo) components[10];
-        intakeClawRight.setAngle(100);
+        intakeClawRight.setAngle(180);
 
         lift.liftMotor2.resetEncoder();
         fakeMotor.resetEncoder();
@@ -172,12 +176,12 @@ public class Robot {
     public void intakeControl(boolean pressed){
         if(pressed && !previousIntakeButton){
             if(intakeOpen){
-                intakeClawLeft.setAngle(50);
-                intakeClawRight.setAngle(100);
+                intakeClawLeft.setAngle(25);
+                intakeClawRight.setAngle(155);
                 intakeOpen = false;
             } else {
-                intakeClawLeft.setAngle(100);
-                intakeClawRight.setAngle(50);
+                intakeClawLeft.setAngle(60);
+                intakeClawRight.setAngle(120);
                 intakeOpen = true;
             }
         }
@@ -213,7 +217,7 @@ public class Robot {
                 foundationHook.setAngle(133);
                 foundationOpen = false;
             } else {
-                foundationHook.setAngle(85);
+                foundationHook.setAngle(103);
                 foundationOpen = true;
             }
         }
@@ -277,22 +281,116 @@ public class Robot {
     }
 
     public float moveTargetY(){
+        /*
         correctionY = pidYDistance.update(currentY);
         drivetrain.moveYDistance(correctionY);
         if(this.currentY > this.highestY) {
             this.highestY = this.currentY;
         }
-        return correctionY;
+        return correctionY;*/
+        if (epicMode){
+            if(targetY > 0){
+                if (currentY < targetY){
+                    if (currentY < targetY * 0.37){
+                        drivetrain.move(0.0f, -0.6f, 0.0f);
+                    } else {
+                        drivetrain.move(0.0f, -0.28f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }else{
+                if (currentY > targetY){
+                    if (currentY > targetY*0.37){
+                        drivetrain.move(0.0f, 0.6f, 0.0f);
+                    } else {
+                        drivetrain.move(0.0f, 0.28f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }
+        } else {
+            if(targetY > 0){
+                if (currentY < targetY){
+                    if (currentY < targetY * 0.37){
+                        drivetrain.move(0.0f, -0.3f, 0.0f);
+                    } else {
+                        drivetrain.move(0.0f, -0.14f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }else{
+                if (currentY > targetY){
+                    if (currentY > targetY*0.37){
+                        drivetrain.move(0.0f, 0.3f, 0.0f);
+                    } else {
+                        drivetrain.move(0.0f, 0.14f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }
+        }
+
+
+        return 420.0f;
     }
 
     public float moveTargetX(){
-        correctionX = pidXDistance.update(currentX);
+        /*correctionX = pidXDistance.update(currentX);
         drivetrain.moveXDistance(correctionX);
         if(this.currentX > this.highestX) {
             this.highestX = this.currentX;
+        }*/
+        if (epicMode){
+            if(targetX > 0){
+                if (currentX < targetX){
+                    if (currentX < targetX*0.37){
+                        drivetrain.move(1f, 0.0f, 0.0f);
+                    } else {
+                        drivetrain.move(0.6f, 0.0f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }else{
+                if (currentX > targetX){
+                    if (currentX > targetX*0.37){
+                        drivetrain.move(-1f, 0.0f, 0.0f);
+                    } else {
+                        drivetrain.move(-0.6f, 0.0f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }
+        } else {
+            if(targetX > 0){
+                if (currentX < targetX){
+                    if (currentX < targetX*0.37){
+                        drivetrain.move(0.5f, 0.0f, 0.0f);
+                    } else {
+                        drivetrain.move(0.3f, 0.0f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }else{
+                if (currentX > targetX){
+                    if (currentX > targetX*0.37){
+                        drivetrain.move(-0.5f, 0.0f, 0.0f);
+                    } else {
+                        drivetrain.move(-0.3f, 0.0f, 0.0f);
+                    }
+                }else{
+                    drivetrain.move(0.0f,0.0f,0.0f);
+                }
+            }
         }
-        return correctionX;
+
+
+        return 69.0f;
     }
-
-
 }

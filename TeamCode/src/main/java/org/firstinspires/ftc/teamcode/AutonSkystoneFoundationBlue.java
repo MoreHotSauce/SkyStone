@@ -105,23 +105,19 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                 break;
 
             case STRAFETOSKYSTONE:
-                robot.changeTargetX(26.0f);
+                robot.changeTargetX(25.0f);
                 if (tol(robot.currentX , robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     currentState = StateBlueSkystone.SKYSTONECHECKING1;
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
                 break;
 
             case SKYSTONECHECKING1:
-                //robot.changeTargetY(-2.0f);
-                if (tol(robot.currentY , robot.targetY, YTOL)){
-                    robot.changeTargetX(0.0f);
-                }
                 if (robot.isSkystone()) {
                     currentState = StateBlueSkystone.MOVEINTO;
                     moveMore = 16.0f;
@@ -133,21 +129,20 @@ public class AutonSkystoneFoundationBlue extends OpMode {
             case SKYSTONECHECKING2:
                 robot.changeTargetY(8.0f);
                 if (tol(robot.currentY , robot.targetY, YTOL)){
-                    robot.changeTargetX(0.0f);
-                }
-
-                if (robot.isSkystone()) {
-                    currentState = StateBlueSkystone.MOVEINTO;
-                    moveMore = 8.0f;
-                } else {
-                    currentState = StateBlueSkystone.SKYSTONECHECKING3;
+                    robot.changeTargetY(0.0f);
+                    if (robot.isSkystone()) {
+                        currentState = StateBlueSkystone.MOVEINTO;
+                        moveMore = 8.0f;
+                    } else {
+                        currentState = StateBlueSkystone.SKYSTONECHECKING3;
+                    }
                 }
                 break;
 
             case SKYSTONECHECKING3:
                 robot.changeTargetY(8.0f);
                 if (tol(robot.currentY , robot.targetY, YTOL)){
-                    robot.changeTargetX(0.0f);
+                    robot.changeTargetY(0.0f);
                     currentState = StateBlueSkystone.MOVEINTO;
                 }
 
@@ -170,7 +165,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                 break;
 
             /*case STRAFEBACK:
-                robot.changeTargetX(-4.0f);
+                robot.changeTargetX(-12.0f);
                 if (tol(robot.currentX , robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
                     currentState = StateBlueSkystone.ROT90CCW;
@@ -180,7 +175,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
             case ROT90CCW:
                 robot.changeTargetRotation(-90.0f);
                 if (tol(robot.heading , robot.targetHeading, RTOL)){
-                    currentState = StateBlueSkystone.STRAFETOFOUNDATION;
+                    currentState = StateBlueSkystone.PARK;
                 }
                 break;
 

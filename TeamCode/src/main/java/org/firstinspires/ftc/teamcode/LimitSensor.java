@@ -1,20 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class LimitSensor extends Component {
 
-    public DigitalChannel digitalTouch;
+    public TouchSensor digitalTouch;
 
     public LimitSensor(int port, String name, HardwareMap map) {
         super(port, name);
-        this.digitalTouch = map.get(DigitalChannel.class, "sensor_digital");
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+        this.digitalTouch = map.touchSensor.get(name);
     }
 
     public boolean isPressed(){
-        return digitalTouch.getState();
+        return digitalTouch.isPressed();
     }
 
 }
