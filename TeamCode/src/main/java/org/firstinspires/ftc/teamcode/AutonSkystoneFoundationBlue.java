@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,9 +9,9 @@ enum StateBlueSkystone{ //Maybe add wait states
     CHECKHEADING,
     STRAFETOSKYSTONE,
     SKYSTONECHECKING1,
-    SKYSTONECHECKING21,
-    SKYSTONECHECKING22,
-    SKYSTONECHECKING3,
+    MOVETOSKYSTONE2,
+    SKYSTONECHECKING2,
+    MOVETOSKYSTONE3,
     MOVEINTO,
     YOINK,
     STRAFEBACK,
@@ -23,7 +24,7 @@ enum StateBlueSkystone{ //Maybe add wait states
     FORWARDTOPARK,
     PARK
 }
-@TeleOp
+@Disabled
 public class AutonSkystoneFoundationBlue extends OpMode {
 
     Robot robot;
@@ -32,7 +33,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
 
     private final float YTOL = 1.0f;
     private final float RTOL = 3.0f;
-    private final float XTOL = 1.0f;
+    private final float XTOL = 2.0f;
 
     private float moveMore = 0.0f;
 
@@ -77,15 +78,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
         telemetry.addData("Rotation", robot.heading);
         telemetry.addData("RotationTarget", robot.targetHeading);
         telemetry.addData("CorrectionR", robot.correctionR);
-        // telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
-        //telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
-        //telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
-        //telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
         telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
-        //telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
-        //telemetry.addData("red", robot.colorSensor.getValue()[1]);
-        //telemetry.addData("green", robot.colorSensor.getValue()[2]);
-        //telemetry.addData("blue", robot.colorSensor.getValue()[3]);
         telemetry.addData("skystone?", robot.isSkystone());
         telemetry.addData("STATE", currentState);
 
@@ -106,21 +99,58 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                 break;
 
             case STRAFETOSKYSTONE:
-                robot.changeTargetX(25.0f);
+                //robot.changeTargetX(25.0f);
                 if (tol(robot.currentX , robot.targetX, XTOL)){
-                    robot.changeTargetX(0.0f);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    //robot.changeTargetX(0.0f);
                     currentState = StateBlueSkystone.SKYSTONECHECKING1;
                 }
                 break;
 
             case SKYSTONECHECKING1:
-                if (robot.isSkystone()) {
+                if(robot.isSkystone()){
+                    moveMore = 16.0f;
                     currentState = StateBlueSkystone.MOVEINTO;
+                } else {
+                    currentState = StateBlueSkystone.MOVETOSKYSTONE2;
+                }
+                break;
+
+            case MOVETOSKYSTONE2:
+                robot.changeTargetY(8);
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0);
+                    currentState = StateBlueSkystone.SKYSTONECHECKING2;
+                }
+                break;
+
+            case SKYSTONECHECKING2:
+                if(robot.isSkystone()){
+                    moveMore = 8.0f;
+                    currentState = StateBlueSkystone.MOVEINTO;
+                } else {
+                    currentState = StateBlueSkystone.MOVETOSKYSTONE3;
+                }
+                break;
+
+            case MOVETOSKYSTONE3:
+                robot.changeTargetY(8);
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0);
+                    currentState = StateBlueSkystone.MOVEINTO;
+                }
+                break;
+
+            case MOVEINTO:
+                //robot.changeTargetX(6);
+                if(tol(robot.currentX, robot.targetX, XTOL)){
+                    //robot.changeTargetX(0);
+                    currentState = StateBlueSkystone.PARK;
+                }
+                break;
+
+            /*case SKYSTONECHECKING1:
+                if (robot.isSkystone()) {
+                    currentState = StateBlueSkystone.PARK;
                     moveMore = 16.0f;
                 } else {
                     currentState = StateBlueSkystone.SKYSTONECHECKING21;
@@ -129,8 +159,8 @@ public class AutonSkystoneFoundationBlue extends OpMode {
 
             case SKYSTONECHECKING21:
                 robot.changeTargetY(8.0f);
-                if (tol(robot.currentX , robot.targetX, XTOL)){
-                    robot.changeTargetX(0.0f);
+                if (tol(robot.currentY , robot.targetY, YTOL)){
+                    robot.changeTargetY(0.0f);
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -152,9 +182,9 @@ public class AutonSkystoneFoundationBlue extends OpMode {
             case SKYSTONECHECKING3:
                 robot.changeTargetY(8.0f);
                 if (tol(robot.currentY , robot.targetY, YTOL)){
-                    moveMore = 8.0f;
+                    moveMore = 0.0f;
                     robot.changeTargetY(0.0f);
-                    currentState = StateBlueSkystone.MOVEINTO;
+                    currentState = StateBlueSkystone.PARK;
                 }
 
             case MOVEINTO:
@@ -176,7 +206,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                 currentState = StateBlueSkystone.PARK;
                 break;
 
-            /*case STRAFEBACK:
+            case STRAFEBACK:
                 robot.changeTargetX(-12.0f);
                 if (tol(robot.currentX , robot.targetX, XTOL)){
                     robot.changeTargetX(0.0f);
