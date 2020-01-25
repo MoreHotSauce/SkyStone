@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@TeleOp(name="Autonomous Park Delay", group="Auton Opmode")
+@TeleOp(name="Autonomous Park with Delay", group="Auton Opmode")
 public class AutonParkDelay extends LinearOpMode {
 
     Robot robot;
