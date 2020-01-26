@@ -107,7 +107,7 @@ public class AutonFoundationParkBlue extends OpMode {
                 break;
 
             case MOVETOFOUNDATION:
-                robot.changeTargetY(-10.0f);
+                robot.changeTargetY(-8.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StateBlue.HOOK;
@@ -127,7 +127,7 @@ public class AutonFoundationParkBlue extends OpMode {
 
             case MOVEBACK:
                 robot.epicMode = true;
-                robot.changeTargetY(14.0f);
+                robot.changeTargetY(12.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StateBlue.ROT90;
@@ -138,17 +138,7 @@ public class AutonFoundationParkBlue extends OpMode {
             case ROT90:
                 robot.changeTargetRotation(90);
                 if(tol(robot.heading, robot.targetHeading, RTOL)){
-                    currentState = StateBlue.INTOWALL;
-                }
-                break;
-
-            case INTOWALL:
-                robot.epicMode = true;
-                robot.changeTargetY(-12.0f);
-                if(tol(robot.currentY, robot.targetY, YTOL)){
-                    robot.changeTargetY(0.0f);
                     currentState = StateBlue.UNHOOK;
-                    robot.epicMode = false;
                 }
                 break;
 
@@ -162,7 +152,17 @@ public class AutonFoundationParkBlue extends OpMode {
                     e.printStackTrace();
                 }
 
-                currentState = StateBlue.FORWARD;
+                currentState = StateBlue.INTOWALL;
+                break;
+
+            case INTOWALL:
+                robot.epicMode = true;
+                robot.changeTargetY(-12.0f);
+                if(tol(robot.currentY, robot.targetY, YTOL)){
+                    robot.changeTargetY(0.0f);
+                    currentState = StateBlue.FORWARD;
+                    robot.epicMode = false;
+                }
                 break;
 
             case FORWARD:

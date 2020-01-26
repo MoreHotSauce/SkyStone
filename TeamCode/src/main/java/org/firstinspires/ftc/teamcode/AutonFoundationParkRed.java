@@ -107,7 +107,7 @@ public class AutonFoundationParkRed extends OpMode {
                 break;
 
             case MOVETOFOUNDATION:
-                robot.changeTargetY(-10.0f);
+                robot.changeTargetY(-8.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StateRed.HOOK;
@@ -127,7 +127,7 @@ public class AutonFoundationParkRed extends OpMode {
 
             case MOVEBACK:
                 robot.epicMode = true;
-                robot.changeTargetY(14.0f);
+                robot.changeTargetY(12.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     robot.changeTargetY(0.0f);
                     currentState = StateRed.ROT90;

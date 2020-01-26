@@ -97,7 +97,7 @@ public class Robot {
         this.gyro = new Gyro(map);
 
         this.foundationHook = (StepperServo) components[4];
-        foundationHook.setAngle(133);
+        foundationHook.setAngle(165);
 
         actuator = new Actuator((EMotor) components[6]);
 
@@ -217,7 +217,7 @@ public class Robot {
                 foundationHook.setAngle(133);
                 foundationOpen = false;
             } else {
-                foundationHook.setAngle(103);
+                foundationHook.setAngle(100);
                 foundationOpen = true;
             }
         }
@@ -294,7 +294,7 @@ public class Robot {
                     if (currentY < targetY * 0.37){
                         drivetrain.move(0.0f, -0.6f, 0.0f);
                     } else {
-                        drivetrain.move(0.0f, -0.28f, 0.0f);
+                        drivetrain.move(0.0f, -0.35f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
@@ -304,7 +304,7 @@ public class Robot {
                     if (currentY > targetY*0.37){
                         drivetrain.move(0.0f, 0.6f, 0.0f);
                     } else {
-                        drivetrain.move(0.0f, 0.28f, 0.0f);
+                        drivetrain.move(0.0f, 0.35f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
@@ -316,7 +316,7 @@ public class Robot {
                     if (currentY < targetY * 0.37){
                         drivetrain.move(0.0f, -0.3f, 0.0f);
                     } else {
-                        drivetrain.move(0.0f, -0.14f, 0.0f);
+                        drivetrain.move(0.0f, -0.25f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
@@ -326,7 +326,7 @@ public class Robot {
                     if (currentY > targetY*0.37){
                         drivetrain.move(0.0f, 0.3f, 0.0f);
                     } else {
-                        drivetrain.move(0.0f, 0.14f, 0.0f);
+                        drivetrain.move(0.0f, 0.25f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
@@ -347,7 +347,7 @@ public class Robot {
         if (epicMode){
             if(targetX > 0){
                 if (currentX < targetX){
-                    if (currentX < targetX*0.37){
+                    if (currentX < targetX*0.45){
                         drivetrain.move(1f, 0.0f, 0.0f);
                     } else {
                         drivetrain.move(0.6f, 0.0f, 0.0f);
@@ -357,7 +357,7 @@ public class Robot {
                 }
             }else{
                 if (currentX > targetX){
-                    if (currentX > targetX*0.37){
+                    if (currentX > targetX*0.45){
                         drivetrain.move(-1f, 0.0f, 0.0f);
                     } else {
                         drivetrain.move(-0.6f, 0.0f, 0.0f);
@@ -369,20 +369,20 @@ public class Robot {
         } else {
             if(targetX > 0){
                 if (currentX < targetX){
-                    if (currentX < targetX*0.37){
-                        drivetrain.move(0.5f, 0.0f, 0.0f);
+                    if (currentX < targetX*0.45){
+                        drivetrain.move(0.6f, 0.0f, 0.0f);
                     } else {
-                        drivetrain.move(0.3f, 0.0f, 0.0f);
+                        drivetrain.move(0.35f, 0.0f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
                 }
             }else{
                 if (currentX > targetX){
-                    if (currentX > targetX*0.37){
-                        drivetrain.move(-0.5f, 0.0f, 0.0f);
+                    if (currentX > targetX*0.45){
+                        drivetrain.move(-0.6f, 0.0f, 0.0f);
                     } else {
-                        drivetrain.move(-0.3f, 0.0f, 0.0f);
+                        drivetrain.move(-0.35f, 0.0f, 0.0f);
                     }
                 }else{
                     drivetrain.move(0.0f,0.0f,0.0f);
