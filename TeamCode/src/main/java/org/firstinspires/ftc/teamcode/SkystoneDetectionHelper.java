@@ -8,6 +8,13 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import java.util.Locale;
 
+/*
+    POSITION 1: TOWARDS NEUTRAL BRIDGE
+    POSITION 2: CENTER STONE
+    POSITION 3: TOWARDS WALL
+ */
+
+
 public class SkystoneDetectionHelper {
     private OpenCvCamera phoneCam;
     private SkystoneDetector skyStoneDetector;
@@ -18,7 +25,7 @@ public class SkystoneDetectionHelper {
         phoneCam.openCameraDevice();
         skyStoneDetector = new SkystoneDetector();
         phoneCam.setPipeline(skyStoneDetector);
-        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        phoneCam.startStreaming(720, 1080, OpenCvCameraRotation.UPRIGHT);
     }
 
     public float getStoneX() {
