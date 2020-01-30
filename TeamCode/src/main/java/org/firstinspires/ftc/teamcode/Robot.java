@@ -68,6 +68,10 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
+    public int sigma = 0;
+    public int count = 0;
+    public SkystoneDetectionHelper skystoneDetector;
+
     public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
         if (auton){
@@ -129,6 +133,8 @@ public class Robot {
 
         currentX = getOdoX();
         //changeTargetX(targetX);
+
+        skystoneDetector = new SkystoneDetectionHelper(map);
     }
 
     public void updateLoop(){
@@ -136,12 +142,19 @@ public class Robot {
         currentY = getOdoY();
         currentX = getOdoX();
 
+        sigma += skystoneDetector.skystonePos();
+        count += 1;
+
         if(pidX) {
             moveTargetX();
         }else if(pidY) {
             moveTargetY();
         }
         rotatePID();
+    }
+
+    public int getAverageSkystone(){
+        return Math.round(((float) sigma) / count);
     }
 
     public void resetMotorSpeeds(){
