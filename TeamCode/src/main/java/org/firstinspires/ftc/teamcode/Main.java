@@ -57,7 +57,7 @@ public class Main extends OpMode{
 
     @Override
     public void loop() {
-        //robot.updateLoop();
+        robot.updateLoop();
 
         robot.turbo(gamepad1.right_bumper);
 
@@ -83,6 +83,9 @@ public class Main extends OpMode{
             robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
 
+        if(gamepad1.right_stick_x != 0.0f){
+            robot.changeTargetRotation(robot.heading);
+        }
 
         telemetry.addData("rot", robot.heading);
         telemetry.addData("x", robot.getOdoX());

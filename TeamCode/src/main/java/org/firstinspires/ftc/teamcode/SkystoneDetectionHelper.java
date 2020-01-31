@@ -24,6 +24,7 @@ public class SkystoneDetectionHelper {
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();
         skyStoneDetector = new SkystoneDetector();
+
         phoneCam.setPipeline(skyStoneDetector);
         phoneCam.startStreaming(720, 1080, OpenCvCameraRotation.UPRIGHT);
     }

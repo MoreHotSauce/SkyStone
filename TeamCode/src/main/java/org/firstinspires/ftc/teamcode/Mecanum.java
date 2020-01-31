@@ -51,7 +51,6 @@ public class Mecanum {
     public void move(float xMove, float yMove, float rotate) {
         this.rotation = rotate;
 
-
         if (turbo) {
             float x = Math.abs(xMove);
             float y = Math.abs(yMove);
