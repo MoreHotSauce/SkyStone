@@ -19,8 +19,8 @@ public class Robot {
     public StepperServo intakeClawRight;
     //public LimitSensor limit;
 
-    public float heading = 0.0f;
-    public float targetHeading = 0.0f;
+    public float currentR = 0.0f;
+    public float targetR = 0.0f;
 
     public float currentY = 0.0f;
     public float targetY = 0.0f;
@@ -45,6 +45,9 @@ public class Robot {
     private final float rKPR = 0.006f;
     private final float rKIR = 0.00001f;
     private final float rKDR = 0.0001f;
+
+    private final float yBASE = 0.06f;
+    private final float xBASE = 0.06f;
 
     private final float yKPR = 0.06f;
     private final float yKIR = 0.000000001f;
@@ -116,8 +119,8 @@ public class Robot {
 
         //this.limit = (LimitSensor) components[14];
 
-        heading = gyro.getHeading();
-        targetHeading = heading;
+        currentR = gyro.getHeading();
+        targetR = currentR;
         //changeTargetRotation(targetHeading);
 
         this.intakeClawLeft = (StepperServo) components[9];
@@ -138,19 +141,15 @@ public class Robot {
     }
 
     public void updateLoop(){
-        heading = gyro.getHeading();
+        currentR = gyro.getHeading();
         currentY = getOdoY();
         currentX = getOdoX();
 
         sigma += skystoneDetector.skystonePos();
         count += 1;
 
-        if(pidX) {
-            moveTargetX();
-        }else if(pidY) {
-            moveTargetY();
-        }
-        rotatePID();
+        autonMove();
+
     }
 
     public int getAverageSkystone(){
@@ -252,6 +251,41 @@ public class Robot {
         previousHuggerButton = pressed;
     }
 
+    public void changeTarget(float x, float y, float r){
+        //check if targetX has changed
+        if(x != targetX){
+            targetX = x;
+            pidXDistance = new PIDController(targetX, xKPR, xKIR, xKDR, false);
+            lift.liftMotor2.resetEncoder(); //reset x odometry encoder
+        }
+
+        //check if targetY has changed
+        if(y != targetY){
+            targetY = y;
+            pidYDistance = new PIDController(targetY, yKPR, yKIR, yKDR, false);
+            fakeMotor.resetEncoder(); //reset y odometry encoder
+        }
+
+        if(r != this.targetR){
+            targetR = r;
+            pidRotation = new PIDController(targetR, rKPR, rKIR, rKDR, true);
+        }
+
+    }
+
+    public void autonMove(){
+        correctionX = pidXDistance.update(currentX);
+        correctionY = pidXDistance.update(currentY);
+        correctionR = pidRotation.update(currentR);
+
+        float xSpeed = xBASE + correctionX;
+        float ySpeed = yBASE + correctionY;
+        float rSpeed = correctionR;
+
+        drivetrain.move(xSpeed, ySpeed, rSpeed);
+    }
+
+    /*
     public void changeTargetY(float target){
         if(target == this.targetY){
             return;
@@ -277,6 +311,8 @@ public class Robot {
             pidXDistance = new PIDController(target, xKPR, xKIR, xKDR, false);
         }
     }
+*/
+/*
 
     public void changeTargetRotation(float target){
         if(target == this.targetHeading){
@@ -292,15 +328,16 @@ public class Robot {
         drivetrain.rotatePID(correctionR);
         return correctionR;
     }
-
+*/
+/*
     public float moveTargetY(){
-        /*
+
         correctionY = pidYDistance.update(currentY);
         drivetrain.moveYDistance(correctionY);
         if(this.currentY > this.highestY) {
             this.highestY = this.currentY;
         }
-        return correctionY;*/
+        return correctionY
         if (epicMode){
             if(targetY > 0){
                 if (currentY < targetY){
@@ -352,11 +389,11 @@ public class Robot {
     }
 
     public float moveTargetX(){
-        /*correctionX = pidXDistance.update(currentX);
+        correctionX = pidXDistance.update(currentX);
         drivetrain.moveXDistance(correctionX);
         if(this.currentX > this.highestX) {
             this.highestX = this.currentX;
-        }*/
+        }
         if (epicMode){
             if(targetX > 0){
                 if (currentX < targetX){
@@ -406,4 +443,6 @@ public class Robot {
 
         return 69.0f;
     }
+
+     */
 }
