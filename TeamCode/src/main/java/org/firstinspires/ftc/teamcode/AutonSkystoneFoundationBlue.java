@@ -75,8 +75,8 @@ public class AutonSkystoneFoundationBlue extends OpMode {
         telemetry.addData("highestX", robot.highestX);
         //telemetry.addData("PositionX", robot.currentX);
         //telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("Rotation", robot.heading);
-        telemetry.addData("RotationTarget", robot.targetHeading);
+        telemetry.addData("Rotation", robot.currentR);
+        telemetry.addData("RotationTarget", robot.targetR);
         telemetry.addData("CorrectionR", robot.correctionR);
         telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
         telemetry.addData("skystone?", robot.isSkystone());
@@ -93,7 +93,7 @@ public class AutonSkystoneFoundationBlue extends OpMode {
                 break;
 
             case CHECKHEADING:
-                if (tol(robot.heading , robot.targetHeading, RTOL)){
+                if (tol(robot.currentR , robot.targetR, RTOL)){
                     currentState = StateBlueSkystone.STRAFETOSKYSTONE;
                 }
                 break;

@@ -10,7 +10,6 @@ public class Main extends OpMode{
 
     /*
     GAMEPAD CONTROLS:
-
     GAMEPAD 1:
         left stick x = drive horizontal
         left stick y = drive vertical
@@ -34,20 +33,22 @@ public class Main extends OpMode{
                 new Motor(-1, "frontLeft", hardwareMap, false),             //2
                 new Motor(-1, "frontRight", hardwareMap, true),             //3
                 new StepperServo(-1, "foundationHook", hardwareMap),                //4
-                new StepperServo(-1, "hugger", hardwareMap),                        //5
+                new StepperServo(-1, "huggerRMain", hardwareMap),                   //5
                 new EMotor(-1, "actuator", hardwareMap, 1),                  //6
                 new Motor(-1, "liftMotor", hardwareMap, false),             //7
-                new Motor(-1, "liftMotor2", hardwareMap, true),            //8
+                new Motor(-1, "liftMotor2", hardwareMap, true),             //8
                 new StepperServo(-1, "intakeClawLeft", hardwareMap),                //9
                 new StepperServo(-1, "intakeClawRight", hardwareMap),               //10
                 new StepperServo(-1, "odoServo", hardwareMap),                      //11
                 new Motor(-1, "fakeMotor", hardwareMap, true),              //12
-                new Color(-1, "colorSensor", hardwareMap),                           //13
+                new Color(-1, "colorSensor", hardwareMap),                          //13
+                new StepperServo(-1, "huggerRArm", hardwareMap),                    //14
+                new StepperServo(-1, "huggerLMain", hardwareMap),                   //15
+                new StepperServo(-1, "huggerLArm", hardwareMap),                    //16
         };
 
         robot = new Robot(componentList, hardwareMap, false);
         telemetry.addData("Test", "Robot");
-        telemetry.addData("avgRotation", robot.heading);
     }
 
     public void start(){
@@ -57,15 +58,15 @@ public class Main extends OpMode{
 
     @Override
     public void loop() {
-        robot.updateLoop();
-
         robot.turbo(gamepad1.right_bumper);
 
         robot.intakeControl(gamepad2.a);
 
-        robot.huggerControl(gamepad2.dpad_down);
+        robot.huggerControl(gamepad2.x, gamepad2.b);
 
-        robot.actuatorControl(gamepad2.x, gamepad2.b);
+        robot.actuatorControl(gamepad2.dpad_up, gamepad2.dpad_down);
+
+        robot.switchHuggers(gamepad2.dpad_left, gamepad2.dpad_right);
 
         robot.moveLift(gamepad2.left_trigger, gamepad2.right_trigger);
 
@@ -84,10 +85,10 @@ public class Main extends OpMode{
         }
 
         if(gamepad1.right_stick_x != 0.0f){
-            robot.changeTargetRotation(robot.heading);
+            //robot.changeTarget(0,0);
         }
 
-        telemetry.addData("rot", robot.heading);
+        telemetry.addData("rot", robot.currentR);
         telemetry.addData("x", robot.getOdoX());
         telemetry.addData("y", robot.getOdoY());
         telemetry.addData("pidX", robot.pidX);

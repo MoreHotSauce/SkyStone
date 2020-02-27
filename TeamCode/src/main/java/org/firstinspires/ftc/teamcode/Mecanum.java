@@ -71,40 +71,40 @@ public class Mecanum {
             }
 
             switch(snap){
-                 case(0):
-                     backLeftSpeed = 1;
-                     backRightSpeed = -1;
-                     frontLeftSpeed = -1;
-                     frontRightSpeed = 1;
-                     break;
+                case(0):
+                    backLeftSpeed = 1;
+                    backRightSpeed = -1;
+                    frontLeftSpeed = -1;
+                    frontRightSpeed = 1;
+                    break;
 
-                 case(1):
-                     backLeftSpeed = 1;
-                     backRightSpeed = 1;
-                     frontLeftSpeed = 1;
-                     frontRightSpeed = 1;
-                     break;
+                case(1):
+                    backLeftSpeed = 1;
+                    backRightSpeed = 1;
+                    frontLeftSpeed = 1;
+                    frontRightSpeed = 1;
+                    break;
 
-                 case(2):
-                     backLeftSpeed = -1;
-                     backRightSpeed = 1;
-                     frontLeftSpeed = 1;
-                     frontRightSpeed = -1;
-                     break;
+                case(2):
+                    backLeftSpeed = -1;
+                    backRightSpeed = 1;
+                    frontLeftSpeed = 1;
+                    frontRightSpeed = -1;
+                    break;
 
-                 case(3):
+                case(3):
                     backLeftSpeed = -1;
                     backRightSpeed = -1;
                     frontLeftSpeed = -1;
                     frontRightSpeed = -1;
                     break;
 
-                 default:
-                     backLeftSpeed = 0;
-                     backRightSpeed = 0;
-                     frontLeftSpeed = 0;
-                     frontRightSpeed = 0;
-             }
+                default:
+                    backLeftSpeed = 0;
+                    backRightSpeed = 0;
+                    frontLeftSpeed = 0;
+                    frontRightSpeed = 0;
+            }
 
         } else {
             backLeftSpeed = yMove + xMove + rotate;
@@ -132,38 +132,35 @@ public class Mecanum {
     }
 
     public void moveYDistance(float correctionY){
-        backLeftSpeed = YCONST;
+        /*backLeftSpeed = YCONST;
         frontLeftSpeed = YCONST;
         backRightSpeed = YCONST;
         frontRightSpeed = YCONST;
-
         backLeftSpeed *= correctionY;
         frontLeftSpeed *= correctionY;
         backRightSpeed *= correctionY;
         frontRightSpeed *= correctionY;
-
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
-        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));*/
     }
 
     public void moveXDistance(float correctionX){
 
-        backLeftSpeed = -XCONST;
+        /*backLeftSpeed = -XCONST;
         frontLeftSpeed = XCONST;
         backRightSpeed = XCONST;
         frontRightSpeed = -XCONST;
-
         backLeftSpeed *= correctionX;
         frontLeftSpeed *= correctionX;
         backRightSpeed *= correctionX;
         frontRightSpeed *= correctionX;
-
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+         */
     }
 
     public void resetAllEncoders(){
@@ -175,15 +172,15 @@ public class Mecanum {
 
     public void rotatePID(float correction){
 
-        backLeftSpeed += correction;
+        /*backLeftSpeed += correction;
         frontLeftSpeed += correction;
         backRightSpeed += -correction;
         frontRightSpeed += -correction;
-
         backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
         frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
         backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+         */
     }
 
     public void stop(){

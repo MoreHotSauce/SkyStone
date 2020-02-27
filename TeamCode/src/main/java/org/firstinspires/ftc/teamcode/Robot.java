@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.util.ArrayList;
+
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
@@ -13,7 +15,10 @@ public class Robot {
     public StepperServo foundationHook;
     public Actuator actuator;
     public Color colorSensor;
-    public StepperServo hugger;
+    public StepperServo huggerRMain;
+    public StepperServo huggerRArm;
+    public StepperServo huggerLMain;
+    public StepperServo huggerLArm;
     public Motor fakeMotor;
     public StepperServo intakeClawLeft;
     public StepperServo intakeClawRight;
@@ -34,8 +39,8 @@ public class Robot {
     public float correctionY = 0.0f;
     public float correctionR = 0.0f;
 
-    private final float xSpeed = 0.45f;
-    private final float ySpeed = -0.25f;
+    private final float xSpeed = 0.2f;
+    private final float ySpeed = -0.2f;
 
     public boolean epicMode = false;
 
@@ -46,16 +51,16 @@ public class Robot {
     private final float rKIR = 0.00001f;
     private final float rKDR = 0.0001f;
 
-    private final float yBASE = 0.06f;
+    private final float yBASE = 0.3f;
     private final float xBASE = 0.06f;
 
-    private final float yKPR = 0.06f;
-    private final float yKIR = 0.000000001f;
-    private final float yKDR = 0.00005f;
+    private final float yKPR = .1f;
+    private final float yKIR = 0.00f;
+    private final float yKDR = 0.00f;
 
-    private final float xKPR = 0.0325f;
-    private final float xKIR = 0.00002f;
-    private final float xKDR = 0.000005f;
+    private final float xKPR = 0.05f;
+    private final float xKIR = 0.00f;
+    private final float xKDR = 0.00f;
 
     private final long SKYSTONE_THRESHOLD = 500000;
 
@@ -63,17 +68,30 @@ public class Robot {
     private boolean intakeOpen = true;
 
     private boolean previousFoundationButton = false;
-    private boolean previousHuggerButton = false;
     private boolean foundationOpen = true;
-    private boolean huggerOpen = true;
+
+    private boolean mainArmPreviousR = false;
+    private boolean mainArmOpenR = true;
+    private boolean mainArmPreviousL = false;
+    private boolean mainArmOpenL = true;
+
+    private boolean hugArmPreviousR = false;
+    private boolean hugArmOpenR = true;
+    private boolean hugArmPreviousL = false;
+    private boolean hugArmOpenL = true;
+
+    private boolean right = true;
+
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public int sigma = 0;
-    public int count = 0;
-    public SkystoneDetectionHelper skystoneDetector;
+    public ArrayList<Integer> skystones = new ArrayList<>();
+    //public SkystoneDetectionHelper skystoneDetector;
+    //public VuforiaSkystone skystoneDetector;
+
+
 
     public Robot(Component[] comps, HardwareMap map, boolean auton){
         this.components = comps;
@@ -110,8 +128,15 @@ public class Robot {
 
         this.colorSensor = (Color) components[13];
 
-        this.hugger = (StepperServo) components[5];
-        hugger.setAngle(0);
+        this.huggerRMain = (StepperServo) components[5];
+        this.huggerRArm = (StepperServo) components[14];
+        huggerRMain.setAngle(0);
+        huggerRArm.setAngle(100);
+
+        this.huggerLMain = (StepperServo) components[15];
+        this.huggerLArm = (StepperServo) components[16];
+        huggerLMain.setAngle(70);
+        huggerLArm.setAngle(0);
 
         drivetrain.resetAllEncoders();
 
@@ -137,7 +162,8 @@ public class Robot {
         currentX = getOdoX();
         //changeTargetX(targetX);
 
-        skystoneDetector = new SkystoneDetectionHelper(map);
+        //skystoneDetector = new VuforiaSkystone(map);
+
     }
 
     public void updateLoop(){
@@ -145,15 +171,20 @@ public class Robot {
         currentY = getOdoY();
         currentX = getOdoX();
 
-        sigma += skystoneDetector.skystonePos();
-        count += 1;
-
+        /*skystones.add(skystoneDetector.currentStone);
+        if(skystones.size() > 20){
+            skystones.remove(0);
+        }*/
         autonMove();
 
     }
 
     public int getAverageSkystone(){
-        return Math.round(((float) sigma) / count);
+        int total = 0;
+        for(int value : skystones){
+            total+=value;
+        }
+        return Math.round(total/(skystones.size()));
     }
 
     public void resetMotorSpeeds(){
@@ -215,9 +246,9 @@ public class Robot {
 
     public void actuatorControl(boolean extend, boolean retract){
         if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(0.6);
+            actuator.actuatorMotor.motor.setPower(0.8);
         } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-0.6);
+            actuator.actuatorMotor.motor.setPower(-0.8);
         } else {
             actuator.actuatorMotor.motor.setPower(0);
         }
@@ -237,18 +268,57 @@ public class Robot {
         previousFoundationButton = pressed;
     }
 
-    public void huggerControl(boolean pressed){
-        if(pressed && !previousHuggerButton){
-            if(huggerOpen){
-                hugger.setAngle(133);
-                huggerOpen = false;
-            } else {
-                hugger.setAngle(0);
-                huggerOpen = true;
+    public void switchHuggers(boolean l, boolean r){
+        if (l){
+            this.right = false;
+        } else if (r){
+            this.right = true;
+        }
+    }
+
+    public void huggerControl(boolean mainArm, boolean grab){
+        if (right){
+            if (mainArm && !mainArmPreviousR){
+                if (mainArmOpenR){
+                    huggerRMain.setAngle(70);
+                    mainArmOpenR = false;
+                } else {
+                    huggerRMain.setAngle(0);
+                    mainArmOpenR = true;
+                }
+            } else if (grab && !hugArmPreviousR){
+                if (hugArmOpenR){
+                    huggerRArm.setAngle(30);
+                    hugArmOpenR = false;
+                } else {
+                    huggerRArm.setAngle(80);
+                    hugArmOpenR = true;
+                }
             }
+            mainArmPreviousR = mainArm;
+            hugArmPreviousR = grab;
+        } else {
+            if (mainArm && !mainArmPreviousL){
+                if (mainArmOpenL){
+                    huggerLMain.setAngle(60);
+                    mainArmOpenL = false;
+                } else {
+                    huggerLMain.setAngle(0);
+                    mainArmOpenL = true;
+                }
+            } else if (grab && !hugArmPreviousL){
+                if (hugArmOpenL){
+                    huggerLArm.setAngle(70);
+                    hugArmOpenL = false;
+                } else {
+                    huggerLArm.setAngle(30);
+                    hugArmOpenL = true;
+                }
+            }
+            mainArmPreviousL = mainArm;
+            hugArmPreviousL = grab;
         }
 
-        previousHuggerButton = pressed;
     }
 
     public void changeTarget(float x, float y, float r){
@@ -274,175 +344,37 @@ public class Robot {
     }
 
     public void autonMove(){
-        correctionX = pidXDistance.update(currentX);
+        //correctionX = pidXDistance.update(currentX);
         correctionY = pidXDistance.update(currentY);
         correctionR = pidRotation.update(currentR);
 
-        float xSpeed = xBASE + correctionX;
-        float ySpeed = yBASE + correctionY;
+        //float xSpeed = xBASE + correctionX;
+        float ySpeed = yBASE - correctionY;
         float rSpeed = correctionR;
 
-        drivetrain.move(xSpeed, ySpeed, rSpeed);
+        drivetrain.move(0, ySpeed, rSpeed);
     }
 
-    /*
+
     public void changeTargetY(float target){
-        if(target == this.targetY){
-            return;
-        } else {
-            pidY = true;
-            pidX = false;
-            targetY = target;
-            lift.liftMotor2.resetEncoder();
-            fakeMotor.resetEncoder();
-            pidYDistance = new PIDController(target, yKPR, yKIR, yKDR, false);
-        }
     }
 
     public void changeTargetX(float target){
-        if(target == this.targetX){
-            return;
-        } else {
-            pidY = false;
-            pidX = true;
-            targetX = target;
-            lift.liftMotor2.resetEncoder();
-            fakeMotor.resetEncoder();
-            pidXDistance = new PIDController(target, xKPR, xKIR, xKDR, false);
-        }
     }
-*/
-/*
 
     public void changeTargetRotation(float target){
-        if(target == this.targetHeading){
-            return;
-        } else {
-            targetHeading = target;
-            pidRotation = new PIDController(target, rKPR, rKIR, rKDR, true);
-        }
     }
 
     public float rotatePID(){
-        correctionR = pidRotation.update(heading);
-        drivetrain.rotatePID(correctionR);
-        return correctionR;
+        return 0;
     }
-*/
-/*
+
     public float moveTargetY(){
-
-        correctionY = pidYDistance.update(currentY);
-        drivetrain.moveYDistance(correctionY);
-        if(this.currentY > this.highestY) {
-            this.highestY = this.currentY;
-        }
-        return correctionY
-        if (epicMode){
-            if(targetY > 0){
-                if (currentY < targetY){
-                    if (currentY < targetY * 0.37){
-                        drivetrain.move(0.0f, -0.6f, 0.0f);
-                    } else {
-                        drivetrain.move(0.0f, -0.35f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }else{
-                if (currentY > targetY){
-                    if (currentY > targetY*0.37){
-                        drivetrain.move(0.0f, 0.6f, 0.0f);
-                    } else {
-                        drivetrain.move(0.0f, 0.35f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }
-        } else {
-            if(targetY > 0){
-                if (currentY < targetY){
-                    if (currentY < targetY * 0.37){
-                        drivetrain.move(0.0f, -0.3f, 0.0f);
-                    } else {
-                        drivetrain.move(0.0f, -0.25f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }else{
-                if (currentY > targetY){
-                    if (currentY > targetY*0.37){
-                        drivetrain.move(0.0f, 0.3f, 0.0f);
-                    } else {
-                        drivetrain.move(0.0f, 0.25f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }
-        }
-
-
         return 420.0f;
     }
 
     public float moveTargetX(){
-        correctionX = pidXDistance.update(currentX);
-        drivetrain.moveXDistance(correctionX);
-        if(this.currentX > this.highestX) {
-            this.highestX = this.currentX;
-        }
-        if (epicMode){
-            if(targetX > 0){
-                if (currentX < targetX){
-                    if (currentX < targetX*0.45){
-                        drivetrain.move(1f, 0.0f, 0.0f);
-                    } else {
-                        drivetrain.move(0.6f, 0.0f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }else{
-                if (currentX > targetX){
-                    if (currentX > targetX*0.45){
-                        drivetrain.move(-1f, 0.0f, 0.0f);
-                    } else {
-                        drivetrain.move(-0.6f, 0.0f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }
-        } else {
-            if(targetX > 0){
-                if (currentX < targetX){
-                    if (currentX < targetX*0.45){
-                        drivetrain.move(0.6f, 0.0f, 0.0f);
-                    } else {
-                        drivetrain.move(0.35f, 0.0f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }else{
-                if (currentX > targetX){
-                    if (currentX > targetX*0.45){
-                        drivetrain.move(-0.6f, 0.0f, 0.0f);
-                    } else {
-                        drivetrain.move(-0.35f, 0.0f, 0.0f);
-                    }
-                }else{
-                    drivetrain.move(0.0f,0.0f,0.0f);
-                }
-            }
-        }
-
-
         return 69.0f;
     }
 
-     */
 }

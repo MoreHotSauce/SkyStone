@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ enum StatePark{
     PARK
 }
 
+@Disabled
 @TeleOp(name="Autonomous Park Non-timer", group="Auton Opmode")
 public class AutonPark extends OpMode {
 
@@ -55,13 +57,13 @@ public class AutonPark extends OpMode {
 
         telemetry.addData("State", currentState);
         telemetry.addData("y-target", robot.targetY);
-        telemetry.addData("r-target", robot.targetHeading);
+        telemetry.addData("r-target", robot.targetR);
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionX", robot.currentX);
         telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("Rotation", robot.heading);
-        telemetry.addData("RotationTarget", robot.targetHeading);
+        telemetry.addData("Rotation", robot.currentR);
+        telemetry.addData("RotationTarget", robot.targetR);
 
         switch(currentState){
             case START:
@@ -70,7 +72,7 @@ public class AutonPark extends OpMode {
 
             case CHECKHEADING:
                 robot.changeTargetRotation(0.0f);
-                if (tol(robot.heading , robot.targetHeading, RTOL)){
+                if (tol(robot.currentR , robot.targetR, RTOL)){
                     currentState = StatePark.MOVETOPARK;
                 }
                 break;

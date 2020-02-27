@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,7 +19,7 @@ enum StateRed{ //Maybe add wait states
     FORWARD,
     PARK
 }
-
+@Disabled
 @TeleOp(name="Autonomous Foundation and Park Red", group="Auton Opmode")
 public class AutonFoundationParkRed extends OpMode {
 
@@ -62,7 +63,7 @@ public class AutonFoundationParkRed extends OpMode {
     public void loop() {
         telemetry.addData("State", currentState);
         telemetry.addData("y-target", robot.targetY);
-        telemetry.addData("r-target", robot.targetHeading);
+        telemetry.addData("r-target", robot.targetR);
 
         robot.updateLoop();
         robot.resetMotorSpeeds();
@@ -71,8 +72,8 @@ public class AutonFoundationParkRed extends OpMode {
         telemetry.addData("PositionX", robot.currentX);
         telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("Rotation", robot.heading);
-        telemetry.addData("RotationTarget", robot.targetHeading);
+        telemetry.addData("Rotation", robot.currentR);
+        telemetry.addData("RotationTarget", robot.targetR);
 
 
 
@@ -85,7 +86,7 @@ public class AutonFoundationParkRed extends OpMode {
 
             case CHECKHEADING:
                 robot.changeTargetRotation(0.0f);
-                if (tol(robot.heading , robot.targetHeading, RTOL)){
+                if (tol(robot.currentR , robot.targetR, RTOL)){
                     currentState = StateRed.MOVEFROMWALL;
                 }
                 break;
@@ -137,7 +138,7 @@ public class AutonFoundationParkRed extends OpMode {
 
             case ROT90:
                 robot.changeTargetRotation(-90);
-                if(tol(robot.heading, robot.targetHeading, RTOL)){
+                if(tol(robot.currentR, robot.targetR, RTOL)){
                     currentState = StateRed.INTOWALL;
                 }
                 break;
