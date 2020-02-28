@@ -48,6 +48,23 @@ public class Mecanum {
         }
     }
 
+    public void autonMove(float xMove, float yMove, float rotate){
+        backLeftSpeed = 0;
+        backRightSpeed = 0;
+        frontLeftSpeed = 0;
+        frontRightSpeed = 0;
+
+        backLeftSpeed = (yMove + xMove + rotate) / 3f;
+        frontRightSpeed = (yMove + xMove - rotate) / 3f;
+        backRightSpeed = (yMove - xMove - rotate) / 3f;
+        frontLeftSpeed = (yMove - xMove + rotate) / 3f;
+
+        backLeft.setSpeed(Range.clip(backLeftSpeed, -1, 1));
+        frontRight.setSpeed(Range.clip(frontRightSpeed, -1, 1));
+        backRight.setSpeed(Range.clip(backRightSpeed, -1, 1));
+        frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));
+    }
+
     public void move(float xMove, float yMove, float rotate) {
         this.rotation = rotate;
 
@@ -146,7 +163,7 @@ public class Mecanum {
         frontLeft.setSpeed(Range.clip(frontLeftSpeed, -1, 1));*/
     }
 
-    public void moveXDistance(float correctionX){
+    public void moveXDistance( float correctionX){
 
         /*backLeftSpeed = -XCONST;
         frontLeftSpeed = XCONST;

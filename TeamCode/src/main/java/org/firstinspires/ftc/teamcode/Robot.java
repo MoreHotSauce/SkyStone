@@ -51,7 +51,7 @@ public class Robot {
     private final float rKIR = 0.00001f;
     private final float rKDR = 0.0001f;
 
-    private final float yBASE = 0.3f;
+    private final float yBASE = 0.5f;
     private final float xBASE = 0.06f;
 
     private final float yKPR = .1f;
@@ -349,10 +349,10 @@ public class Robot {
         correctionR = pidRotation.update(currentR);
 
         //float xSpeed = xBASE + correctionX;
-        float ySpeed = yBASE - correctionY;
+        float ySpeed = yBASE * correctionY;
         float rSpeed = correctionR;
 
-        drivetrain.move(0, ySpeed, rSpeed);
+        drivetrain.autonMove(0, ySpeed, 0);
     }
 
 

@@ -46,7 +46,7 @@ public class AutonTest extends OpMode {
         robot.resetMotorSpeeds();
 
         //robot.hugger.setAngle(130f);
-        robot.changeTarget(10f, 10f, 0f);
+        robot.changeTarget(0f, 10f, 0f);
 
         telemetry.addData("PositionY", robot.currentY);
         telemetry.addData("PositionTargetY", robot.targetY);
