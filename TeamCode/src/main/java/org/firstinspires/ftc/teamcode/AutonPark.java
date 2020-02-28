@@ -32,7 +32,7 @@ public class AutonPark extends OpMode {
                 new Motor(-1, "frontLeft", hardwareMap, false),             //2
                 new Motor(-1, "frontRight", hardwareMap, true),             //3
                 new StepperServo(-1, "foundationHook", hardwareMap),                //4
-                new StepperServo(-1, "hugger", hardwareMap),                        //5
+                new StepperServo(-1, "huggerRMain", hardwareMap),                   //5
                 new EMotor(-1, "actuator", hardwareMap, 1),                  //6
                 new Motor(-1, "liftMotor", hardwareMap, false),             //7
                 new Motor(-1, "liftMotor2", hardwareMap, true),             //8
@@ -40,7 +40,10 @@ public class AutonPark extends OpMode {
                 new StepperServo(-1, "intakeClawRight", hardwareMap),               //10
                 new StepperServo(-1, "odoServo", hardwareMap),                      //11
                 new Motor(-1, "fakeMotor", hardwareMap, true),              //12
-                new Color(-1, "colorSensor", hardwareMap)                           //13
+                new Color(-1, "colorSensor", hardwareMap),                          //13
+                new StepperServo(-1, "huggerRArm", hardwareMap),                    //14
+                new StepperServo(-1, "huggerLMain", hardwareMap),                   //15
+                new StepperServo(-1, "huggerLArm", hardwareMap),                    //16
         };
 
         robot = new Robot(componentList, hardwareMap, true);
@@ -71,16 +74,15 @@ public class AutonPark extends OpMode {
                 break;
 
             case CHECKHEADING:
-                robot.changeTargetRotation(0.0f);
+                robot.changeTarget(0.0f, 0.0f, 0.0f);
                 if (tol(robot.currentR , robot.targetR, RTOL)){
                     currentState = StatePark.MOVETOPARK;
                 }
                 break;
 
             case MOVETOPARK:
-                robot.changeTargetY(32.0f);
+                robot.changeTarget(0.0f, 32.0f, 0.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
-                    robot.changeTargetY(0.0f);
                     currentState = StatePark.PARK;
                 }
                 break;

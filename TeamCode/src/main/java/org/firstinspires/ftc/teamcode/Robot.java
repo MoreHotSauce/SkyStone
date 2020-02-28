@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import java.util.ArrayList;
 
@@ -39,9 +40,6 @@ public class Robot {
     public float correctionY = 0.0f;
     public float correctionR = 0.0f;
 
-    private final float xSpeed = 0.2f;
-    private final float ySpeed = -0.2f;
-
     public boolean epicMode = false;
 
     public boolean pidX = false;
@@ -54,11 +52,11 @@ public class Robot {
     private final float yBASE = 0.5f;
     private final float xBASE = 0.06f;
 
-    private final float yKPR = .1f;
+    private final float yKPR = 0.06f;
     private final float yKIR = 0.00f;
     private final float yKDR = 0.00f;
 
-    private final float xKPR = 0.05f;
+    private final float xKPR = 0.12f;
     private final float xKIR = 0.00f;
     private final float xKDR = 0.00f;
 
@@ -81,6 +79,10 @@ public class Robot {
     private boolean hugArmOpenL = true;
 
     private boolean right = true;
+
+    public int counterBadX = 0;
+    public int counterBadY = 0;
+    public boolean rlyBad = false;
 
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
@@ -163,6 +165,12 @@ public class Robot {
         //changeTargetX(targetX);
 
         //skystoneDetector = new VuforiaSkystone(map);
+
+
+        pidXDistance = new PIDController(0, xKPR, xKIR, xKDR, false);
+        pidYDistance = new PIDController(0, yKPR, yKIR, yKDR, false);
+        pidRotation = new PIDController(0, rKPR, rKIR, rKDR, true);
+
 
     }
 
@@ -324,16 +332,23 @@ public class Robot {
     public void changeTarget(float x, float y, float r){
         //check if targetX has changed
         if(x != targetX){
+            fakeMotor.resetEncoder();
             targetX = x;
             pidXDistance = new PIDController(targetX, xKPR, xKIR, xKDR, false);
-            lift.liftMotor2.resetEncoder(); //reset x odometry encoder
+            counterBadX++;
+            //fakeMotor.resetEncoder(); //reset x odometry encoder
         }
 
         //check if targetY has changed
         if(y != targetY){
+            lift.liftMotor2.resetEncoder();
             targetY = y;
             pidYDistance = new PIDController(targetY, yKPR, yKIR, yKDR, false);
-            fakeMotor.resetEncoder(); //reset y odometry encoder
+            counterBadY++;
+            if(targetY!=10.0){
+                rlyBad = true;
+            }
+            //lift.liftMotor2.resetEncoder();//reset y odometry encoder
         }
 
         if(r != this.targetR){
@@ -344,15 +359,15 @@ public class Robot {
     }
 
     public void autonMove(){
-        //correctionX = pidXDistance.update(currentX);
-        correctionY = pidXDistance.update(currentY);
+        correctionX = pidXDistance.update(currentX);
+        correctionY = pidYDistance.update(currentY);
         correctionR = pidRotation.update(currentR);
 
-        //float xSpeed = xBASE + correctionX;
-        float ySpeed = yBASE * correctionY;
+        float xSpeed = -Range.clip(correctionX, -1, 1);
+        float ySpeed = Range.clip(correctionY, -1, 1);
         float rSpeed = correctionR;
 
-        drivetrain.autonMove(0, ySpeed, 0);
+        drivetrain.autonMove(xSpeed, ySpeed, rSpeed);
     }
 
 

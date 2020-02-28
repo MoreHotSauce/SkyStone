@@ -1,15 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-@TeleOp(name="AutonTest", group="Auton Opmode")
-public class AutonTest extends OpMode {
+enum StateParkAway{
+    START,
+    CHECKHEADING,
+    STRAFELANEAWAY,
+    MOVETOPARK,
+    PARK
+}
+
+@Disabled
+@TeleOp(name="Autonomous Park Non-timer Away", group="Auton Opmode")
+public class AutonParkAway extends OpMode {
 
     Robot robot;
+
+    private StateParkAway currentState;
+    private final float YTOL = 1.0f;
+    private final float RTOL = 1.0f;
+    private final float XTOL = 1.0f;
+
 
     @Override
     public void init() {
@@ -35,50 +49,59 @@ public class AutonTest extends OpMode {
 
         robot = new Robot(componentList, hardwareMap, true);
         telemetry.addData("Test", "Robot");
-        robot.colorSensor.led(true);
-    }
 
-    @Override
-    public void init_loop(){
+        currentState = StateParkAway.START;
 
     }
 
     @Override
     public void loop() {
+
         robot.updateLoop();
-        robot.resetMotorSpeeds();
 
-        //robot.hugger.setAngle(130f);
-        robot.changeTarget(20f, 20f, 180f);
-
-        telemetry.addData("counterX", robot.counterBadX);
-        telemetry.addData("counterY", robot.counterBadY);
-        telemetry.addData("rlyBad", robot.rlyBad);
+        telemetry.addData("State", currentState);
+        telemetry.addData("y-target", robot.targetY);
+        telemetry.addData("r-target", robot.targetR);
         telemetry.addData("PositionY", robot.currentY);
-        telemetry.addData("PositionTargetY", robot.targetY);
-        telemetry.addData("CorrectionY", robot.correctionY);
-        telemetry.addData("highestY", robot.highestY);
         telemetry.addData("PositionX", robot.currentX);
+        telemetry.addData("PositionTargetY", robot.targetY);
         telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("CorrectionX", robot.correctionX);
-        telemetry.addData("highestX", robot.highestX);
-        telemetry.addData("xEncoder", robot.fakeMotor.getEncoderValue());
-        //telemetry.addData("PositionTargetX", robot.targetX);
         telemetry.addData("Rotation", robot.currentR);
         telemetry.addData("RotationTarget", robot.targetR);
-        telemetry.addData("CorrectionR", robot.correctionR);
-       // telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
-        //telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
-        //telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
-        //telemetry.addData("frontRight", robot.drivetrain.frontRightSpeed);
-        //telemetry.addData("totalMult", robot.colorSensor.getValue()[0] * robot.colorSensor.getValue()[1] * robot.colorSensor.getValue()[2]);
-        //telemetry.addData("alpha", robot.colorSensor.getValue()[0]);
-        //telemetry.addData("red", robot.colorSensor.getValue()[1]);
-        //telemetry.addData("green", robot.colorSensor.getValue()[2]);
-        //telemetry.addData("blue", robot.colorSensor.getValue()[3]);
-        telemetry.addData("skystone?", robot.isSkystone());
 
+        switch(currentState){
+            case START:
+                currentState = StateParkAway.CHECKHEADING;
+                break;
 
+            case CHECKHEADING:
+                robot.changeTarget(0.0f, 0.0f, 0.0f);
+                if (tol(robot.currentR , robot.targetR, RTOL)){
+                    currentState = StateParkAway.STRAFELANEAWAY;
+                }
+                break;
+
+            case STRAFELANEAWAY:
+                robot.changeTarget(-26.0f, 0.0f, 0.0f);
+                if (tol(robot.currentX , robot.targetX, 3)){
+                    currentState = StateParkAway.MOVETOPARK;
+                }
+                break;
+
+            case MOVETOPARK:
+                robot.changeTarget(0.0f, 32.0f, 0.0f);
+                if(tol(robot.currentY, robot.targetY, 4)){
+                    currentState = StateParkAway.PARK;
+                }
+                break;
+
+            case PARK:
+                break;
+        }
+    }
+
+    public static boolean tol(float current, float target, float tolerance){
+        return Math.abs(current - target) <= tolerance;
     }
 
 }
