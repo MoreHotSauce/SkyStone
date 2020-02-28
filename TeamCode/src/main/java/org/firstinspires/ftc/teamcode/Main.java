@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode{
 
     Robot robot;
+    SkystoneDetector detecty;
 
     /*
     GAMEPAD CONTROLS:
@@ -49,6 +52,7 @@ public class Main extends OpMode{
 
         robot = new Robot(componentList, hardwareMap, false);
         telemetry.addData("Test", "Robot");
+        detecty = new SkystoneDetector(telemetry);
     }
 
     public void start(){
@@ -93,6 +97,7 @@ public class Main extends OpMode{
         telemetry.addData("y", robot.getOdoY());
         telemetry.addData("pidX", robot.pidX);
         telemetry.addData("pidY", robot.pidY);
+        telemetry.addData("Detection", detecty.getSkystonePosition());
         //telemetry.addData("y", robot.limit.digitalTouch.isPressed());
     }
 }
