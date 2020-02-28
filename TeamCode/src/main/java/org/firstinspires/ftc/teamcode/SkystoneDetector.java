@@ -181,11 +181,11 @@ public class SkystoneDetector extends OpenCvPipeline {
             thirdStonePosition = secondStonePosition + spacing;
             blocks = new ArrayList<Rect>();
 
-            blocks.add(new Rect(new Point(firstStonePosition - (stoneWidth / 2), 0.50 * height - (stoneHeight / 2)),
+            blocks.add(new Rect(new Point(firstStonePosition - (stoneWidth / 2), 0.5 * height - (stoneHeight / 2)),
                     new Point(firstStonePosition + (stoneWidth / 2), 0.50 * height + (stoneHeight / 2))));
-            blocks.add(new Rect(new Point(secondStonePosition - (stoneWidth / 2), 0.50 * height - (stoneHeight / 2)),
+            blocks.add(new Rect(new Point(secondStonePosition - (stoneWidth / 2), 0.5 * height - (stoneHeight / 2)),
                     new Point(secondStonePosition + (stoneWidth / 2), 0.50 * height + (stoneHeight / 2))));
-            blocks.add(new Rect(new Point(thirdStonePosition - (stoneWidth / 2), 0.50 * height - (stoneHeight / 2)),
+            blocks.add(new Rect(new Point(thirdStonePosition - (stoneWidth / 2), 0.5 * height - (stoneHeight / 2)),
                     new Point(thirdStonePosition + (stoneWidth / 2), 0.50 * height + (stoneHeight / 2))));
         }
     }

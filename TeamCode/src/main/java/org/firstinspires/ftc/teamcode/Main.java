@@ -2,6 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.arcrobotics.ftclib.vision.SkystoneDetector;
+
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -9,7 +15,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Main extends OpMode{
 
     Robot robot;
-    SkystoneDetector detecty;
+    OpenCvCamera camera;
+    SkystoneDetector pipeline;
 
     /*
     GAMEPAD CONTROLS:
@@ -52,7 +59,16 @@ public class Main extends OpMode{
 
         robot = new Robot(componentList, hardwareMap, false);
         telemetry.addData("Test", "Robot");
-        detecty = new SkystoneDetector(telemetry);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        camera.openCameraDevice();
+
+        pipeline = new SkystoneDetector(25, 25, 50, 50, null);
+
+        camera.setPipeline(pipeline);
+        camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+
     }
 
     public void start(){
@@ -97,7 +113,7 @@ public class Main extends OpMode{
         telemetry.addData("y", robot.getOdoY());
         telemetry.addData("pidX", robot.pidX);
         telemetry.addData("pidY", robot.pidY);
-        telemetry.addData("Detection", detecty.getSkystonePosition());
+        telemetry.addData("Detection", pipeline.getSkystonePosition());
         //telemetry.addData("y", robot.limit.digitalTouch.isPressed());
     }
 }

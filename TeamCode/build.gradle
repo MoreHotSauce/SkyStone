@@ -16,3 +16,9 @@ apply from: '../build.common.gradle'
 dependencies {
     implementation 'com.arcrobotics:ftclib:2.0.8' // Replace 2.0.8 with the latest release
 }
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
