@@ -16,10 +16,20 @@ enum StateSkystoneBlue{ //Maybe add wait states
     CHECKHEADING,
     MOVETOSTONES,
     YOINKERSPT1,
+    MOVETOFOUNDATION,
+    STRAFETOFOUNDATION,
+    DROPSTONE,
+    FIXROTATION,
+    MOVETOSTONE2,
+    STARFETOSTONE2,
+    YOINKERSPT2,
+    MOVETOFOUNDATION2,
+    STRAFETOFOUNDATION2,
+    DROPSTONE2,
     PARK
 }
-@Disabled
-@TeleOp(name="Autonomous Skystone Foundation Blue", group="Auton Opmode")
+
+@TeleOp(name="1 Stone Blue", group="Auton Opmode")
 public class AutonSkystoneFoundationParkBlue extends OpMode {
 
     Robot robot;
@@ -67,9 +77,6 @@ public class AutonSkystoneFoundationParkBlue extends OpMode {
 
         camera.setPipeline(pipeline);
         camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-
-        robot.foundationHookControl(true);
-        robot.foundationHookControl(false);
 
         currentState = StateSkystoneBlue.START;
 
@@ -145,6 +152,9 @@ public class AutonSkystoneFoundationParkBlue extends OpMode {
                 break;
 
             case CHECKHEADING:
+                robot.switchHuggers(false, true);
+                robot.huggerControl(false,true);
+                robot.huggerControl(false,false);
                 robot.changeTarget(0.0f, 0.0f, 0.0f);
                 if (tol(robot.currentR , robot.targetR, RTOL)){
                     currentState = StateSkystoneBlue.MOVETOSTONES;
@@ -153,25 +163,162 @@ public class AutonSkystoneFoundationParkBlue extends OpMode {
 
             case MOVETOSTONES:
                 if(averagePosition == 3){ //MV RT
-                    robot.changeTarget(28,4,0);
-                    if (tol(robot.currentX, robot.targetX, 2) && tol(robot.currentY, robot.targetY, 1)){
+                    robot.changeTarget(-26,4,0);
+                    if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 1)){
+                        robot.changeTarget(0,0,0);
                         currentState=StateSkystoneBlue.YOINKERSPT1;
                     }
                 } else if (averagePosition == 2){ //MV CNT
-                    robot.changeTarget(28,-4,0);
-                    if (tol(robot.currentX, robot.targetX, 2) && tol(robot.currentY, robot.targetY, 1)){
+                    robot.changeTarget(-26,-5,0);
+                    if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 1)){
+                        robot.changeTarget(0,0,0);
                         currentState=StateSkystoneBlue.YOINKERSPT1;
                     }
                 } else { //MV LT
-                    robot.changeTarget(28,-12,0);
-                    if (tol(robot.currentX, robot.targetX, 2) && tol(robot.currentY, robot.targetY, 1)){
+                    robot.changeTarget(-26,-13,0);
+                    if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 1)){
+                        robot.changeTarget(0,0,0);
                         currentState=StateSkystoneBlue.YOINKERSPT1;
                     }
                 }
                 break;
 
             case YOINKERSPT1:
-                currentState = StateSkystoneBlue.PARK;
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(false,true);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                currentState = StateSkystoneBlue.MOVETOFOUNDATION;
+                break;
+
+            case MOVETOFOUNDATION:
+                robot.changeTarget(2,-91,0);
+                if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 5)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.STRAFETOFOUNDATION;
+                }
+                break;
+
+            case STRAFETOFOUNDATION:
+                robot.changeTarget(-14,0,0);
+                if (tol(robot.currentX, robot.targetX, 4) && tol(robot.currentY, robot.targetY, 5)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.DROPSTONE;
+                }
+                break;
+
+            case DROPSTONE:
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(false,true);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                currentState=StateSkystoneBlue.MOVETOSTONE2;
+                break;
+
+            /*case FIXROTATION:
+                robot.changeTarget(0,0,0);
+                if (tol(robot.currentR, robot.targetR, 1)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.MOVETOSTONE2;
+                }
+                break;
+
+             */
+
+            case MOVETOSTONE2:
+                robot.changeTarget(10,109,0);
+                if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 2)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.STARFETOSTONE2;
+                }
+                break;
+
+            case STARFETOSTONE2:
+                robot.changeTarget(-9,0,0);
+                if (tol(robot.currentX, robot.targetX, 3) && tol(robot.currentY, robot.targetY, 2)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.YOINKERSPT2;
+                }
+                break;
+
+            case YOINKERSPT2:
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(false,true);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                currentState = StateSkystoneBlue.MOVETOFOUNDATION2;
+                break;
+
+            case MOVETOFOUNDATION2:
+                robot.changeTarget(2,-100,0);
+                if (tol(robot.currentX, robot.targetX, 1) && tol(robot.currentY, robot.targetY, 5)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.STRAFETOFOUNDATION2;
+                }
+                break;
+
+            case STRAFETOFOUNDATION2:
+                robot.changeTarget(-14,0,0);
+                if (tol(robot.currentX, robot.targetX, 4) && tol(robot.currentY, robot.targetY, 5)){
+                    robot.changeTarget(0,0,0);
+                    currentState=StateSkystoneBlue.DROPSTONE2;
+                }
+                break;
+
+            case DROPSTONE2:
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(false,true);
+                robot.huggerControl(false,false);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.huggerControl(true,false);
+                robot.huggerControl(false,false);
+                currentState=StateSkystoneBlue.PARK;
                 break;
 
             case PARK:

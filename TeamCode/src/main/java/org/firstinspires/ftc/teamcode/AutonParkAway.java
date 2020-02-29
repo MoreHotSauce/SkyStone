@@ -13,8 +13,7 @@ enum StateParkAway{
     PARK
 }
 
-@Disabled
-@TeleOp(name="Autonomous Park Non-timer Away", group="Auton Opmode")
+@TeleOp(name="Park_L2", group="Auton Opmode")
 public class AutonParkAway extends OpMode {
 
     Robot robot;
@@ -82,14 +81,14 @@ public class AutonParkAway extends OpMode {
                 break;
 
             case STRAFELANEAWAY:
-                robot.changeTarget(-26.0f, 0.0f, 0.0f);
-                if (tol(robot.currentX , robot.targetX, 3)){
+                robot.changeTarget(-28.0f, 0.0f, 0.0f);
+                if (tol(robot.currentX , robot.targetX, 4)){
                     currentState = StateParkAway.MOVETOPARK;
                 }
                 break;
 
             case MOVETOPARK:
-                robot.changeTarget(0.0f, 32.0f, 0.0f);
+                robot.changeTarget(0.0f, -32.0f, 0.0f);
                 if(tol(robot.currentY, robot.targetY, 4)){
                     currentState = StateParkAway.PARK;
                 }

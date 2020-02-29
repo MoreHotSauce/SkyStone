@@ -45,9 +45,9 @@ public class Robot {
     public boolean pidX = false;
     public boolean pidY = false;
 
-    private final float rKPR = 0.006f;
+    private final float rKPR = 0.05f;
     private final float rKIR = 0.00001f;
-    private final float rKDR = 0.0001f;
+    private final float rKDR = 0.0000f;
 
     private final float yBASE = 0.5f;
     private final float xBASE = 0.06f;
@@ -57,7 +57,7 @@ public class Robot {
     private final float yKDR = 0.00f;
 
     private final float xKPR = 0.12f;
-    private final float xKIR = 0.00f;
+    private final float xKIR = 0.000015f;
     private final float xKDR = 0.00f;
 
     private final long SKYSTONE_THRESHOLD = 500000;

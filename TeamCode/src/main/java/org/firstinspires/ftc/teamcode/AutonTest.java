@@ -49,7 +49,7 @@ public class AutonTest extends OpMode {
         robot.resetMotorSpeeds();
 
         //robot.hugger.setAngle(130f);
-        robot.changeTarget(20f, 20f, 180f);
+        robot.changeTarget(0f, 0f, 15f);
 
         telemetry.addData("counterX", robot.counterBadX);
         telemetry.addData("counterY", robot.counterBadY);

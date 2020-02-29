@@ -12,8 +12,7 @@ enum StatePark{
     PARK
 }
 
-@Disabled
-@TeleOp(name="Autonomous Park Non-timer", group="Auton Opmode")
+@TeleOp(name="Park_L1", group="Auton Opmode")
 public class AutonPark extends OpMode {
 
     Robot robot;
@@ -81,7 +80,7 @@ public class AutonPark extends OpMode {
                 break;
 
             case MOVETOPARK:
-                robot.changeTarget(0.0f, 32.0f, 0.0f);
+                robot.changeTarget(0.0f, -32.0f, 0.0f);
                 if(tol(robot.currentY, robot.targetY, YTOL)){
                     currentState = StatePark.PARK;
                 }
