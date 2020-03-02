@@ -23,7 +23,7 @@ public class Robot {
     public Motor fakeMotor;
     public StepperServo intakeClawLeft;
     public StepperServo intakeClawRight;
-    //public LimitSensor limit;
+    public LimitSensor limit;
 
     public float currentR = 0.0f;
     public float targetR = 0.0f;
@@ -42,8 +42,7 @@ public class Robot {
 
     public boolean epicMode = false;
 
-    public boolean pidX = false;
-    public boolean pidY = false;
+    public boolean pid = true;
 
     private final float rKPR = 0.05f;
     private final float rKIR = 0.00001f;
@@ -56,8 +55,9 @@ public class Robot {
     private final float yKIR = 0.00f;
     private final float yKDR = 0.00f;
 
-    private final float xKPR = 0.12f;
-    private final float xKIR = 0.000015f;
+    private final float xKPR = 0.0f;
+    private final float xKPR_SMALL = 0.0f;
+    private final float xKIR = 0.00f;
     private final float xKDR = 0.00f;
 
     private final long SKYSTONE_THRESHOLD = 500000;
@@ -84,12 +84,16 @@ public class Robot {
     public int counterBadY = 0;
     public boolean rlyBad = false;
 
+    private float lastX = 0;
+    private float lastY = 0;
+
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
     public ArrayList<Integer> skystones = new ArrayList<>();
+
     //public SkystoneDetectionHelper skystoneDetector;
     //public VuforiaSkystone skystoneDetector;
 
@@ -144,7 +148,7 @@ public class Robot {
 
         this.fakeMotor = (Motor) components[12];
 
-        //this.limit = (LimitSensor) components[14];
+        this.limit = (LimitSensor) components[17];
 
         currentR = gyro.getHeading();
         targetR = currentR;
@@ -176,15 +180,19 @@ public class Robot {
 
     public void updateLoop(){
         currentR = gyro.getHeading();
+        lastY = currentY;
         currentY = getOdoY();
+        lastX = currentX;
         currentX = getOdoX();
 
         /*skystones.add(skystoneDetector.currentStone);
         if(skystones.size() > 20){
             skystones.remove(0);
         }*/
-        autonMove();
 
+        if(pid){
+            autonMove();
+        }
     }
 
     public int getAverageSkystone(){
@@ -217,9 +225,13 @@ public class Robot {
 
     public void moveLift(float speedDown, float speedUp){
         if(speedDown == 0 && speedUp == 0){
-            lift.brake();
+            if(!limit.isPressed()) {
+                lift.brake();
+            }
         }else {
-            lift.down(speedDown);
+            if(!limit.isPressed()){
+                lift.down(speedDown);
+            }
             lift.up(speedUp);
         }
     }
@@ -291,7 +303,7 @@ public class Robot {
                     huggerRMain.setAngle(70);
                     mainArmOpenR = false;
                 } else {
-                    huggerRMain.setAngle(0);
+                    huggerRMain.setAngle(10);
                     mainArmOpenR = true;
                 }
             } else if (grab && !hugArmPreviousR){
@@ -332,9 +344,13 @@ public class Robot {
     public void changeTarget(float x, float y, float r){
         //check if targetX has changed
         if(x != targetX){
+            float xKP = xKPR;
+            if(targetX < 10){
+                xKP = xKPR_SMALL;
+            }
             fakeMotor.resetEncoder();
             targetX = x;
-            pidXDistance = new PIDController(targetX, xKPR, xKIR, xKDR, false);
+            pidXDistance = new PIDController(targetX, xKP, xKIR, xKDR, false);
             counterBadX++;
             //fakeMotor.resetEncoder(); //reset x odometry encoder
         }
@@ -370,6 +386,21 @@ public class Robot {
         drivetrain.autonMove(xSpeed, ySpeed, rSpeed);
     }
 
+    public static boolean tol(float current, float target, float tolerance){
+        return Math.abs(current - target) <= tolerance;
+    }
+
+    public boolean stopped(boolean x){
+        if(x){
+            return Math.abs(lastX - currentX) <= 0.01;
+        } else {
+            return Math.abs(lastY - currentY) <= 0.01;
+        }
+    }
+
+    public void setPid(boolean pid){
+        this.pid = pid;
+    }
 
     public void changeTargetY(float target){
     }

@@ -55,6 +55,7 @@ public class Main extends OpMode{
                 new StepperServo(-1, "huggerRArm", hardwareMap),                    //14
                 new StepperServo(-1, "huggerLMain", hardwareMap),                   //15
                 new StepperServo(-1, "huggerLArm", hardwareMap),                    //16
+                new LimitSensor(-1, "limit", hardwareMap)                           //17
         };
 
         robot = new Robot(componentList, hardwareMap, false);
@@ -80,7 +81,7 @@ public class Main extends OpMode{
     public void loop() {
         robot.turbo(gamepad1.right_bumper);
 
-        robot.intakeControl(gamepad2.a);
+        robot.intakeControl(gamepad2.a || gamepad1.a);
 
         robot.huggerControl(gamepad2.x, gamepad2.b);
 
@@ -91,6 +92,11 @@ public class Main extends OpMode{
         robot.moveLift(gamepad2.left_trigger, gamepad2.right_trigger);
 
         robot.foundationHookControl(gamepad2.y);
+
+        if(gamepad2.left_bumper){
+            robot.moveLift(1,0);
+            robot.actuatorControl(true,false);
+        }
 
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);
@@ -109,10 +115,9 @@ public class Main extends OpMode{
         }
 
         telemetry.addData("rot", robot.currentR);
+        telemetry.addData("limit", robot.limit.digitalTouch.isPressed());
         telemetry.addData("x", robot.getOdoX());
         telemetry.addData("y", robot.getOdoY());
-        telemetry.addData("pidX", robot.pidX);
-        telemetry.addData("pidY", robot.pidY);
         telemetry.addData("Detection", pipeline.getSkystonePosition());
         //telemetry.addData("y", robot.limit.digitalTouch.isPressed());
     }

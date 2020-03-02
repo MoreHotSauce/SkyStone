@@ -44,6 +44,7 @@ public class AutonParkAway extends OpMode {
                 new StepperServo(-1, "huggerRArm", hardwareMap),                    //14
                 new StepperServo(-1, "huggerLMain", hardwareMap),                   //15
                 new StepperServo(-1, "huggerLArm", hardwareMap),                    //16
+                new LimitSensor(-1, "limit", hardwareMap)                           //17
         };
 
         robot = new Robot(componentList, hardwareMap, true);

@@ -31,6 +31,7 @@ public class AutonTest extends OpMode {
                 new StepperServo(-1, "huggerRArm", hardwareMap),                    //14
                 new StepperServo(-1, "huggerLMain", hardwareMap),                   //15
                 new StepperServo(-1, "huggerLArm", hardwareMap),                    //16
+                new LimitSensor(-1, "limit", hardwareMap)                           //17
         };
 
         robot = new Robot(componentList, hardwareMap, true);
@@ -48,9 +49,9 @@ public class AutonTest extends OpMode {
         robot.updateLoop();
         robot.resetMotorSpeeds();
 
-        //robot.hugger.setAngle(130f);
-        robot.changeTarget(0f, 0f, 15f);
+        robot.changeTarget(25f, 0f, 0f);
 
+        telemetry.addData("stopped", robot.stopped(true));
         telemetry.addData("counterX", robot.counterBadX);
         telemetry.addData("counterY", robot.counterBadY);
         telemetry.addData("rlyBad", robot.rlyBad);
@@ -67,6 +68,7 @@ public class AutonTest extends OpMode {
         telemetry.addData("Rotation", robot.currentR);
         telemetry.addData("RotationTarget", robot.targetR);
         telemetry.addData("CorrectionR", robot.correctionR);
+
        // telemetry.addData("backLeft", robot.drivetrain.backLeftSpeed);
         //telemetry.addData("backRight", robot.drivetrain.backRightSpeed);
         //telemetry.addData("frontLeft", robot.drivetrain.frontLeftSpeed);
