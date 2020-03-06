@@ -49,7 +49,7 @@ public class AutonTest extends OpMode {
         robot.updateLoop();
         robot.resetMotorSpeeds();
 
-        robot.changeTarget(25f, 0f, 0f);
+        robot.changeTarget(0f, 0f, 90f);
 
         telemetry.addData("stopped", robot.stopped(true));
         telemetry.addData("counterX", robot.counterBadX);

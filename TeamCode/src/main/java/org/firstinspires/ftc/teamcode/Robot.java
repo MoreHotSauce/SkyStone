@@ -44,20 +44,19 @@ public class Robot {
 
     public boolean pid = true;
 
-    private final float rKPR = 0.05f;
-    private final float rKIR = 0.00001f;
+    private final float rKPR = 0.012f;
+    private final float rKIR = 0.000005f;
     private final float rKDR = 0.0000f;
 
     private final float yBASE = 0.5f;
     private final float xBASE = 0.06f;
 
     private final float yKPR = 0.06f;
-    private final float yKIR = 0.00f;
+    private final float yKIR = 0.000002f;
     private final float yKDR = 0.00f;
 
-    private final float xKPR = 0.0f;
-    private final float xKPR_SMALL = 0.0f;
-    private final float xKIR = 0.00f;
+    private final float xKPR = 0.17f;
+    private final float xKIR = 0.000007f;
     private final float xKDR = 0.00f;
 
     private final long SKYSTONE_THRESHOLD = 500000;
@@ -79,6 +78,8 @@ public class Robot {
     private boolean hugArmOpenL = true;
 
     private boolean right = true;
+
+    private boolean autonRotating = false;
 
     public int counterBadX = 0;
     public int counterBadY = 0;
@@ -345,13 +346,16 @@ public class Robot {
         //check if targetX has changed
         if(x != targetX){
             float xKP = xKPR;
-            if(targetX < 10){
+            /*if(Math.abs(targetX) <= 10){
                 xKP = xKPR_SMALL;
+                counterBadX++;
             }
+
+             */
             fakeMotor.resetEncoder();
             targetX = x;
             pidXDistance = new PIDController(targetX, xKP, xKIR, xKDR, false);
-            counterBadX++;
+
             //fakeMotor.resetEncoder(); //reset x odometry encoder
         }
 
@@ -382,6 +386,11 @@ public class Robot {
         float xSpeed = -Range.clip(correctionX, -1, 1);
         float ySpeed = Range.clip(correctionY, -1, 1);
         float rSpeed = correctionR;
+
+        if(autonRotating){
+            xSpeed = 0;
+            ySpeed = 0;
+        }
 
         drivetrain.autonMove(xSpeed, ySpeed, rSpeed);
     }
@@ -423,4 +432,11 @@ public class Robot {
         return 69.0f;
     }
 
+    public boolean isAutonRotating() {
+        return autonRotating;
+    }
+
+    public void setAutonRotating(boolean autonRotating) {
+        this.autonRotating = autonRotating;
+    }
 }
