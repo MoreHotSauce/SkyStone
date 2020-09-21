@@ -11,19 +11,6 @@ import java.util.ArrayList;
 public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
-    public Lift lift;
-    public Gyro gyro;
-    public StepperServo foundationHook;
-    public Actuator actuator;
-    public Color colorSensor;
-    public StepperServo huggerRMain;
-    public StepperServo huggerRArm;
-    public StepperServo huggerLMain;
-    public StepperServo huggerLArm;
-    public Motor fakeMotor;
-    public StepperServo intakeClawLeft;
-    public StepperServo intakeClawRight;
-    public LimitSensor limit;
 
     public float currentR = 0.0f;
     public float targetR = 0.0f;
@@ -88,8 +75,6 @@ public class Robot {
     private float lastX = 0;
     private float lastY = 0;
 
-
-
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
@@ -105,20 +90,6 @@ public class Robot {
                 new Motor(-1, "backRight", map, true),                  //1
                 new Motor(-1, "frontLeft", map, false),                 //2
                 new Motor(-1, "frontRight", map, true),                 //3
-                new StepperServo(-1, "foundationHook", map),            //4
-                new StepperServo(-1, "huggerRMain", map),                   //5
-                new EMotor(-1, "actuator", map, 1),                     //6
-                new Motor(-1, "liftMotor", map, false),                 //7
-                new Motor(-1, "liftMotor2", map, true),                 //8
-                new StepperServo(-1, "intakeClawLeft", map),                //9
-                new StepperServo(-1, "intakeClawRight", map),               //10
-                new StepperServo(-1, "odoServo", map),                      //11
-                new Motor(-1, "fakeMotor", map, true),              //12
-                new Color(-1, "colorSensor", map),                          //13
-                new StepperServo(-1, "huggerRArm", map),                    //14
-                new StepperServo(-1, "huggerLMain", map),                   //15
-                new StepperServo(-1, "huggerLArm", map),                    //16
-                new LimitSensor(-1, "limit", map)                           //17
         };
 
         if (auton){
@@ -145,41 +116,10 @@ public class Robot {
                 components[8]
         );
 
-        this.gyro = new Gyro(map);
-
-        this.foundationHook = (StepperServo) components[4];
-        foundationHook.setAngle(165);
-
-        actuator = new Actuator((EMotor) components[6]);
-
-        this.colorSensor = (Color) components[13];
-
-        this.huggerRMain = (StepperServo) components[5];
-        this.huggerRArm = (StepperServo) components[14];
-        huggerRMain.setAngle(0);
-        huggerRArm.setAngle(100);
-
-        this.huggerLMain = (StepperServo) components[15];
-        this.huggerLArm = (StepperServo) components[16];
-        huggerLMain.setAngle(70);
-        huggerLArm.setAngle(0);
-
         drivetrain.resetAllEncoders();
 
         this.fakeMotor = (Motor) components[12];
 
-        this.limit = (LimitSensor) components[17];
-
-        currentR = gyro.getHeading();
-        targetR = currentR;
-        //changeTargetRotation(targetHeading);
-
-        this.intakeClawLeft = (StepperServo) components[9];
-        intakeClawLeft.setAngle(0);
-        this.intakeClawRight = (StepperServo) components[10];
-        intakeClawRight.setAngle(180);
-
-        lift.liftMotor2.resetEncoder();
         fakeMotor.resetEncoder();
 
         currentY = getOdoY();
@@ -190,89 +130,9 @@ public class Robot {
 
         //skystoneDetector = new VuforiaSkystone(map);
 
-
         pidXDistance = new PIDController(0, xKPR, xKIR, xKDR, false);
         pidYDistance = new PIDController(0, yKPR, yKIR, yKDR, false);
         pidRotation = new PIDController(0, rKPR, rKIR, rKDR, true);
-
-    }
-
-    public Robot(Component[] comps, HardwareMap map, boolean auton){
-        this.components = comps;
-        if (auton){
-            drivetrain = new Mecanum(
-                    components[0],
-                    components[1],
-                    components[2],
-                    components[3],
-                    true
-            );
-        } else {
-            drivetrain = new Mecanum(
-                    components[0],
-                    components[1],
-                    components[2],
-                    components[3],
-                    false
-            );
-        }
-
-
-        lift = new Lift(
-                components[7],
-                components[8]
-        );
-
-        this.gyro = new Gyro(map);
-
-        this.foundationHook = (StepperServo) components[4];
-        foundationHook.setAngle(165);
-
-        actuator = new Actuator((EMotor) components[6]);
-
-        this.colorSensor = (Color) components[13];
-
-        this.huggerRMain = (StepperServo) components[5];
-        this.huggerRArm = (StepperServo) components[14];
-        huggerRMain.setAngle(0);
-        huggerRArm.setAngle(100);
-
-        this.huggerLMain = (StepperServo) components[15];
-        this.huggerLArm = (StepperServo) components[16];
-        huggerLMain.setAngle(70);
-        huggerLArm.setAngle(0);
-
-        drivetrain.resetAllEncoders();
-
-        this.fakeMotor = (Motor) components[12];
-
-        this.limit = (LimitSensor) components[17];
-
-        currentR = gyro.getHeading();
-        targetR = currentR;
-        //changeTargetRotation(targetHeading);
-
-        this.intakeClawLeft = (StepperServo) components[9];
-        intakeClawLeft.setAngle(0);
-        this.intakeClawRight = (StepperServo) components[10];
-        intakeClawRight.setAngle(180);
-
-        lift.liftMotor2.resetEncoder();
-        fakeMotor.resetEncoder();
-
-        currentY = getOdoY();
-        //changeTargetY(targetY);
-
-        currentX = getOdoX();
-        //changeTargetX(targetX);
-
-        //skystoneDetector = new VuforiaSkystone(map);
-
-
-        pidXDistance = new PIDController(0, xKPR, xKIR, xKDR, false);
-        pidYDistance = new PIDController(0, yKPR, yKIR, yKDR, false);
-        pidRotation = new PIDController(0, rKPR, rKIR, rKDR, true);
-
 
     }
 
@@ -317,126 +177,12 @@ public class Robot {
         drivetrain.move(xMove, yMove, rotate);
     }
 
-    public boolean isSkystone(){
-        return (colorSensor.getValue()[0] * colorSensor.getValue()[1] * colorSensor.getValue()[2] < SKYSTONE_THRESHOLD);
-    }
-
-    public void moveLift(float speedDown, float speedUp){
-        if(speedDown == 0 && speedUp == 0){
-            if(!limit.isPressed()) {
-                lift.brake();
-            }
-        }else {
-            if(!limit.isPressed()){
-                lift.down(speedDown);
-            }
-            lift.up(speedUp);
-        }
-    }
-
-    public void intakeControl(boolean pressed){
-        if(pressed && !previousIntakeButton){
-            if(intakeOpen){
-                intakeClawLeft.setAngle(25);
-                intakeClawRight.setAngle(155);
-                intakeOpen = false;
-            } else {
-                intakeClawLeft.setAngle(60);
-                intakeClawRight.setAngle(120);
-                intakeOpen = true;
-            }
-        }
-
-        previousIntakeButton = pressed;
-    }
-
-    public void chomperControl(boolean pressed){
-
-    }
-
     public float getOdoX(){
         return (fakeMotor.getEncoderValue() / (8192f)) * 6.1842375f;
     }
 
     public float getOdoY(){
         return (lift.liftMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
-    }
-
-    public void actuatorControl(boolean extend, boolean retract){
-        if (extend && !retract){
-            actuator.actuatorMotor.motor.setPower(0.8);
-        } else if (!extend && retract) {
-            actuator.actuatorMotor.motor.setPower(-0.8);
-        } else {
-            actuator.actuatorMotor.motor.setPower(0);
-        }
-    }
-
-    public void foundationHookControl(boolean pressed){
-        if(pressed && !previousFoundationButton){
-            if(foundationOpen){
-                foundationHook.setAngle(133);
-                foundationOpen = false;
-            } else {
-                foundationHook.setAngle(100);
-                foundationOpen = true;
-            }
-        }
-
-        previousFoundationButton = pressed;
-    }
-
-    public void switchHuggers(boolean l, boolean r){
-        if (l){
-            this.right = false;
-        } else if (r){
-            this.right = true;
-        }
-    }
-
-    public void huggerControl(boolean mainArm, boolean grab){
-        if (right){
-            if (mainArm && !mainArmPreviousR){
-                if (mainArmOpenR){
-                    huggerRMain.setAngle(70);
-                    mainArmOpenR = false;
-                } else {
-                    huggerRMain.setAngle(10);
-                    mainArmOpenR = true;
-                }
-            } else if (grab && !hugArmPreviousR){
-                if (hugArmOpenR){
-                    huggerRArm.setAngle(30);
-                    hugArmOpenR = false;
-                } else {
-                    huggerRArm.setAngle(80);
-                    hugArmOpenR = true;
-                }
-            }
-            mainArmPreviousR = mainArm;
-            hugArmPreviousR = grab;
-        } else {
-            if (mainArm && !mainArmPreviousL){
-                if (mainArmOpenL){
-                    huggerLMain.setAngle(60);
-                    mainArmOpenL = false;
-                } else {
-                    huggerLMain.setAngle(0);
-                    mainArmOpenL = true;
-                }
-            } else if (grab && !hugArmPreviousL){
-                if (hugArmOpenL){
-                    huggerLArm.setAngle(70);
-                    hugArmOpenL = false;
-                } else {
-                    huggerLArm.setAngle(30);
-                    hugArmOpenL = true;
-                }
-            }
-            mainArmPreviousL = mainArm;
-            hugArmPreviousL = grab;
-        }
-
     }
 
     public void changeTarget(float x, float y, float r){
