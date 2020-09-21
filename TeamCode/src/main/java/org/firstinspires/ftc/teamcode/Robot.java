@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class Robot {
     private Component[] components;
     public Gyro gyro;
+    public Motor fakeMotor;
+    public Motor fakeMotor2;
     public Mecanum drivetrain;
 
     public float currentR = 0.0f;
@@ -91,6 +93,8 @@ public class Robot {
                 new Motor(-1, "backRight", map, true),                  //1
                 new Motor(-1, "frontLeft", map, false),                 //2
                 new Motor(-1, "frontRight", map, true),                 //3
+                new Motor(-1, "fakeMotor", map, true),                 //4
+                new Motor(-1, "fakeMotor2", map, true),                 //4
         };
 
         if (auton){
@@ -115,9 +119,13 @@ public class Robot {
 
         drivetrain.resetAllEncoders();
 
-        this.fakeMotor = (Motor) components[12];
+        this.fakeMotor = (Motor) components[4];
 
         fakeMotor.resetEncoder();
+
+        this.fakeMotor2 = (Motor) components[5];
+
+        fakeMotor2.resetEncoder();
 
         currentY = getOdoY();
         //changeTargetY(targetY);
@@ -179,7 +187,7 @@ public class Robot {
     }
 
     public float getOdoY(){
-        return (lift.liftMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
+        return (fakeMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
     }
 
     public void changeTarget(float x, float y, float r){
@@ -201,7 +209,7 @@ public class Robot {
 
         //check if targetY has changed
         if(y != targetY){
-            lift.liftMotor2.resetEncoder();
+            fakeMotor2.resetEncoder();
             targetY = y;
             pidYDistance = new PIDController(targetY, yKPR, yKIR, yKDR, false);
             counterBadY++;

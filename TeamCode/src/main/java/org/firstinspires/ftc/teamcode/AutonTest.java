@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-@TeleOp(name="AutonTest", group="Auton Opmode")
+//@TeleOp(name="AutonTest", group="Auton Opmode")
+@Disabled
 public class AutonTest extends OpMode {
 
     Robot robot;
@@ -20,7 +22,7 @@ public class AutonTest extends OpMode {
                 new Motor(-1, "frontRight", hardwareMap, true),             //3
                 new StepperServo(-1, "foundationHook", hardwareMap),                //4
                 new StepperServo(-1, "huggerRMain", hardwareMap),                   //5
-                new EMotor(-1, "actuator", hardwareMap, 1),                  //6
+                //new EMotor(-1, "actuator", hardwareMap, 1),                  //6
                 new Motor(-1, "liftMotor", hardwareMap, false),             //7
                 new Motor(-1, "liftMotor2", hardwareMap, true),             //8
                 new StepperServo(-1, "intakeClawLeft", hardwareMap),                //9
@@ -34,9 +36,9 @@ public class AutonTest extends OpMode {
                 new LimitSensor(-1, "limit", hardwareMap)                           //17
         };
 
-        robot = new Robot(componentList, hardwareMap, true);
+        robot = new Robot(hardwareMap, true);
         telemetry.addData("Test", "Robot");
-        robot.colorSensor.led(true);
+        //robot.colorSensor.led(true);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class AutonTest extends OpMode {
         //telemetry.addData("red", robot.colorSensor.getValue()[1]);
         //telemetry.addData("green", robot.colorSensor.getValue()[2]);
         //telemetry.addData("blue", robot.colorSensor.getValue()[3]);
-        telemetry.addData("skystone?", robot.isSkystone());
+        //telemetry.addData("skystone?", robot.isSkystone());
 
 
     }

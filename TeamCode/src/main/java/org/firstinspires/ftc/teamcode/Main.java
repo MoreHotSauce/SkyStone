@@ -46,7 +46,7 @@ public class Main extends OpMode{
     }
 
     public void start(){
-        robot.lift.liftMotor2.resetEncoder();
+        //robot.lift.liftMotor2.resetEncoder();
         robot.fakeMotor.resetEncoder();
     }
 
