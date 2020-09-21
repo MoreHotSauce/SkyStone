@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Robot {
     private Component[] components;
+    public Gyro gyro;
     public Mecanum drivetrain;
 
     public float currentR = 0.0f;
@@ -110,11 +111,7 @@ public class Robot {
             );
         }
 
-
-        lift = new Lift(
-                components[7],
-                components[8]
-        );
+        this.gyro = new Gyro(map);
 
         drivetrain.resetAllEncoders();
 
