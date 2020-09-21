@@ -30,7 +30,6 @@ public class Motor extends Component{
 
     public float getEncoderValue(){
         return motor.getCurrentPosition();
-
     }
 
     public void resetEncoder(){

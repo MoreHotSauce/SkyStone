@@ -4,13 +4,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Locale;
 
-/**
- * This is NOT an opmode.
- *
- * THis Class is used to define a PID controller of any kind
- *
- */
-
 public class FormatHelper
 {
     //----------------------------------------------------------------------------------------------

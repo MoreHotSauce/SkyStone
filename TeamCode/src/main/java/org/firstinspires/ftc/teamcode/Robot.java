@@ -101,15 +101,15 @@ public class Robot {
 
     public Robot(HardwareMap map, boolean auton){
         this.components = new Component[]{
-                new Motor(-1, "backLeft", map, false),              //0
-                new Motor(-1, "backRight", map, true),              //1
-                new Motor(-1, "frontLeft", map, false),             //2
-                new Motor(-1, "frontRight", map, true),             //3
-                new StepperServo(-1, "foundationHook", map),                //4
+                new Motor(-1, "backLeft", map, false),                  //0
+                new Motor(-1, "backRight", map, true),                  //1
+                new Motor(-1, "frontLeft", map, false),                 //2
+                new Motor(-1, "frontRight", map, true),                 //3
+                new StepperServo(-1, "foundationHook", map),            //4
                 new StepperServo(-1, "huggerRMain", map),                   //5
-                new EMotor(-1, "actuator", map, 1),                  //6
-                new Motor(-1, "liftMotor", map, false),             //7
-                new Motor(-1, "liftMotor2", map, true),             //8
+                new EMotor(-1, "actuator", map, 1),                     //6
+                new Motor(-1, "liftMotor", map, false),                 //7
+                new Motor(-1, "liftMotor2", map, true),                 //8
                 new StepperServo(-1, "intakeClawLeft", map),                //9
                 new StepperServo(-1, "intakeClawRight", map),               //10
                 new StepperServo(-1, "odoServo", map),                      //11
